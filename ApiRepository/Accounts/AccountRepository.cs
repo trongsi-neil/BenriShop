@@ -28,29 +28,25 @@ namespace BenriShop.ApiRepository.Accounts
             return result.Entity;
         }
 
-        public async void DeleteAccount(string accountId)
+        public async Task<bool> DeleteAccountAsync(string accountId)
         {
 
             var account = await _context.Account.FindAsync(accountId);
-            if (account == null)
+            if (account != null)
             {
-                _context.Account.Remove(account);
-                await _context.SaveChangesAsync();
+                try
+                {
+                    _context.Account.Remove(account);
+                    await _context.SaveChangesAsync();
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex);
+                    return false;
+                }
+                return true;
             }
-
-            //var result = await _context.Account.FirstOrDefaultAsync(e => e.Username == accountId);
-            //if (result != null)
-            //{
-            //    try
-            //    {
-            //        _context.Account.Remove(result);
-            //        await _context.SaveChangesAsync();
-            //    }
-            //    catch(Exception ex)
-            //    {
-
-            //    }
-            //}
+            return false;
         }
 
         public async Task<Account> GetAccount(string accountId)

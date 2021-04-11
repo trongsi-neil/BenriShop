@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "tuIKnKuiMMNVC8p75KO9LiN538E/w/A/QdnsHD/K2AAAtORqcFeMovjLLJjtwMXdjrEPcTtl/ZYC0GYWSuSDKg==",
+  "dgSpecHash": "8lTYJEfujQi7p+uNiotPBKw5D6JoI5B2QQO9hCDxe66IwNJr1z7W0yFZOVY/o9y1bQGi5ELyBdVXJZ3J6njTpw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\ngomi\\source\\repos\\BenriShop\\BenriShop.csproj",
+  "projectFilePath": "C:\\Users\\ngomi\\source\\repos\\BenriShop\\BenriShop\\BenriShop.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ngomi\\.nuget\\packages\\microsoft.aspnet.razor\\3.2.7\\microsoft.aspnet.razor.3.2.7.nupkg.sha512",
     "C:\\Users\\ngomi\\.nuget\\packages\\microsoft.aspnet.webpages\\3.2.7\\microsoft.aspnet.webpages.3.2.7.nupkg.sha512",

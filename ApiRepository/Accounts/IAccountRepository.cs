@@ -12,7 +12,7 @@ namespace BenriShop.ApiRepository.Accounts
         Task<Account> GetAccount(string accountId);
         Task<Account> AddAccount(Account account);
         Task<Account> UpdateAccount(Account account);
-        void DeleteAccount(string accountId);
+        Task<bool> DeleteAccountAsync(string accountId);
 
         Task<IEnumerable<Account>> GetAccountsByRole(string role);
 

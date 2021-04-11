@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using System.Web.Helpers;
 using System.Net.Http;
 using BenriShop.ApiRepository.Accounts;
+using System.Security.Claims;
 
 namespace BenriShop.Controllers
 {
@@ -48,7 +49,11 @@ namespace BenriShop.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Thêm tài khoản nhân viên
+        /// </summary>
+        /// <param name="account"></param>
+        /// <returns></returns>
         [HttpPost("AddModAccount")]
         [AllowAnonymous]
         public async Task<ActionResult<Account>> AddModAccount(Account account)
@@ -98,11 +103,10 @@ namespace BenriShop.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-       // [Authorize]
-        [HttpPost("ChangeRoleOfAccount/{id}")]
+        [Authorize (Roles = "Admin")]
+        [HttpPut("ChangeRoleOfAccount/{id}")]
         public async Task<IActionResult> ChangeRoleOfAccount(string id, Account account)
         {
-
             var username = account.Username;
             var role = account.Role;
 
@@ -131,10 +135,9 @@ namespace BenriShop.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                throw;
+                return NoContent();         
             }
-
-            return NoContent();
+ 
         }
 
         // DELETE: api/Accounts/5
@@ -145,17 +148,25 @@ namespace BenriShop.Controllers
             var account = await _accountRepository.GetAccount(id);
             if (account == null)
             {
-                return NotFound();
+                return NotFound("Không tìm thấy tài khoản này");
             }
             try
             {
-                _accountRepository.DeleteAccount(id);
+               if (await _accountRepository.DeleteAccountAsync(id))
+                {
+                    return Ok("Xóa tài khoản thành công");
+                }
+                else
+                {
+                    return BadRequest("Xóa tài khoản không thành công");
+                }
+               
             }
             catch (DbUpdateException)
             {
-                throw;
+                return account;
             }
-            return account;
+
         }
 
         #endregion
@@ -166,46 +177,71 @@ namespace BenriShop.Controllers
 
         // GET: api/Accounts/5
         [Authorize]
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Account>> GetAccount(string id)
+        [HttpGet("GetAccountInformation/{id}")]
+        public async Task<ActionResult<Account>> GetAccountInformation(string id)
         {
-            var account = await _accountRepository.GetAccount(id);
-
-            if (account == null)
+            var identity = User.Identity as ClaimsIdentity;
+            var accountRole = await _accountRepository.GetAccount(identity.Name);
+            if (accountRole.Role == "Admin")
             {
-                return NotFound();
+                var account = await _accountRepository.GetAccount(id);
+                if (account == null)
+                {
+                    return NotFound();
+                }
+                return account;
             }
-
-            return account;
+            else
+            {
+                if(identity.Name == id)
+                {
+                    var account = await _accountRepository.GetAccount(id);
+                    if (account == null)
+                    {
+                        return NotFound();
+                    }
+                    return account;
+                }
+                else
+                {
+                    BadRequest("Không có quyền truy cập");
+                }
+            }
+            return BadRequest("Không truy cập được");
         }
         // PUT: api/Accounts/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [Authorize]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutAccount(string id, Account account)
+        [HttpPut("ChangeAccountInformation/{id}")]
+        public async Task<IActionResult> ChangeAccountInformation(string id, Account account)
         {
-            if (id != account.Username)
-            {
-                return BadRequest();
-            }
+            var identity = User.Identity as ClaimsIdentity;
 
-            var _account = await _accountRepository.GetAccount(id);
-
-            if (_account == null)
+            if (identity != null)
             {
-                return NotFound();
-            }
+                if (id != account.Username || identity.Name != account.Username)
+                {
+                    return BadRequest();
+                }
 
-            try
-            {
-                await _accountRepository.UpdateAccount(account);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                throw;
-            }
+                var _account = await _accountRepository.GetAccount(id);
 
+                if (_account == null)
+                {
+                    return NotFound();
+                }
+
+                try
+                {
+                    await _accountRepository.UpdateAccount(account);
+                    return Ok("Update account successfully");
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }
+            }
             return NoContent();
         }
 
@@ -220,16 +256,18 @@ namespace BenriShop.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost("CreateAccount")]
         [AllowAnonymous]
-        public async Task<ActionResult<Account>> PostAccount(Account account)
+        public async Task<ActionResult<Account>> CreateAccount(Account account)
         {
             var _account = await _accountRepository.GetAccount(account.Username);
-
+           
             if (_account != null)
             {
-                return Conflict();
+                return Conflict("Tài khoản đã bị trùng");
             }
             try
             {
+                //Khách chỉ tạo đươc tài khoản là Customer
+                account.Role = Role.Customer;
                 await _accountRepository.AddAccount(account);
             }
             catch (DbUpdateException)
@@ -261,20 +299,30 @@ namespace BenriShop.Controllers
 
         #endregion
 
-        #region Method
-
-        private bool AccountExists(string id)
+        #region Test
+        [Authorize]
+        [HttpPost("getname2")]
+        public Object GetName2()
         {
-            if (_accountRepository.GetAccount(id) != null)
+            var identity = User.Identity as ClaimsIdentity;
+            if (identity != null)
             {
-                return true;
+                return identity.Name;
+                IEnumerable<Claim> claims = identity.Claims;
+                var name = claims.Where(p => p.Type == "FullName").FirstOrDefault()?.Value;
+                return new
+                {
+                    data = name
+                };
+
             }
-            else
-            {
-                return false;
-            }
-          
+            return null;
         }
+        #endregion
+
+
+
+        #region Method
 
         #endregion
 

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BenriShop.Controllers
 {
-    [Authorize]
+  
     [ApiController]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
