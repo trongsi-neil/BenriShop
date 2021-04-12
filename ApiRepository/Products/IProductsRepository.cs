@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BenriShop.ApiRepository.Products
 {
-    interface IProductsRepository
+    public interface IProductsRepository
     {
         Task<IEnumerable<Product>> GetProducts();
         Task<Product> GetProduct(int ProductId);

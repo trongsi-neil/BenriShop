@@ -276,7 +276,6 @@ C:\Users\ngomi\source\repos\BenriShop\BenriShop\obj\Debug\netcoreapp3.1\BenriSho
 C:\Users\ngomi\source\repos\BenriShop\BenriShop\obj\Debug\netcoreapp3.1\BenriShop.dll
 C:\Users\ngomi\source\repos\BenriShop\BenriShop\obj\Debug\netcoreapp3.1\BenriShop.pdb
 C:\Users\ngomi\source\repos\BenriShop\BenriShop\obj\Debug\netcoreapp3.1\BenriShop.genruntimeconfig.cache
-C:\Users\ngomi\source\repos\BenriShop\BenriShop\obj\Debug\netcoreapp3.1\BenriShop.csprojAssemblyReference.cache
 C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\appsettings.Development.json
 C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\appsettings.json
 C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\BenriShop.exe
@@ -417,3 +416,8 @@ C:\Users\Neil's PC\Source\Repos\BenriShop\obj\Debug\netcoreapp3.1\BenriShop.cspr
 C:\Users\Neil's PC\Source\Repos\BenriShop\obj\Debug\netcoreapp3.1\BenriShop.dll
 C:\Users\Neil's PC\Source\Repos\BenriShop\obj\Debug\netcoreapp3.1\BenriShop.pdb
 C:\Users\Neil's PC\Source\Repos\BenriShop\obj\Debug\netcoreapp3.1\BenriShop.genruntimeconfig.cache
+C:\Users\ngomi\source\repos\BenriShop\BenriShop\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\ngomi\source\repos\BenriShop\BenriShop\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\ngomi\source\repos\BenriShop\BenriShop\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\ngomi\source\repos\BenriShop\BenriShop\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Identity.Core.dll
+C:\Users\ngomi\source\repos\BenriShop\BenriShop\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Identity.Stores.dll

@@ -1,6 +1,7 @@
 using BenriShop.ApiRepository.Accounts;
 using BenriShop.ApiRepository.Products;
 using BenriShop.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,8 +35,20 @@ namespace BenriShop
         {
             var connection = Configuration.GetConnectionString("BenriShopDatabase");
 
-
             //services.AddDbContextPool<InventoryContext>(options => options.UseSqlServer(connection));
+            services.AddHttpClient();
+
+            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            //.AddCookie(options =>
+            //{
+            //    options.LoginPath = "/Account/Login";
+            //    options.AccessDeniedPath = "/User/Forbidden/";
+            //});
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+            });
 
             services.AddDbContext<BenriShopContext>(op => op.UseSqlServer(connection));
 

@@ -17,7 +17,7 @@ namespace BenriShop.Controllers
     {
         private readonly IProductsRepository _productRepository;
 
-        public ProductsController(ProductsRepository productRepository)
+        public ProductsController(IProductsRepository productRepository)
         {
             this._productRepository = productRepository;
         }
@@ -28,11 +28,15 @@ namespace BenriShop.Controllers
         // PUT: api/Products/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("UpdateProduct")]
-        public async Task<IActionResult> UpdateProduct(Product product)
+        [HttpPut("UpdateProduct/{id}")]
+        public async Task<IActionResult> UpdateProduct(int id, Product product)
         {
+            if (id != product.Productid)
+            {
+                return BadRequest();
+            }
             var _product = await _productRepository.GetProduct(product.Productid);
-
+            
             if (_product == null)
             {
                 return NotFound();
@@ -87,15 +91,15 @@ namespace BenriShop.Controllers
 
         #region Users
 
-        // GET: api/Products
-        //[HttpGet("GetProducts")]
-        /* public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
-         {
-             return _productRepository.GetProducts();
-         }*/
+       // GET: api/Products
+       [HttpGet("GetProducts")]
+        public async Task<IEnumerable<Product>> GetProducts()
+        {
+            return await _productRepository.GetProducts();
+        }
 
-        // GET: api/Products/5
-        [HttpGet("{id}")]
+       // GET: api/Products/5
+       [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
             var product = await _productRepository.GetProduct(id);

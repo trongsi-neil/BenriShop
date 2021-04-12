@@ -11,17 +11,17 @@ namespace BenriShop.ApiRepository.Products
 {
     public class ProductsRepository : IProductsRepository
     {
-        private readonly BenriShopContext _context;
+        private readonly BenriShopContext _contextProduct;
         public ProductsRepository(BenriShopContext context)
         {
-            this._context = context;
+            this._contextProduct = context;
         }
         public async Task<Product> AddProduct(Product product)
         {
             try
             {
-                var result = await _context.Product.AddAsync(product);
-                await _context.SaveChangesAsync();
+                var result = await _contextProduct.Product.AddAsync(product);
+                await _contextProduct.SaveChangesAsync();
                 return result.Entity;
             }catch (Exception ex)
             {
@@ -32,13 +32,13 @@ namespace BenriShop.ApiRepository.Products
         public async Task<bool> DeleteProduct(int productId)
         {
 
-            var product = await _context.Product.FindAsync(productId);
+            var product = await _contextProduct.Product.FindAsync(productId);
             if (product != null)
             {
                 try
                 {
-                    _context.Product.Remove(product);
-                    await _context.SaveChangesAsync();
+                    _contextProduct.Product.Remove(product);
+                    await _contextProduct.SaveChangesAsync();
                 }
                 catch (Exception ex)
                 {
@@ -52,7 +52,7 @@ namespace BenriShop.ApiRepository.Products
 
         public async Task<Product> UpdateProduct(Product product)
         {
-            var result = await _context.Product.FindAsync(product.Productid);
+            var result = await _contextProduct.Product.FindAsync(product.Productid);
 
             if (result != null)
             {
@@ -68,7 +68,7 @@ namespace BenriShop.ApiRepository.Products
                 result.Sizeofproducthadcolor = product.Sizeofproducthadcolor;
                 try
                 {
-                    await _context.SaveChangesAsync();
+                    await _contextProduct.SaveChangesAsync();
                 }catch (Exception ex)
                 {
                     throw ex;
@@ -82,12 +82,12 @@ namespace BenriShop.ApiRepository.Products
 
         public async Task<Product> GetProduct(int ProductId)
         {
-            return await _context.Product.FindAsync(ProductId);
+            return await _contextProduct.Product.FindAsync(ProductId);
         }
 
         public async Task<IEnumerable<Product>> GetProducts()
         {
-            return await _context.Product.ToListAsync();
+            return await _contextProduct.Product.ToListAsync();
         }
     }
 }
