@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Neil's PC\\Source\\Repos\\BenriShop\\BenriShop.csproj": {}
+    "C:\\Users\\Neil's PC\\source\\repos\\BenriShop\\BenriShop.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Neil's PC\\Source\\Repos\\BenriShop\\BenriShop.csproj": {
+    "C:\\Users\\Neil's PC\\source\\repos\\BenriShop\\BenriShop.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Neil's PC\\Source\\Repos\\BenriShop\\BenriShop.csproj",
+        "projectUniqueName": "C:\\Users\\Neil's PC\\source\\repos\\BenriShop\\BenriShop.csproj",
         "projectName": "BenriShop",
-        "projectPath": "C:\\Users\\Neil's PC\\Source\\Repos\\BenriShop\\BenriShop.csproj",
+        "projectPath": "C:\\Users\\Neil's PC\\source\\repos\\BenriShop\\BenriShop.csproj",
         "packagesPath": "C:\\Users\\Neil's PC\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Neil's PC\\Source\\Repos\\BenriShop\\obj\\",
+        "outputPath": "C:\\Users\\Neil's PC\\source\\repos\\BenriShop\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Neil's PC\\AppData\\Roaming\\NuGet\\NuGet.Config",

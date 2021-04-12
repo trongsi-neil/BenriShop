@@ -1,4 +1,5 @@
 using BenriShop.ApiRepository.Accounts;
+using BenriShop.ApiRepository.Products;
 using BenriShop.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -48,7 +49,7 @@ namespace BenriShop
              * be provided and it will be available throughout the entire scope of that HTTP request.
             */
            services.AddScoped<IAccountRepository, AccountRepository>();
-           // services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+           services.AddScoped<IProductsRepository, ProductsRepository>();
 
 
 

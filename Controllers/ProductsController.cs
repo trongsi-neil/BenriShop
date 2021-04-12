@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BenriShop.Models;
 using Microsoft.AspNetCore.Authorization;
+using BenriShop.ApiRepository.Products;
 
 namespace BenriShop.Controllers
 {
@@ -14,78 +15,62 @@ namespace BenriShop.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly BenriShopContext _context;
+        private readonly IProductsRepository _productRepository;
 
-        public ProductsController(BenriShopContext context)
+        public ProductsController(ProductsRepository productRepository)
         {
-            _context = context;
+            this._productRepository = productRepository;
         }
 
 
         #region Admin
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         // PUT: api/Products/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutProduct(int id, Product product)
+        [HttpPut("UpdateProduct")]
+        public async Task<IActionResult> UpdateProduct(Product product)
         {
-            if (id != product.Productid)
-            {
-                return BadRequest();
-            }
+            var _product = await _productRepository.GetProduct(product.Productid);
 
-            _context.Entry(product).State = EntityState.Modified;
+            if (_product == null)
+            {
+                return NotFound();
+            }
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _productRepository.UpdateProduct(product);
+                return Ok("Update product successfully");
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProductExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NoContent();
             }
 
-            return NoContent();
         }
 
         // POST: api/Products
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPost]
-        public async Task<ActionResult<Product>> PostProduct(Product product)
+        /// <summary>
+        /// Thêm tài khoản nhân viên
+        /// </summary>
+        /// <param name="account"></param>
+        /// <returns></returns>
+        [HttpPost("AddProduct")]
+        [Authorize(Roles = "Admin, Mod")]
+        public async Task<ActionResult<Product>> AddProduct(Product product)
         {
-            _context.Product.Add(product);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (ProductExists(product.Productid))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+
 
             return CreatedAtAction("GetProduct", new { id = product.Productid }, product);
         }
 
 
         // DELETE: api/Products/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Product>> DeleteProduct(string id)
+        //[HttpDelete("{id}")]
+        /*public async Task<ActionResult<Product>> DeleteProduct(string id)
         {
             var product = await _context.Product.FindAsync(id);
             if (product == null)
@@ -97,23 +82,23 @@ namespace BenriShop.Controllers
             await _context.SaveChangesAsync();
 
             return product;
-        }
+        }*/
         #endregion
 
         #region Users
 
         // GET: api/Products
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProduct()
-        {
-            return await _context.Product.ToListAsync();
-        }
+        //[HttpGet("GetProducts")]
+        /* public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+         {
+             return _productRepository.GetProducts();
+         }*/
 
         // GET: api/Products/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProduct(string id)
+        public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            var product = await _context.Product.FindAsync(id);
+            var product = await _productRepository.GetProduct(id);
 
             if (product == null)
             {
@@ -127,10 +112,10 @@ namespace BenriShop.Controllers
 
         #region Method
 
-        private bool ProductExists(int id)
+        /*private bool ProductExists(int id)
         {
             return _context.Product.Any(e => e.Productid == id);
-        }
+        }*/
         #endregion
 
     }

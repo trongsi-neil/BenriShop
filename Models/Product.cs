@@ -20,8 +20,6 @@ namespace BenriShop.Models
         public string Productdescription { get; set; }
         public int Price { get; set; }
         public int Storagequantity { get; set; }
-
-        public virtual Category Category { get; set; }
         public virtual ICollection<Cartitem> Cartitem { get; set; }
         public virtual ICollection<HaveTag> HaveTag { get; set; }
         public virtual ICollection<Image> Image { get; set; }

@@ -73,7 +73,7 @@ namespace BenriShop.Controllers
             {
                 throw;
             }
-            return CreatedAtAction("GetAccount", new { id = account.Username }, account);
+            return Ok("Thêm tài khoản thành công");
         }
 
 

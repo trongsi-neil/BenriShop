@@ -293,12 +293,6 @@ namespace BenriShop.Models
                     .HasMaxLength(200);
 
                 entity.Property(e => e.Storagequantity).HasColumnName("STORAGEQUANTITY");
-
-                entity.HasOne(d => d.Category)
-                    .WithMany(p => p.Product)
-                    .HasForeignKey(d => d.Categoryid)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_PRODUCT_HAVE_CATE_CATEGORY");
             });
 
             modelBuilder.Entity<Shipping>(entity =>
