@@ -7,7 +7,7 @@ namespace BenriShop.Models
     {
         public string Sizeid { get; set; }
         public string Colorid { get; set; }
-        public string Productid { get; set; }
+        public int Productid { get; set; }
         public int Quantityinsizeofcolor { get; set; }
 
         public virtual Color Color { get; set; }

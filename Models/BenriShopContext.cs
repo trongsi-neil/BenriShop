@@ -272,8 +272,7 @@ namespace BenriShop.Models
 
                 entity.Property(e => e.Productid)
                     .HasColumnName("PRODUCTID")
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
+                    .ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Categoryid)
                     .IsRequired()

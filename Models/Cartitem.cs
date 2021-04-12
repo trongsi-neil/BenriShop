@@ -5,7 +5,7 @@ namespace BenriShop.Models
 {
     public partial class Cartitem
     {
-        public string Productid { get; set; }
+        public int Productid { get; set; }
         public string Username { get; set; }
         public int Quantityincart { get; set; }
 

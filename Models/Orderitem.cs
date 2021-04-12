@@ -5,7 +5,7 @@ namespace BenriShop.Models
 {
     public partial class Orderitem
     {
-        public string Productid { get; set; }
+        public int Productid { get; set; }
         public string Orderid { get; set; }
         public int Quantityinorder { get; set; }
 

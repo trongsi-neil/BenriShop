@@ -28,7 +28,7 @@ namespace BenriShop.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProduct(string id, Product product)
+        public async Task<IActionResult> PutProduct(int id, Product product)
         {
             if (id != product.Productid)
             {
@@ -127,7 +127,7 @@ namespace BenriShop.Controllers
 
         #region Method
 
-        private bool ProductExists(string id)
+        private bool ProductExists(int id)
         {
             return _context.Product.Any(e => e.Productid == id);
         }

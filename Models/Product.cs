@@ -14,7 +14,7 @@ namespace BenriShop.Models
             Sizeofproducthadcolor = new HashSet<Sizeofproducthadcolor>();
         }
 
-        public string Productid { get; set; }
+        public int Productid { get; set; }
         public string Categoryid { get; set; }
         public string Productname { get; set; }
         public string Productdescription { get; set; }
