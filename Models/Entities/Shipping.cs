@@ -5,12 +5,12 @@ namespace BenriShop.Models
 {
     public partial class Shipping
     {
-        public string Orderid { get; set; }
-        public string Shippingid { get; set; }
+        public string ShippingId { get; set; }
+        public string OrderId { get; set; }
         public int Cost { get; set; }
         public int Status { get; set; }
         public string Note { get; set; }
 
-        public virtual Order Order { get; set; }
+        public Order Order { get; set; }
     }
 }

@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using BenriShop.Models;
 using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
-using System.Web.Helpers;
 using System.Net.Http;
 using BenriShop.ApiRepository.Accounts;
 using System.Security.Claims;
@@ -58,7 +57,7 @@ namespace BenriShop.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<Account>> AddModAccount(Account account)
         {
-            var _account = await _accountRepository.GetAccount(account.Username);
+            var _account = await _accountRepository.GetAccount(account.UserName);
 
             if (_account != null)
             {
@@ -107,7 +106,7 @@ namespace BenriShop.Controllers
         [HttpPut("ChangeRoleOfAccount/{id}")]
         public async Task<IActionResult> ChangeRoleOfAccount(string id, Account account)
         {
-            var username = account.Username;
+            var username = account.UserName;
             var role = account.Role;
 
             var _account = await _accountRepository.GetAccount(username);
@@ -220,7 +219,7 @@ namespace BenriShop.Controllers
 
             if (identity != null)
             {
-                if (id != account.Username || identity.Name != account.Username)
+                if (id != account.UserName || identity.Name != account.UserName)
                 {
                     return BadRequest();
                 }
@@ -258,7 +257,7 @@ namespace BenriShop.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<Account>> CreateAccount(Account account)
         {
-            var _account = await _accountRepository.GetAccount(account.Username);
+            var _account = await _accountRepository.GetAccount(account.UserName);
            
             if (_account != null)
             {
@@ -275,7 +274,7 @@ namespace BenriShop.Controllers
                 throw;
             }
 
-            return CreatedAtAction("GetAccount", new { id = account.Username }, account);
+            return CreatedAtAction("GetAccount", new { id = account.UserName }, account);
         }
 
         [HttpPost("CheckAccount")]
@@ -283,7 +282,7 @@ namespace BenriShop.Controllers
         public async Task<IActionResult> CheckAccountAsync(Account account)
         {
 
-            var _account = await _accountRepository.GetAccount(account.Username);
+            var _account = await _accountRepository.GetAccount(account.UserName);
 
             if (_account != null)
             {

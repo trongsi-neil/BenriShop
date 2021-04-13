@@ -78,7 +78,7 @@ namespace BenriShop.Migrations
                 {
                     table.PrimaryKey("PK_ORDER", x => x.ORDERID);
                     table.ForeignKey(
-                        name: "FK_ORDER_ORDER_ACCOUNT",
+                        name: "fk_order_order_account",
                         column: x => x.USERNAME,
                         principalTable: "ACCOUNT",
                         principalColumn: "USERNAME",
@@ -101,19 +101,19 @@ namespace BenriShop.Migrations
                 {
                     table.PrimaryKey("PK_PRODUCT", x => x.PRODUCTID);
                     table.ForeignKey(
-                        name: "FK_PRODUCT_HAVE_CATE_CATEGORY",
+                        name: "FK_PRODUCT_CATEGORY_CATEGORYID",
                         column: x => x.CATEGORYID,
                         principalTable: "CATEGORY",
                         principalColumn: "CATEGORYID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "SHIPPING",
                 columns: table => new
                 {
-                    ORDERID = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     SHIPPINGID = table.Column<string>(unicode: false, maxLength: 60, nullable: false),
+                    ORDERID = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     COST = table.Column<int>(nullable: false),
                     STATUS = table.Column<int>(nullable: false),
                     NOTE = table.Column<string>(maxLength: 300, nullable: true)
@@ -141,17 +141,17 @@ namespace BenriShop.Migrations
                 {
                     table.PrimaryKey("PK_CARTITEM", x => new { x.PRODUCTID, x.USERNAME });
                     table.ForeignKey(
-                        name: "FK_CARTITEM_ADDED_PRODUCT",
+                        name: "FK_CARTITEM_PRODUCT_PRODUCTID",
                         column: x => x.PRODUCTID,
                         principalTable: "PRODUCT",
                         principalColumn: "PRODUCTID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CARTITEM_HAVE_ITEM_ACCOUNT",
+                        name: "FK_CARTITEM_ACCOUNT_USERNAME",
                         column: x => x.USERNAME,
                         principalTable: "ACCOUNT",
                         principalColumn: "USERNAME",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -165,17 +165,17 @@ namespace BenriShop.Migrations
                 {
                     table.PrimaryKey("PK_HAVE_TAG", x => new { x.PRODUCTID, x.TAGID });
                     table.ForeignKey(
-                        name: "FK_HAVE_TAG_HAVE_TAG_PRODUCT",
+                        name: "FK_HAVE_TAG_PRODUCT_PRODUCTID",
                         column: x => x.PRODUCTID,
                         principalTable: "PRODUCT",
                         principalColumn: "PRODUCTID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_HAVE_TAG_HAVE_TAG2_TAG",
+                        name: "FK_HAVE_TAG_TAG_TAGID",
                         column: x => x.TAGID,
                         principalTable: "TAG",
                         principalColumn: "TAGID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -190,11 +190,11 @@ namespace BenriShop.Migrations
                 {
                     table.PrimaryKey("PK_IMAGE", x => new { x.PRODUCTID, x.IMAGEID });
                     table.ForeignKey(
-                        name: "FK_IMAGE_HAVE_IMAG_PRODUCT",
+                        name: "FK_IMAGE_PRODUCT_PRODUCTID",
                         column: x => x.PRODUCTID,
                         principalTable: "PRODUCT",
                         principalColumn: "PRODUCTID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -260,7 +260,7 @@ namespace BenriShop.Migrations
                 column: "PRODUCTID");
 
             migrationBuilder.CreateIndex(
-                name: "HAVE_ITEM_IN_CART_FK",
+                name: "IX_CARTITEM_USERNAME",
                 table: "CARTITEM",
                 column: "USERNAME");
 

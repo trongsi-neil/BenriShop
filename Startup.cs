@@ -45,10 +45,10 @@ namespace BenriShop
             //    options.AccessDeniedPath = "/User/Forbidden/";
             //});
 
-            services.AddSession(options =>
-            {
-                options.IdleTimeout = TimeSpan.FromMinutes(30);
-            });
+            //services.AddSession(options =>
+            //{
+            //    options.IdleTimeout = TimeSpan.FromMinutes(30);
+            //});
 
             services.AddDbContext<BenriShopContext>(op => op.UseSqlServer(connection));
 

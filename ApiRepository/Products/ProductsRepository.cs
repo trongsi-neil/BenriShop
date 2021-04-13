@@ -20,7 +20,7 @@ namespace BenriShop.ApiRepository.Products
         {
             try
             {
-                var result = await _context.Product.AddAsync(product);
+                var result = await _context.Products.AddAsync(product);
                 await _context.SaveChangesAsync();
                 return result.Entity;
             }catch (Exception ex)
@@ -32,12 +32,12 @@ namespace BenriShop.ApiRepository.Products
         public async Task<bool> DeleteProduct(int productId)
         {
 
-            var product = await _context.Product.FindAsync(productId);
+            var product = await _context.Products.FindAsync(productId);
             if (product != null)
             {
                 try
                 {
-                    _context.Product.Remove(product);
+                    _context.Products.Remove(product);
                     await _context.SaveChangesAsync();
                 }
                 catch (Exception ex)
@@ -52,20 +52,20 @@ namespace BenriShop.ApiRepository.Products
 
         public async Task<Product> UpdateProduct(Product product)
         {
-            var result = await _context.Product.FindAsync(product.Productid);
+            var result = await _context.Products.FindAsync(product.ProductId);
 
             if (result != null)
             {
-                result.Categoryid = product.Categoryid;
-                result.Productname = product.Productname;
-                result.Productdescription = product.Productdescription;
+                result.CategoryId = product.CategoryId;
+                result.ProductName = product.ProductName;
+                result.ProductDescription = product.ProductDescription;
                 result.Price = product.Price;
-                result.Storagequantity = product.Storagequantity;
-                result.Cartitem = product.Cartitem;
-                result.HaveTag = product.HaveTag;
-                result.Image = product.Image;
-                result.Orderitem = product.Orderitem;
-                result.Sizeofproducthadcolor = product.Sizeofproducthadcolor;
+                result.StorageQuantity = product.StorageQuantity;
+                result.CartItems = product.CartItems;
+                result.HaveTags = product.HaveTags;
+                result.Images = product.Images;
+                result.OrderItems = product.OrderItems;
+                result.SizeOfProductHadColors = product.SizeOfProductHadColors;
                 try
                 {
                     await _context.SaveChangesAsync();
@@ -80,14 +80,75 @@ namespace BenriShop.ApiRepository.Products
             return null;
         }
 
+
+
+        //public List<EmployeeDTO> GetImages(int ProductId)
+        //{
+        //    var result = (from IMAGE in BenriShop
+        //                  where Product.ProductId == ProductId
+        //                  select new EmployeeDTO
+        //                  {
+        //                      FullName = emp.FullName,
+        //                      Role = emp.Role,
+        //                      Designation = emp.Designation
+        //                  }).ToList();
+
+        //    return result;
+        //}
+
         public async Task<Product> GetProduct(int ProductId)
         {
-            return await _context.Product.FindAsync(ProductId);
+
+            var product = await _context.Products.FirstOrDefaultAsync(e => e.ProductId == ProductId);
+
+            //_context.Image.Where(x => x.Imageid.Contains("select * from [image] where ProductId = "+ProductId+";")).Select(x => new { x., x.Name }).ToList();
+
+            IQueryable<Image> query = _context.Images;
+
+            if (!string.IsNullOrEmpty(ProductId.ToString()))
+            {
+                //query = query.Where(e => e.Productid.Contains(ProductId.ToString()));
+                query = query.Where(e => e.ProductId == ProductId).
+                    Select(i => new Image
+                    {
+                        Link = i.Link
+                    }).AsQueryable();
+            }
+
+            //ICollection<Image> image = (ICollection<Image>)_context.Image.Select(t => t.Productid == ProductId).ToListAsync();
+
+            product.Images = await query.ToListAsync();
+            return product;
         }
 
         public async Task<IEnumerable<Product>> GetProducts()
         {
-            return await _context.Product.ToListAsync();
+            return await _context.Products.ToListAsync();
+        }
+
+        public async Task<bool> AddImage(int ProductId, string ImageId, string ImageLink)
+        {
+            var product = await _context.Products.FindAsync(ProductId);
+            if (product == null)
+            {
+                return false;
+            }
+            Image img = new Image();
+            //img.Product = product;
+            img.Imageid = ImageId;
+            img.Link = ImageLink;
+            img.ProductId = product.ProductId;
+
+            try
+            {
+                _context.Images.Add(img);
+                var result = await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

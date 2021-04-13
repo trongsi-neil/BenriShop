@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using BenriShop.Models;
 using Microsoft.AspNetCore.Authorization;
 using BenriShop.ApiRepository.Products;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace BenriShop.Controllers
 {
@@ -16,26 +18,44 @@ namespace BenriShop.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IProductsRepository _productRepository;
+        public static IWebHostEnvironment _environment;
 
-        public ProductsController(IProductsRepository productRepository)
+        public ProductsController(IProductsRepository productRepository, IWebHostEnvironment environment)
         {
             this._productRepository = productRepository;
+
+            _environment = environment; 
         }
 
+        public class FileUpload
+        {
+            public int ProductId { get; set; }
+
+            public string Id { get; set; }
+
+            public string Link { get; set; }
+
+            public IFormFile files { get; set; }
+        }
 
         #region Admin
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Mod")]
         // PUT: api/Products/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        /// <summary>
+        /// Sửa thông tin sản phẩm
+        /// </summary>
+        /// <param id="ProductId"></param>
+        /// <returns></returns>
         [HttpPut("UpdateProduct/{id}")]
         public async Task<IActionResult> UpdateProduct(int id, Product product)
         {
-            if (id != product.Productid)
+            if (id != product.ProductId)
             {
                 return BadRequest();
             }
-            var _product = await _productRepository.GetProduct(product.Productid);
+            var _product = await _productRepository.GetProduct(product.ProductId);
             
             if (_product == null)
             {
@@ -58,17 +78,16 @@ namespace BenriShop.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         /// <summary>
-        /// Thêm tài khoản nhân viên
+        /// Thêm sản phẩm vào cửa hàng
         /// </summary>
-        /// <param name="account"></param>
+        /// <param product="Product"></param>
         /// <returns></returns>
         [HttpPost("AddProduct")]
-        [Authorize(Roles = "Admin, Mod")]
+        //[Authorize(Roles = "Admin, Mod")]
         public async Task<ActionResult<Product>> AddProduct(Product product)
         {
-
-
-            return CreatedAtAction("GetProduct", new { id = product.Productid }, product);
+            await _productRepository.AddProduct(product);
+            return CreatedAtAction("GetProduct", new { id = product.ProductId }, product);
         }
 
 
@@ -120,6 +139,43 @@ namespace BenriShop.Controllers
         {
             return _context.Product.Any(e => e.Productid == id);
         }*/
+        [HttpPost("UploadImage")]
+        //[Route("api/[controller]/uploadimage")]
+        public async Task<ActionResult> UploadImage([FromForm] FileUpload objFile)
+        {
+            if (objFile.files.Length > 0)
+            {
+                objFile.Id = objFile.ProductId + "_" + objFile.files.FileName;
+                objFile.Link = _environment.WebRootPath + "\\images\\" + objFile.Id;
+                if (objFile.Id.Length > 20)
+                {
+                    return BadRequest("Lỗi á");
+                }
+                try
+                {
+                    if (!Directory.Exists(_environment.WebRootPath + "\\images\\"))
+                    {
+                        Directory.CreateDirectory(_environment.WebRootPath + "\\images\\");
+                    }
+                    using (FileStream fileStream = System.IO.File.Create(objFile.Link))
+                    {
+                        objFile.files.CopyTo(fileStream);
+                        fileStream.Flush();
+                        await _productRepository.AddImage(objFile.ProductId, objFile.Id, objFile.Link);
+                        return Ok("CÓ hình ròi bạn ei");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+            else
+            {
+                return BadRequest("Hình gì mà độ dài dữ liệu < 0? Mày khùng hả?");
+            }
+        }
+
         #endregion
 
     }

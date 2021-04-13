@@ -5,10 +5,10 @@ namespace BenriShop.Models
 {
     public partial class Image
     {
-        public int Productid { get; set; }
+        public int ProductId { get; set; }
         public string Imageid { get; set; }
         public string Link { get; set; }
 
-        public virtual Product Product { get; set; }
+        public Product Product { get; set; }
     }
 }

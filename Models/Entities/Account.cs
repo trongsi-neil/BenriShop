@@ -12,20 +12,14 @@ namespace BenriShop.Models
 
     public partial class Account
     {
-        public Account()
-        {
-            Cartitem = new HashSet<Cartitem>();
-            Order = new HashSet<Order>();
-        }
-
-        public string Username { get; set; }
+        public string UserName { get; set; }
         public string Password { get; set; }
-        public string Phonenumber { get; set; }
+        public string PhoneNumber { get; set; }
         public string Address { get; set; }
-        public string Fullname { get; set; }
+        public string FullName { get; set; }
         public string Role { get; set; }
 
-        public virtual ICollection<Cartitem> Cartitem { get; set; }
-        public virtual ICollection<Order> Order { get; set; }
+        public List<CartItem> CartItems { get; set; }
+        public List<Order> Orders { get; set; }
     }
 }

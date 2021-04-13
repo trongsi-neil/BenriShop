@@ -24,14 +24,14 @@ namespace BenriShop.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrder()
         {
-            return await _context.Order.ToListAsync();
+            return await _context.Orders.ToListAsync();
         }
 
         // GET: api/Orders/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Order>> GetOrder(string id)
         {
-            var order = await _context.Order.FindAsync(id);
+            var order = await _context.Orders.FindAsync(id);
 
             if (order == null)
             {
@@ -47,7 +47,7 @@ namespace BenriShop.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutOrder(string id, Order order)
         {
-            if (id != order.Orderid)
+            if (id != order.OrderId)
             {
                 return BadRequest();
             }
@@ -79,14 +79,14 @@ namespace BenriShop.Controllers
         [HttpPost]
         public async Task<ActionResult<Order>> PostOrder(Order order)
         {
-            _context.Order.Add(order);
+            _context.Orders.Add(order);
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (OrderExists(order.Orderid))
+                if (OrderExists(order.OrderId))
                 {
                     return Conflict();
                 }
@@ -96,20 +96,20 @@ namespace BenriShop.Controllers
                 }
             }
 
-            return CreatedAtAction("GetOrder", new { id = order.Orderid }, order);
+            return CreatedAtAction("GetOrder", new { id = order.OrderId }, order);
         }
 
         // DELETE: api/Orders/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Order>> DeleteOrder(string id)
         {
-            var order = await _context.Order.FindAsync(id);
+            var order = await _context.Orders.FindAsync(id);
             if (order == null)
             {
                 return NotFound();
             }
 
-            _context.Order.Remove(order);
+            _context.Orders.Remove(order);
             await _context.SaveChangesAsync();
 
             return order;
@@ -117,7 +117,7 @@ namespace BenriShop.Controllers
 
         private bool OrderExists(string id)
         {
-            return _context.Order.Any(e => e.Orderid == id);
+            return _context.Orders.Any(e => e.OrderId == id);
         }
     }
 }

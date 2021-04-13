@@ -16,5 +16,6 @@ namespace BenriShop.ApiRepository.Products
         Task<Product> AddProduct(Product Product);
         Task<Product> UpdateProduct(Product Product);
         Task<bool> DeleteProduct(int ProductId);
+        Task<bool> AddImage(int ProductId, string ImageId, string ImageLink);
     }
 }

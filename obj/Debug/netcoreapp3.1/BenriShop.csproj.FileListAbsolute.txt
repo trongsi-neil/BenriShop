@@ -145,11 +145,6 @@ C:\Users\ngomi\source\repos\BenriShop\BenriShop\bin\Debug\netcoreapp3.1\BenriSho
 C:\Users\ngomi\source\repos\BenriShop\BenriShop\bin\Debug\netcoreapp3.1\BenriShop.runtimeconfig.dev.json
 C:\Users\ngomi\source\repos\BenriShop\BenriShop\bin\Debug\netcoreapp3.1\BenriShop.dll
 C:\Users\ngomi\source\repos\BenriShop\BenriShop\bin\Debug\netcoreapp3.1\BenriShop.pdb
-C:\Users\ngomi\source\repos\BenriShop\BenriShop\bin\Debug\netcoreapp3.1\System.Web.Razor.dll
-C:\Users\ngomi\source\repos\BenriShop\BenriShop\bin\Debug\netcoreapp3.1\System.Web.Helpers.dll
-C:\Users\ngomi\source\repos\BenriShop\BenriShop\bin\Debug\netcoreapp3.1\System.Web.WebPages.Deployment.dll
-C:\Users\ngomi\source\repos\BenriShop\BenriShop\bin\Debug\netcoreapp3.1\System.Web.WebPages.Razor.dll
-C:\Users\ngomi\source\repos\BenriShop\BenriShop\bin\Debug\netcoreapp3.1\System.Web.WebPages.dll
 C:\Users\ngomi\source\repos\BenriShop\BenriShop\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\ngomi\source\repos\BenriShop\BenriShop\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Razor.Language.dll
 C:\Users\ngomi\source\repos\BenriShop\BenriShop\bin\Debug\netcoreapp3.1\Microsoft.Bcl.AsyncInterfaces.dll
@@ -190,7 +185,6 @@ C:\Users\ngomi\source\repos\BenriShop\BenriShop\bin\Debug\netcoreapp3.1\Microsof
 C:\Users\ngomi\source\repos\BenriShop\BenriShop\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.Web.CodeGeneration.Templating.dll
 C:\Users\ngomi\source\repos\BenriShop\BenriShop\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.Web.CodeGeneration.Utils.dll
 C:\Users\ngomi\source\repos\BenriShop\BenriShop\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.Web.CodeGenerators.Mvc.dll
-C:\Users\ngomi\source\repos\BenriShop\BenriShop\bin\Debug\netcoreapp3.1\Microsoft.Web.Infrastructure.dll
 C:\Users\ngomi\source\repos\BenriShop\BenriShop\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
 C:\Users\ngomi\source\repos\BenriShop\BenriShop\bin\Debug\netcoreapp3.1\NuGet.Frameworks.dll
 C:\Users\ngomi\source\repos\BenriShop\BenriShop\bin\Debug\netcoreapp3.1\System.Collections.Immutable.dll
