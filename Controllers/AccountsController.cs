@@ -186,7 +186,7 @@ namespace BenriShop.Controllers
                 var account = await _accountRepository.GetAccount(id);
                 if (account == null)
                 {
-                    return NotFound();
+                    return NotFound("Can't found the account with id: " + id);
                 }
                 return account;
             }
@@ -197,16 +197,16 @@ namespace BenriShop.Controllers
                     var account = await _accountRepository.GetAccount(id);
                     if (account == null)
                     {
-                        return NotFound();
+                        return NotFound("Can't found the account with id: " + id);
                     }
                     return account;
                 }
                 else
                 {
-                    BadRequest("Không có quyền truy cập");
+                    BadRequest("Not authorized");
                 }
             }
-            return BadRequest("Không truy cập được");
+            return BadRequest("Can't access!");
         }
         // PUT: api/Accounts/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for

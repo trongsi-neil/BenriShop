@@ -8657,27 +8657,25 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\ngomi\\.nuget\\packages\\": {}
+    "C:\\Users\\Neil's PC\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ngomi\\source\\repos\\BenriShop\\BenriShop\\BenriShop.csproj",
+      "projectUniqueName": "C:\\Users\\Neil's PC\\Source\\Repos\\BenriShop\\BenriShop.csproj",
       "projectName": "BenriShop",
-      "projectPath": "C:\\Users\\ngomi\\source\\repos\\BenriShop\\BenriShop\\BenriShop.csproj",
-      "packagesPath": "C:\\Users\\ngomi\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ngomi\\source\\repos\\BenriShop\\BenriShop\\obj\\",
+      "projectPath": "C:\\Users\\Neil's PC\\Source\\Repos\\BenriShop\\BenriShop.csproj",
+      "packagesPath": "C:\\Users\\Neil's PC\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Neil's PC\\Source\\Repos\\BenriShop\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\ngomi\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 19.1.config",
+        "C:\\Users\\Neil's PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp3.1"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\DevExpress 19.1\\Components\\System\\Components\\Packages": {},
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },

@@ -149,7 +149,7 @@ namespace BenriShop.Controllers
                 objFile.Link = _environment.WebRootPath + "\\images\\" + objFile.Id;
                 if (objFile.Id.Length > 20)
                 {
-                    return BadRequest("Lỗi á");
+                    return BadRequest("Lỗi do cái tên quá trời dài á!");
                 }
                 try
                 {
@@ -162,7 +162,7 @@ namespace BenriShop.Controllers
                         objFile.files.CopyTo(fileStream);
                         fileStream.Flush();
                         await _productRepository.AddImage(objFile.ProductId, objFile.Id, objFile.Link);
-                        return Ok("CÓ hình ròi bạn ei");
+                        return Ok("Có hình rồi nè thanh niên ơi!");
                     }
                 }
                 catch (Exception ex)

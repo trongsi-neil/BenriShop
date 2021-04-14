@@ -278,11 +278,6 @@ C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\BenriShop.runt
 C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\BenriShop.runtimeconfig.dev.json
 C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\BenriShop.dll
 C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\BenriShop.pdb
-C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\System.Web.Razor.dll
-C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\System.Web.Helpers.dll
-C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\System.Web.WebPages.Deployment.dll
-C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\System.Web.WebPages.Razor.dll
-C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\System.Web.WebPages.dll
 C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Razor.Language.dll
 C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\Microsoft.Bcl.AsyncInterfaces.dll
@@ -323,7 +318,6 @@ C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\Microsoft.Visu
 C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.Web.CodeGeneration.Templating.dll
 C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.Web.CodeGeneration.Utils.dll
 C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.Web.CodeGenerators.Mvc.dll
-C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\Microsoft.Web.Infrastructure.dll
 C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
 C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\NuGet.Frameworks.dll
 C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\System.Collections.Immutable.dll
@@ -397,7 +391,6 @@ C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\runtimes\win-x
 C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.0\System.Runtime.Caching.dll
 C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Runtime.Caching.dll
 C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
-C:\Users\Neil's PC\Source\Repos\BenriShop\obj\Debug\netcoreapp3.1\BenriShop.csprojAssemblyReference.cache
 C:\Users\Neil's PC\Source\Repos\BenriShop\obj\Debug\netcoreapp3.1\BenriShop.AssemblyInfoInputs.cache
 C:\Users\Neil's PC\Source\Repos\BenriShop\obj\Debug\netcoreapp3.1\BenriShop.AssemblyInfo.cs
 C:\Users\Neil's PC\Source\Repos\BenriShop\obj\Debug\netcoreapp3.1\BenriShop.csproj.CoreCompileInputs.cache
@@ -415,3 +408,8 @@ C:\Users\ngomi\source\repos\BenriShop\BenriShop\bin\Debug\netcoreapp3.1\Microsof
 C:\Users\ngomi\source\repos\BenriShop\BenriShop\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
 C:\Users\ngomi\source\repos\BenriShop\BenriShop\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Identity.Core.dll
 C:\Users\ngomi\source\repos\BenriShop\BenriShop\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Identity.Stores.dll
+C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Identity.Core.dll
+C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Identity.Stores.dll
