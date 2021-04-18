@@ -49,7 +49,7 @@ namespace BenriShop.Controllers
         {
             if (id != order.OrderId)
             {
-                return BadRequest();
+                return BadRequest("Wrong of OrderId");
             }
 
             _context.Entry(order).State = EntityState.Modified;

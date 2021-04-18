@@ -53,7 +53,7 @@ namespace BenriShop.Controllers
         {
             if (id != product.ProductId)
             {
-                return BadRequest();
+                return BadRequest("Wrong of ProductId");
             }
             var _product = await _productRepository.GetProduct(product.ProductId);
             

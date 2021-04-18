@@ -57,7 +57,8 @@ namespace BenriShop.ApiRepository.CartItems
 
         public async Task<bool> DeleteCartItem(string UserName, int ProductId)
         {
-            var cartItem = await _context.CartItems.FindAsync(UserName, ProductId);
+            var cartItem = await _context.CartItems.FirstOrDefaultAsync
+                (e => e.UserName == UserName && e.ProductId == ProductId);
             if (cartItem != null)
             {
                 try
@@ -77,7 +78,8 @@ namespace BenriShop.ApiRepository.CartItems
 
         public async Task<CartItem> GetCartItem(string UserName, int ProductId)
         {
-            return await _context.CartItems.FindAsync(UserName, ProductId);
+            return await _context.CartItems.FirstOrDefaultAsync
+                (e => e.UserName == UserName && e.ProductId == ProductId);
         }
 
         public async Task<IEnumerable<CartItem>> GetCartItems(string userName)

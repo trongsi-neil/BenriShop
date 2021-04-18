@@ -1,6 +1,7 @@
 ﻿using BenriShop.ApiRepository.CartItems;
 using BenriShop.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -21,7 +22,7 @@ namespace BenriShop.Controllers
         /// </summary>
         /// <param name="userName"></param>
         /// <returns></returns>
-        // GET: api/CartItems
+        // GET: api/CartItems/userName
         [HttpGet("{userName}")]
         public async Task<IEnumerable<CartItem>> GetCartItems(string userName)
         {
@@ -33,92 +34,56 @@ namespace BenriShop.Controllers
             return (IEnumerable<CartItem>)NotFound("Error of GetCartItem");
         }
 
-        //GET: api/CartItems/5
-        /*[HttpGet("{id}")]
-        public async Task<ActionResult<CartItem>> GetCartItem(int id)
-        {
-            var cartItem = await _context.CartItems.FindAsync(id);
-
-            if (cartItem == null)
-            {
-                return NotFound();
-            }
-
-            return cartItem;
-        }
-
-        // PUT: api/CartItems/5
+        // PUT: api/CartItems/userName/1
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCartItem(int id, CartItem cartItem)
+        [HttpPut("{userName}/{productId}")]
+        public async Task<IActionResult> UpdateCartItem(string userName, int productId, CartItem cartItem)
         {
-            if (id != cartItem.ProductId)
+            if (productId != cartItem.ProductId || userName != cartItem.UserName)
             {
-                return BadRequest();
+                return BadRequest("Wrong of productId or userName");
             }
 
-            _context.Entry(cartItem).State = EntityState.Modified;
+            var _product = await _cartItemRepository.GetCartItem(cartItem.UserName, cartItem.ProductId);
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _cartItemRepository.UpdateCartItem(cartItem);
+                return Ok("Update cartItem successfully");
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CartItemExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NoContent();
             }
-
-            return NoContent();
+            
         }
 
         // POST: api/CartItems
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<CartItem>> PostCartItem(CartItem cartItem)
+        public async Task<ActionResult<CartItem>> AddCartItem(CartItem cartItem)
         {
-            _context.CartItems.Add(cartItem);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (CartItemExists(cartItem.ProductId))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _cartItemRepository.AddCartItem(cartItem);
 
-            return CreatedAtAction("GetCartItem", new { id = cartItem.ProductId }, cartItem);
+            return CreatedAtAction("GetCartItems", new { userName = cartItem.UserName }, cartItem);
         }
 
         // DELETE: api/CartItems/5
-        [HttpDelete("{id}/{UserName}")]
-        public async Task<ActionResult<CartItem>> DeleteCartItem(int id, string UserName)
+        [HttpDelete("{userName}/{productId}")]
+        public async Task<ActionResult<CartItem>> DeleteCartItem(string userName, int productId)
         {
-            if(await _cartItemRepository.DeleteCartItem(UserName, id))
+            if(await _cartItemRepository.DeleteCartItem(userName, productId))
             {
-                return Ok("Delete CartItem successfully!(" + UserName + ", " + id);
+                return Ok("Delete CartItem successfully!(" + userName + ", " + productId);
             }else
             {
                 return BadRequest("Delete CartItem failed!");
             }
         }
 
-        private bool CartItemExists(int id)
+        /*private bool CartItemExists(int id)
         {
             return _context.CartItems.Any(e => e.ProductId == id);
         }*/
