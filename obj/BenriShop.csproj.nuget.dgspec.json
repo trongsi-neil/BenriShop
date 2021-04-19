@@ -62,6 +62,10 @@
               "target": "Package",
               "version": "[3.1.5, )"
             },
+            "Stripe.net": {
+              "target": "Package",
+              "version": "[39.45.0, )"
+            },
             "System.Collections": {
               "target": "Package",
               "version": "[4.3.0, )"

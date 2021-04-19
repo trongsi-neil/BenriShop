@@ -1161,6 +1161,20 @@
           }
         }
       },
+      "Stripe.net/39.45.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Bcl.AsyncInterfaces": "1.1.0",
+          "Newtonsoft.Json": "11.0.1",
+          "System.Configuration.ConfigurationManager": "4.5.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Stripe.net.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Stripe.net.dll": {}
+        }
+      },
       "System.AppContext/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -1447,7 +1461,7 @@
           "System.Security.Permissions": "4.5.0"
         },
         "compile": {
-          "ref/netstandard2.0/_._": {}
+          "ref/netstandard2.0/System.Configuration.ConfigurationManager.dll": {}
         },
         "runtime": {
           "lib/netstandard2.0/System.Configuration.ConfigurationManager.dll": {}
@@ -2157,7 +2171,7 @@
           "System.Security.Principal.Windows": "4.5.0"
         },
         "compile": {
-          "ref/netstandard2.0/_._": {}
+          "ref/netstandard2.0/System.Security.AccessControl.dll": {}
         },
         "runtime": {
           "lib/netstandard2.0/System.Security.AccessControl.dll": {}
@@ -2393,7 +2407,7 @@
           "System.Security.AccessControl": "4.5.0"
         },
         "compile": {
-          "ref/netstandard2.0/_._": {}
+          "ref/netstandard2.0/System.Security.Permissions.dll": {}
         },
         "runtime": {
           "lib/netstandard2.0/System.Security.Permissions.dll": {}
@@ -2405,7 +2419,7 @@
           "Microsoft.NETCore.Platforms": "2.0.0"
         },
         "compile": {
-          "ref/netstandard2.0/_._": {}
+          "ref/netstandard2.0/System.Security.Principal.Windows.dll": {}
         },
         "runtime": {
           "lib/netstandard2.0/System.Security.Principal.Windows.dll": {}
@@ -4474,6 +4488,28 @@
         "runtimes/win-x86/native/sni.dll",
         "useSharedDesignerContext.txt",
         "version.txt"
+      ]
+    },
+    "Stripe.net/39.45.0": {
+      "sha512": "8x9yS3OlVDW7H3dtxRozwRjfovdlUi5ZGioDMjdxUr33C9uz0AQt2PkSq5HWF4NQDTXX6e56ZW4KWcwpDDtJ6g==",
+      "type": "package",
+      "path": "stripe.net/39.45.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "icon.png",
+        "lib/net461/Stripe.net.dll",
+        "lib/net461/Stripe.net.pdb",
+        "lib/net461/Stripe.net.xml",
+        "lib/net5.0/Stripe.net.dll",
+        "lib/net5.0/Stripe.net.pdb",
+        "lib/net5.0/Stripe.net.xml",
+        "lib/netstandard2.0/Stripe.net.dll",
+        "lib/netstandard2.0/Stripe.net.pdb",
+        "lib/netstandard2.0/Stripe.net.xml",
+        "stripe.net.39.45.0.nupkg.sha512",
+        "stripe.net.nuspec"
       ]
     },
     "System.AppContext/4.3.0": {
@@ -8652,6 +8688,7 @@
       "Microsoft.EntityFrameworkCore.SqlServer >= 3.1.13",
       "Microsoft.EntityFrameworkCore.Tools >= 3.1.13",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 3.1.5",
+      "Stripe.net >= 39.45.0",
       "System.Collections >= 4.3.0",
       "System.IdentityModel.Tokens.Jwt >= 5.6.0"
     ]
@@ -8662,11 +8699,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Neil's PC\\Source\\Repos\\BenriShop\\BenriShop.csproj",
+      "projectUniqueName": "C:\\Users\\Neil's PC\\source\\repos\\BenriShop\\BenriShop.csproj",
       "projectName": "BenriShop",
-      "projectPath": "C:\\Users\\Neil's PC\\Source\\Repos\\BenriShop\\BenriShop.csproj",
+      "projectPath": "C:\\Users\\Neil's PC\\source\\repos\\BenriShop\\BenriShop.csproj",
       "packagesPath": "C:\\Users\\Neil's PC\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Neil's PC\\Source\\Repos\\BenriShop\\obj\\",
+      "outputPath": "C:\\Users\\Neil's PC\\source\\repos\\BenriShop\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Neil's PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -8716,6 +8753,10 @@
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
             "target": "Package",
             "version": "[3.1.5, )"
+          },
+          "Stripe.net": {
+            "target": "Package",
+            "version": "[39.45.0, )"
           },
           "System.Collections": {
             "target": "Package",

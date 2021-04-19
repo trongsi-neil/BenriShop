@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "DsTIi7TtZaKLpUfgFd7iDqYTW2fFLSdGXB2MhadTY6AaURiXWjXG8TpHF9xPu1BxD8fSc6XIuBZwEtxqK8Vkhg==",
+  "dgSpecHash": "ZGBdRfcClBVo62xAYE96Y/lgngKw6tr0jyFCsDaoTIyBLh7o0/4YsXOB5OoBk55wO2T0Bw9I1FaWVA3c8Qm+DA==",
   "success": true,
   "projectFilePath": "C:\\Users\\Neil's PC\\source\\repos\\BenriShop\\BenriShop.csproj",
   "expectedPackageFiles": [
@@ -83,6 +83,7 @@
     "C:\\Users\\Neil's PC\\.nuget\\packages\\runtime.win-arm64.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-arm64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
     "C:\\Users\\Neil's PC\\.nuget\\packages\\runtime.win-x64.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-x64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
     "C:\\Users\\Neil's PC\\.nuget\\packages\\runtime.win-x86.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-x86.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+    "C:\\Users\\Neil's PC\\.nuget\\packages\\stripe.net\\39.45.0\\stripe.net.39.45.0.nupkg.sha512",
     "C:\\Users\\Neil's PC\\.nuget\\packages\\system.appcontext\\4.3.0\\system.appcontext.4.3.0.nupkg.sha512",
     "C:\\Users\\Neil's PC\\.nuget\\packages\\system.buffers\\4.3.0\\system.buffers.4.3.0.nupkg.sha512",
     "C:\\Users\\Neil's PC\\.nuget\\packages\\system.collections\\4.3.0\\system.collections.4.3.0.nupkg.sha512",

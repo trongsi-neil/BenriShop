@@ -69,7 +69,7 @@ namespace BenriShop.Controllers
                 await _accountRepository.AddAccount(account);
                 return Ok("Add mod account successful!");
             }
-            catch (DbUpdateException ex)
+            catch (DbUpdateException)
             {
                 return BadRequest("Error when AddAccount");
             }
@@ -306,7 +306,10 @@ namespace BenriShop.Controllers
         {
 
             var _account = await _accountRepository.GetAccount(account.UserName);
-
+            if (account.UserName == null)
+            {
+                return Conflict("User name can't empty");
+            }
             if (_account != null)
             {
                 return Conflict("This user name is existed");

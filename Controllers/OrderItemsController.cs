@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BenriShop.Models;
 using BenriShop.ApiRepository.OrderItems;
+using Stripe;
 
 namespace BenriShop.Controllers
 {
@@ -26,14 +27,14 @@ namespace BenriShop.Controllers
         /// <returns></returns>
         // GET: api/OrderItems
         [HttpGet("orderId")]
-        public async Task<IEnumerable<OrderItem>> GetOrderItems(string orderId)
+        public async Task<IEnumerable<Models.OrderItem>> GetOrderItems(string orderId)
         {
             var orderItems = _orderItemRepository.GetOrderItems(orderId);
             if (orderItems != null)
             {
                 return await orderItems;
             }
-            return (IEnumerable<OrderItem>)NotFound("Error of GetOrderItem");
+            return (IEnumerable<Models.OrderItem>)NotFound("Error of GetOrderItem");
         }
         /// <summary>
         /// Cập nhật số lượng sản phẩm trong đơn hàng.
@@ -46,7 +47,7 @@ namespace BenriShop.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{orderId}/{productId}")]
-        public async Task<IActionResult> UpdateOrderItem(string orderId, int productId, OrderItem orderItem)
+        public async Task<IActionResult> UpdateOrderItem(string orderId, int productId, Models.OrderItem orderItem)
         {
             if (productId != orderItem.ProductId || orderId != orderItem.OrderId)
             {
