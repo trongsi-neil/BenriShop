@@ -276,7 +276,10 @@ namespace BenriShop.Controllers
         public async Task<ActionResult<Account>> CreateAccount(Account account)
         {
             var _account = await _accountRepository.GetAccount(account.UserName);
-           
+            if (account.UserName == null || account.Password == null)
+            {
+                return Conflict("User name and password can't empty");
+            }
             if (_account != null)
             {
                 return Conflict("This user name is existed");
