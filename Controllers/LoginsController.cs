@@ -23,7 +23,11 @@ namespace BenriShop.Controllers
             _configuration = config;
             _context = context;
         }
-
+        /// <summary>
+        /// Đăng nhập với 1 đối tượng được truyền vào và trả về tokken tương ứng
+        /// </summary>
+        /// <param name="_account"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Post(Account _account)
         {
@@ -61,10 +65,15 @@ namespace BenriShop.Controllers
             }
             else
             {
-                return BadRequest();
+                return BadRequest("Some parameter is null");
             }
         }
-
+        /// <summary>
+        /// Tìm tài khoản trong database với username và password được truyền vào.
+        /// </summary>
+        /// <param name="UserName"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         private async Task<Account> GetAcount(string UserName, string password)
         {
             return await _context.Accounts.FirstOrDefaultAsync(u => u.UserName == UserName && u.Password == password);

@@ -20,14 +20,14 @@ namespace BenriShop.ApiRepository.Accounts
         {
             this._context = context;
         }
-
+        
         public async Task<Account> AddAccount(Account account)
         {
             var result = await _context.Accounts.AddAsync(account);
             await _context.SaveChangesAsync();
             return result.Entity;
         }
-
+        
         public async Task<bool> DeleteAccountAsync(string accountId)
         {
 
@@ -48,18 +48,18 @@ namespace BenriShop.ApiRepository.Accounts
             }
             return false;
         }
-
+        
         public async Task<Account> GetAccount(string accountId)
         {
             return await _context.Accounts.FirstOrDefaultAsync(e => e.UserName == accountId);
         }
 
-
+        
         public async Task<IEnumerable<Account>> GetAccounts()
         {
             return await _context.Accounts.ToListAsync();
         }
-
+        
         public async Task<Account> UpdateAccount(Account account)
         {
             var result = await _context.Accounts.FirstOrDefaultAsync(e => e.UserName == account.UserName);
@@ -79,7 +79,7 @@ namespace BenriShop.ApiRepository.Accounts
 
             return null;
         }
-
+        
         public async Task<IEnumerable<Account>> GetAccountsByRole(string role)
         {
             IQueryable<Account> query = _context.Accounts;

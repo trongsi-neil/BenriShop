@@ -30,7 +30,8 @@ namespace BenriShop.ApiRepository.OrderItems
 
         public async Task<bool> DeleteOrderItem(string OrderId, int ProductId)
         {
-            var orderItem = await _context.OrderItems.FindAsync(OrderId, ProductId);
+            var orderItem = await _context.OrderItems.FirstOrDefaultAsync
+                (e => e.OrderId == OrderId && e.ProductId == ProductId);
             if (orderItem != null)
             {
                 try
@@ -50,7 +51,8 @@ namespace BenriShop.ApiRepository.OrderItems
 
         public async Task<OrderItem> GetOrderItem(string OrderId, int ProductId)
         {
-            return await _context.OrderItems.FindAsync(OrderId, ProductId);
+            return await _context.OrderItems.FirstOrDefaultAsync
+                (e => e.OrderId == OrderId && e.ProductId == ProductId);
         }
 
         public async Task<IEnumerable<OrderItem>> GetOrderItems(string OrderId)

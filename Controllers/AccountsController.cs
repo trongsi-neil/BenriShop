@@ -53,7 +53,7 @@ namespace BenriShop.Controllers
         /// </summary>
         /// <param name="account"></param>
         /// <returns></returns>
-        [HttpPost("AddModAccount")]
+        [HttpPost]
         [AllowAnonymous]
         public async Task<ActionResult<Account>> AddModAccount(Account account)
         {
@@ -61,18 +61,18 @@ namespace BenriShop.Controllers
 
             if (_account != null)
             {
-                return Conflict();
+                return Conflict("Parameter account is not null");
             }
             try
             {
                 account.Role = Role.Mod;
                 await _accountRepository.AddAccount(account);
+                return Ok("Add mod account successful!");
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException ex)
             {
-                throw;
+                return BadRequest("Error when AddAccount");
             }
-            return Ok("Thêm tài khoản thành công");
         }
 
 
@@ -113,17 +113,17 @@ namespace BenriShop.Controllers
 
             if (_account == null)
             {
-                return NotFound();
+                return NotFound("Not found this account in database");
             }
 
             if (id != username)
             {
-                return BadRequest();
+                return BadRequest("Parameter username is diffirent with account's username in database");
             }
 
             if (_account.Role == role || role == "" || role == null )
             {
-                return BadRequest();
+                return BadRequest("Error of parameter role");
             }
             _account.Role = role;
 
@@ -134,11 +134,15 @@ namespace BenriShop.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                return NoContent();         
+                return BadRequest("Error when call UpdateAccount(_account)");         
             }
  
         }
-
+        /// <summary>
+        /// Xóa tài khoản bằng cách truyền vào username
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // DELETE: api/Accounts/5
        // [Authorize]
         [HttpDelete("Delete/{id}")]
@@ -147,17 +151,17 @@ namespace BenriShop.Controllers
             var account = await _accountRepository.GetAccount(id);
             if (account == null)
             {
-                return NotFound("Không tìm thấy tài khoản này");
+                return NotFound("Can't found account with this username");
             }
             try
             {
                if (await _accountRepository.DeleteAccountAsync(id))
                 {
-                    return Ok("Xóa tài khoản thành công");
+                    return Ok("Delete account successful");
                 }
                 else
                 {
-                    return BadRequest("Xóa tài khoản không thành công");
+                    return BadRequest("Error when call DeleteAccountAsync(id)");
                 }
                
             }
@@ -173,7 +177,11 @@ namespace BenriShop.Controllers
         #region User
 
         #region Authorize
-
+        /// <summary>
+        /// Lấy thông tin tài khoản bằng cách truyền vào username
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // GET: api/Accounts/5
         [Authorize]
         [HttpGet("GetAccountInformation/{id}")]
@@ -206,8 +214,14 @@ namespace BenriShop.Controllers
                     BadRequest("Not authorized");
                 }
             }
-            return BadRequest("Can't access!");
+            return BadRequest("Can't access to database!");
         }
+        /// <summary>
+        /// Thay đổi thông tin tài khoản bằng cách truyền vào username và một đối tượng Account
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="account"></param>
+        /// <returns></returns>
         // PUT: api/Accounts/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
@@ -221,14 +235,14 @@ namespace BenriShop.Controllers
             {
                 if (id != account.UserName || identity.Name != account.UserName)
                 {
-                    return BadRequest();
+                    return BadRequest("Parameter username is diffirent with acount's username");
                 }
 
                 var _account = await _accountRepository.GetAccount(id);
 
                 if (_account == null)
                 {
-                    return NotFound();
+                    return NotFound("Not found account with this username");
                 }
 
                 try
@@ -249,7 +263,11 @@ namespace BenriShop.Controllers
 
 
         #region AllowAnonymous
-
+        /// <summary>
+        /// Tạo tài khoản với role là Customer bằng cách truyền vào 1 đối tượng Account
+        /// </summary>
+        /// <param name="account"></param>
+        /// <returns></returns>
         // POST: api/Accounts
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
@@ -261,22 +279,27 @@ namespace BenriShop.Controllers
            
             if (_account != null)
             {
-                return Conflict("Tài khoản đã bị trùng");
+                return Conflict("This user name is existed");
             }
             try
             {
                 //Khách chỉ tạo đươc tài khoản là Customer
                 account.Role = Role.Customer;
                 await _accountRepository.AddAccount(account);
+                return Ok("Add account is successful");
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException ex)
             {
-                throw;
+                throw ex;
             }
 
             return CreatedAtAction("GetAccount", new { id = account.UserName }, account);
         }
-
+        /// <summary>
+        /// Kiểm tra tài khoản đã tồn tại trong database chưa
+        /// </summary>
+        /// <param name="account"></param>
+        /// <returns></returns>
         [HttpPost("CheckAccount")]
         [AllowAnonymous]
         public async Task<IActionResult> CheckAccountAsync(Account account)
@@ -286,11 +309,11 @@ namespace BenriShop.Controllers
 
             if (_account != null)
             {
-                return Conflict("Trùng tài khoản");
+                return Conflict("This user name is existed");
             }
             else
             {
-                return Ok("Có thể tạo");
+                return Ok("User name can be use");
             }
         }
 

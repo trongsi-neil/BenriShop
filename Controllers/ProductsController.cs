@@ -59,7 +59,7 @@ namespace BenriShop.Controllers
             
             if (_product == null)
             {
-                return NotFound();
+                return NotFound("Not found this product with this productId");
             }
 
             try
@@ -69,7 +69,7 @@ namespace BenriShop.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                return NoContent();
+                return BadRequest("Error when call _productRepository.UpdateProduct(product)");
             }
 
         }
@@ -86,37 +86,52 @@ namespace BenriShop.Controllers
         //[Authorize(Roles = "Admin, Mod")]
         public async Task<ActionResult<Product>> AddProduct(Product product)
         {
-            await _productRepository.AddProduct(product);
-            return CreatedAtAction("GetProduct", new { id = product.ProductId }, product);
+            try
+            {
+                await _productRepository.AddProduct(product);
+                return CreatedAtAction("GetProduct", new { id = product.ProductId }, product);
+            }catch
+            {
+                return BadRequest("Error when call _productRepository.AddProduct(product)");
+            }
         }
 
-
+        /// <summary>
+        /// Xóa sản phẩm bằng cách truyền vào productId
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // DELETE: api/Products/5
-        //[HttpDelete("{id}")]
-        /*public async Task<ActionResult<Product>> DeleteProduct(string id)
+        [HttpDelete("{productId}")]
+        public async Task<ActionResult<Product>> DeleteProduct(int productId)
         {
-            var product = await _context.Product.FindAsync(id);
-            if (product == null)
+            if (await _productRepository.DeleteProduct(productId))
             {
-                return NotFound();
+                return Ok("Delete successfully!");
             }
-
-            _context.Product.Remove(product);
-            await _context.SaveChangesAsync();
-
-            return product;
-        }*/
+            else
+            {
+                return BadRequest("Error when call _productRepository.DeleteProduct(productId)");
+            }
+        }
         #endregion
 
         #region Users
-
-       // GET: api/Products
-       [HttpGet("GetProducts")]
+        /// <summary>
+        /// Lấy tất cả sản phẩm trong database
+        /// </summary>
+        /// <returns></returns>
+        // GET: api/Products
+        [HttpGet("GetProducts")]
         public async Task<IEnumerable<Product>> GetProducts()
         {
             return await _productRepository.GetProducts();
         }
-
+        /// <summary>
+        /// Lấy một sản phẩm bằng cách truyền vào productId
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
        // GET: api/Products/5
        [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
@@ -139,6 +154,11 @@ namespace BenriShop.Controllers
         {
             return _context.Product.Any(e => e.Productid == id);
         }*/
+        /// <summary>
+        /// Nhận hình tải lên và lưu vào thư mục images
+        /// </summary>
+        /// <param name="objFile"></param>
+        /// <returns></returns>
         [HttpPost("UploadImage")]
         //[Route("api/[controller]/uploadimage")]
         public async Task<ActionResult> UploadImage([FromForm] FileUpload objFile)
@@ -149,7 +169,7 @@ namespace BenriShop.Controllers
                 objFile.Link = _environment.WebRootPath + "\\images\\" + objFile.Id;
                 if (objFile.Id.Length > 20)
                 {
-                    return BadRequest("Lỗi do cái tên quá trời dài á!");
+                    return BadRequest("File's name is longer 20 character");
                 }
                 try
                 {
@@ -162,7 +182,7 @@ namespace BenriShop.Controllers
                         objFile.files.CopyTo(fileStream);
                         fileStream.Flush();
                         await _productRepository.AddImage(objFile.ProductId, objFile.Id, objFile.Link);
-                        return Ok("Có hình rồi nè thanh niên ơi!");
+                        return Ok("Upload image is successful");
                     }
                 }
                 catch (Exception ex)
@@ -172,7 +192,7 @@ namespace BenriShop.Controllers
             }
             else
             {
-                return BadRequest("Hình gì mà độ dài dữ liệu < 0? Mày khùng hả?");
+                return BadRequest("Fail in upload image!");
             }
         }
 

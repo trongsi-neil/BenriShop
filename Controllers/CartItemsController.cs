@@ -33,7 +33,13 @@ namespace BenriShop.Controllers
             }
             return (IEnumerable<CartItem>)NotFound("Error of GetCartItem");
         }
-
+        /// <summary>
+        /// Cập nhật số lượng của 1 sản phẩm trong 1 giỏ hàng
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="productId"></param>
+        /// <param name="cartItem"></param>
+        /// <returns></returns>
         // PUT: api/CartItems/userName/1
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
@@ -54,32 +60,48 @@ namespace BenriShop.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                return NoContent();
+                return BadRequest("Error when call _cartItemRepository.UpdateCartItem(cartItem)");
             }
             
         }
-
+        /// <summary>
+        /// Thêm 1 sản phẩm vào giỏ hàng
+        /// </summary>
+        /// <param name="cartItem"></param>
+        /// <returns></returns>
         // POST: api/CartItems
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         public async Task<ActionResult<CartItem>> AddCartItem(CartItem cartItem)
         {
-            await _cartItemRepository.AddCartItem(cartItem);
-
-            return CreatedAtAction("GetCartItems", new { userName = cartItem.UserName }, cartItem);
+            try
+            {
+                await _cartItemRepository.AddCartItem(cartItem);
+                return CreatedAtAction("GetCartItems", new { userName = cartItem.UserName }, cartItem);
+            }catch
+            {
+                return BadRequest("Error when call _cartItemRepository.AddCartItem(cartItem)");
+            }
+            
         }
-
+        /// <summary>
+        /// Xóa 1 sản phẩm khỏi giỏ hàng
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="productId"></param>
+        /// <returns></returns>
         // DELETE: api/CartItems/5
         [HttpDelete("{userName}/{productId}")]
         public async Task<ActionResult<CartItem>> DeleteCartItem(string userName, int productId)
         {
             if(await _cartItemRepository.DeleteCartItem(userName, productId))
             {
-                return Ok("Delete CartItem successfully!(" + userName + ", " + productId);
-            }else
+                return Ok("Delete successfully!");
+            }
+            else
             {
-                return BadRequest("Delete CartItem failed!");
+                return BadRequest("Error when call _cartItemRepository.DeleteCartItem(userName, productId)");
             }
         }
 
