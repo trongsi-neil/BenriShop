@@ -286,6 +286,18 @@ namespace BenriShop.Controllers
             {
                 //Khách chỉ tạo đươc tài khoản là Customer
                 account.Role = Role.Customer;
+                if (account.Address == null)
+                {
+                    account.Address = "";
+                }
+                if (account.FullName == null)
+                {
+                    account.Address = "";
+                }
+                if (account.PhoneNumber == null)
+                {
+                    account.PhoneNumber = "";
+                }
                 await _accountRepository.AddAccount(account);
                 return Ok("Add account is successful");
             }

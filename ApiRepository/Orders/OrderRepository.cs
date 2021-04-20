@@ -13,9 +13,11 @@ namespace BenriShop.ApiRepository.Orders
     public class OrderRepository : IOrderRepository
     {
         private readonly BenriShopContext _context;
+        private readonly BenriShopContext benriShopContext;
         public OrderRepository(BenriShopContext context)
         {
             this._context = context;
+            this.benriShopContext = context;
         }
         public async Task<Order> AddOrder(Order order)
         {
@@ -82,20 +84,40 @@ namespace BenriShop.ApiRepository.Orders
             return null;
         }
 
-        public async Task<Account> GetAccount(string accountId)
+        public async Task<IEnumerable<CartItem>> GetCartItems(string userName)
         {
-            return await _context.Accounts.FirstOrDefaultAsync(e => e.UserName == accountId);
+            return await _context.CartItems.Where(x => x.UserName == userName).ToListAsync();
         }
-        public async Task<bool> AddItemsFromCartToOrder(string orderId)
+        public async Task<bool> AddItemFromCartToOrder(string orderId, CartItem cartItem)
         {
+            IOrderItemRepository _orderItemRepository = new OrderItemRepository(_context);
+            ICartItemRepository _cartItemRepository = new CartItemRepository(_context);
+
             try
             {
-                IOrderItemRepository _orderItemRepository = new OrderItemRepository(_context);
-                ICartItemRepository _cartItemRepository = new CartItemRepository(_context);
                 var order = await _context.Orders.FindAsync(orderId);
-                var cartItems = await _cartItemRepository.GetCartItems(order.UserName);
-                cartItems = cartItems.ToList();
-                foreach(CartItem cartItem in cartItems)
+                OrderItem orderItem = new OrderItem();
+                orderItem.OrderId = order.OrderId;
+                orderItem.ProductId = cartItem.ProductId;
+                orderItem.QuantityInOrder = cartItem.QuantityInCart;
+                orderItem.Order = order;
+                orderItem.Product = cartItem.Product;
+
+                await _orderItemRepository.AddOrderItem(orderItem);
+                await _cartItemRepository.DeleteCartItem(order.UserName, cartItem.ProductId);
+                return true;
+            }catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return false;
+            }
+            /*try
+            {
+                IOrderItemRepository _orderItemRepository = new OrderItemRepository(_context);
+                var order = await _context.Orders.FindAsync(orderId);
+                var cartItems = await benriShopContext.CartItems.Where(x => x.UserName == order.UserName).ToListAsync();
+
+                foreach (CartItem cartItem in cartItems)
                 {
                     OrderItem orderItem = new OrderItem();
                     orderItem.OrderId = order.OrderId;
@@ -105,16 +127,18 @@ namespace BenriShop.ApiRepository.Orders
                     orderItem.Product = cartItem.Product;
 
                     await _orderItemRepository.AddOrderItem(orderItem);
-                    await _cartItemRepository.DeleteCartItem(cartItem.UserName, cartItem.ProductId);
+                    _context.CartItems.Remove(cartItem);
                 }
                 await _context.SaveChangesAsync();
 
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.ToString());
                 return false;
-            }
+            }*/
+
         }
     }
 }
