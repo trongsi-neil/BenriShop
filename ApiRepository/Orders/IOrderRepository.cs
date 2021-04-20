@@ -19,24 +19,26 @@ namespace BenriShop.ApiRepository.Orders
         /// </summary>
         /// <param name="OrderId"></param>
         /// <returns></returns>
-        public Task<Order> GetOrder(string OrderId);
+        public Task<Order> GetOrder(string orderId);
         /// <summary>
         /// Thêm 1 đơn hàng bằng cách truyền vào 1 đối tượng Order với đầy đủ value
         /// </summary>
         /// <param name="Order"></param>
         /// <returns></returns>
-        public Task<Order> AddOrder(Order Order);
+        public Task<Order> AddOrder(Order order);
         /// <summary>
         /// Cập nhật thông tin đơn hàng bằng cách truyền vào 1 đối tượng Order với value mới
         /// </summary>
         /// <param name="Order"></param>
         /// <returns></returns>
-        public Task<Order> UpdateOrder(Order Order);
+        public Task<Order> UpdateOrder(Order order);
         /// <summary>
         /// Xóa 1 đơn hàng bằng cách truyền vào OrderId
         /// </summary>
         /// <param name="OrderId"></param>
         /// <returns></returns>
-        public Task<bool> DeleteOrder(string OrderId);
+        public Task<bool> DeleteOrder(string orderId);
+        public Task<Account> GetAccount(string accountId);
+        public Task<bool> AddItemsFromCartToOrder(string orderId);
     }
 }

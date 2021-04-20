@@ -83,7 +83,7 @@ namespace BenriShop.Controllers
         /// <param product="Product"></param>
         /// <returns></returns>
         [HttpPost("AddProduct")]
-        //[Authorize(Roles = "Admin, Mod")]
+        [Authorize(Roles = "Admin, Mod")]
         public async Task<ActionResult<Product>> AddProduct(Product product)
         {
             try

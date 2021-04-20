@@ -21,6 +21,7 @@ namespace BenriShop.Controllers
     {
         private readonly IAccountRepository _accountRepository;
 
+
         public AccountsController(IAccountRepository accountRepository)
         {
             this._accountRepository = accountRepository;
@@ -31,9 +32,9 @@ namespace BenriShop.Controllers
         /// Lấy toàn bộ danh sach tài khoản của database
         /// </summary>
         /// <returns></returns>
-        // GET: api/Accounts 
+        // GET: api/Accounts/GetAccounts 
         [Authorize(Roles = "Admin")]
-        [HttpGet]
+        [HttpGet("GetAccounts")]
         public async Task<ActionResult<IEnumerable<Account>>> GetAccounts()
         {
             try
@@ -53,8 +54,9 @@ namespace BenriShop.Controllers
         /// </summary>
         /// <param name="account"></param>
         /// <returns></returns>
-        [HttpPost]
-        [AllowAnonymous]
+        // POST: api/Accounts/AddModAccount 
+        [HttpPost("AddModAccount")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Account>> AddModAccount(Account account)
         {
             var _account = await _accountRepository.GetAccount(account.UserName);
@@ -81,6 +83,8 @@ namespace BenriShop.Controllers
         /// Lấy danh sách tài khoản Mod
         /// </summary>
         /// <returns></returns>
+        // GET: api/Accounts/GetModAccounts
+        [Authorize(Roles = "Admin")]
         [HttpGet("GetModAccounts")]
         public async Task<ActionResult<IEnumerable<Account>>> GetModAccounts()
         {
@@ -102,9 +106,10 @@ namespace BenriShop.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        // PUT: api/Accounts/ChangeRoleOfAccount
         [Authorize (Roles = "Admin")]
-        [HttpPut("ChangeRoleOfAccount/{id}")]
-        public async Task<IActionResult> ChangeRoleOfAccount(string id, Account account)
+        [HttpPut("ChangeRoleOfAccount")]
+        public async Task<IActionResult> ChangeRoleOfAccount(Account account)
         {
             var username = account.UserName;
             var role = account.Role;
@@ -114,11 +119,6 @@ namespace BenriShop.Controllers
             if (_account == null)
             {
                 return NotFound("Not found this account in database");
-            }
-
-            if (id != username)
-            {
-                return BadRequest("Parameter username is diffirent with account's username in database");
             }
 
             if (_account.Role == role || role == "" || role == null )
@@ -143,31 +143,31 @@ namespace BenriShop.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        // DELETE: api/Accounts/5
-       // [Authorize]
-        [HttpDelete("Delete/{id}")]
-        public async Task<ActionResult<Account>> DeleteAccount(string id)
+        // DELETE: api/Accounts/DeleteAccount/userName
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("DeleteAccount/{userName}")]
+        public async Task<ActionResult<Account>> DeleteAccount(string userName)
         {
-            var account = await _accountRepository.GetAccount(id);
+            var account = await _accountRepository.GetAccount(userName);
             if (account == null)
             {
                 return NotFound("Can't found account with this username");
             }
             try
             {
-               if (await _accountRepository.DeleteAccountAsync(id))
+               if (await _accountRepository.DeleteAccountAsync(userName))
                 {
                     return Ok("Delete account successful");
                 }
                 else
                 {
-                    return BadRequest("Error when call DeleteAccountAsync(id)");
+                    return BadRequest("Error when call DeleteAccountAsync(userName)");
                 }
                
             }
             catch (DbUpdateException)
             {
-                return account;
+                return BadRequest("DbUpdateException in DeleteAccount");
             }
 
         }
@@ -182,30 +182,30 @@ namespace BenriShop.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        // GET: api/Accounts/5
+        // GET: api/Accounts/GetAccountInformation/userName
         [Authorize]
-        [HttpGet("GetAccountInformation/{id}")]
-        public async Task<ActionResult<Account>> GetAccountInformation(string id)
+        [HttpGet("GetAccountInformation/{userName}")]
+        public async Task<ActionResult<Account>> GetAccountInformation(string userName)
         {
             var identity = User.Identity as ClaimsIdentity;
             var accountRole = await _accountRepository.GetAccount(identity.Name);
             if (accountRole.Role == "Admin")
             {
-                var account = await _accountRepository.GetAccount(id);
+                var account = await _accountRepository.GetAccount(userName);
                 if (account == null)
                 {
-                    return NotFound("Can't found the account with id: " + id);
+                    return NotFound("Can't found the account with id: " + userName);
                 }
                 return account;
             }
             else
             {
-                if(identity.Name == id)
+                if(identity.Name == userName)
                 {
-                    var account = await _accountRepository.GetAccount(id);
+                    var account = await _accountRepository.GetAccount(userName);
                     if (account == null)
                     {
-                        return NotFound("Can't found the account with id: " + id);
+                        return NotFound("Can't found the account with id: " + userName);
                     }
                     return account;
                 }
@@ -226,19 +226,19 @@ namespace BenriShop.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [Authorize]
-        [HttpPut("ChangeAccountInformation/{id}")]
-        public async Task<IActionResult> ChangeAccountInformation(string id, Account account)
+        [HttpPut("ChangeAccountInformation/{userName}")]
+        public async Task<IActionResult> ChangeAccountInformation(string userName, Account account)
         {
             var identity = User.Identity as ClaimsIdentity;
 
             if (identity != null)
             {
-                if (id != account.UserName || identity.Name != account.UserName)
+                if (userName != account.UserName || identity.Name != account.UserName)
                 {
                     return BadRequest("Parameter username is diffirent with acount's username");
                 }
 
-                var _account = await _accountRepository.GetAccount(id);
+                var _account = await _accountRepository.GetAccount(userName);
 
                 if (_account == null)
                 {
@@ -247,12 +247,13 @@ namespace BenriShop.Controllers
 
                 try
                 {
+                    account.Role = _account.Role;
                     await _accountRepository.UpdateAccount(account);
                     return Ok("Update account successfully");
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException ex)
                 {
-                    throw;
+                    return BadRequest(ex.ToString() + "Error in ChangeAccountInformation()");
                 }
             }
             return NoContent();
@@ -268,7 +269,7 @@ namespace BenriShop.Controllers
         /// </summary>
         /// <param name="account"></param>
         /// <returns></returns>
-        // POST: api/Accounts
+        // POST: api/Accounts/CreateAccount
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost("CreateAccount")]
@@ -276,10 +277,7 @@ namespace BenriShop.Controllers
         public async Task<ActionResult<Account>> CreateAccount(Account account)
         {
             var _account = await _accountRepository.GetAccount(account.UserName);
-            if (account.UserName == null || account.Password == null)
-            {
-                return Conflict("User name and password can't empty");
-            }
+
             if (_account != null)
             {
                 return Conflict("This user name is existed");
@@ -293,26 +291,22 @@ namespace BenriShop.Controllers
             }
             catch (DbUpdateException ex)
             {
-                throw ex;
+                return BadRequest(ex.ToString() + "Error in CreateAccount()");
             }
-
-            return CreatedAtAction("GetAccount", new { id = account.UserName }, account);
         }
         /// <summary>
         /// Kiểm tra tài khoản đã tồn tại trong database chưa
         /// </summary>
         /// <param name="account"></param>
         /// <returns></returns>
-        [HttpPost("CheckAccount")]
+        // POST: api/Accounts/CheckAccountAsync
+        [HttpPost("CheckAccountAsync")]
         [AllowAnonymous]
         public async Task<IActionResult> CheckAccountAsync(Account account)
         {
 
             var _account = await _accountRepository.GetAccount(account.UserName);
-            if (account.UserName == null)
-            {
-                return Conflict("User name can't empty");
-            }
+            
             if (_account != null)
             {
                 return Conflict("This user name is existed");

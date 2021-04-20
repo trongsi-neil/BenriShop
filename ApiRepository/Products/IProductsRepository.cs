@@ -12,10 +12,10 @@ namespace BenriShop.ApiRepository.Products
     public interface IProductsRepository
     {
         Task<IEnumerable<Product>> GetProducts();
-        Task<Product> GetProduct(int ProductId);
-        Task<Product> AddProduct(Product Product);
-        Task<Product> UpdateProduct(Product Product);
-        Task<bool> DeleteProduct(int ProductId);
-        Task<bool> AddImage(int ProductId, string ImageId, string ImageLink);
+        Task<Product> GetProduct(int productId);
+        Task<Product> AddProduct(Product product);
+        Task<Product> UpdateProduct(Product product);
+        Task<bool> DeleteProduct(int productId);
+        Task<bool> AddImage(int productId, string imageId, string imageLink);
     }
 }

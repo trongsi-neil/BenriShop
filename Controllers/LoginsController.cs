@@ -28,6 +28,7 @@ namespace BenriShop.Controllers
         /// </summary>
         /// <param name="_account"></param>
         /// <returns></returns>
+        // POST: api/Logins
         [HttpPost]
         public async Task<IActionResult> Post(Account _account)
         {

@@ -15,11 +15,11 @@ namespace BenriShop.ApiRepository.CartItems
         {
             this._context = context;
         }
-        public async Task<CartItem> AddCartItem(CartItem CartItem)
+        public async Task<CartItem> AddCartItem(CartItem cartItem)
         {
             try
             {
-                var result = await _context.CartItems.AddAsync(CartItem);
+                var result = await _context.CartItems.AddAsync(cartItem);
                 await _context.SaveChangesAsync();
                 return result.Entity;
             }
@@ -29,12 +29,12 @@ namespace BenriShop.ApiRepository.CartItems
             }
         }
 
-        public async Task<bool> AddItemsFromCartToOrder(string OrderId)
+        /*public async Task<bool> AddItemsFromCartToOrder(string orderId)
         {
             try
             {
                 IOrderItemRepository _orderItemRepository = new OrderItemRepository(_context);
-                var order = await _context.Orders.FindAsync(OrderId);
+                var order = await _context.Orders.FindAsync(orderId);
                 var account = await _context.Accounts.FirstOrDefaultAsync(e => e.UserName == order.UserName);
                 for (int i = 0; i < account.CartItems.Count; i++)
                 {
@@ -46,19 +46,20 @@ namespace BenriShop.ApiRepository.CartItems
                     orderItem.Product = account.CartItems[i].Product;
 
                     await _orderItemRepository.AddOrderItem(orderItem);
-                    await _context.SaveChangesAsync();
+                    account.CartItems.RemoveAt(i);
                 }
+                await _context.SaveChangesAsync();
                 return true;
             }catch
             {
                 return false;
             }
-        }
+        }*/
 
-        public async Task<bool> DeleteCartItem(string UserName, int ProductId)
+        public async Task<bool> DeleteCartItem(string userName, int productId)
         {
             var cartItem = await _context.CartItems.FirstOrDefaultAsync
-                (e => e.UserName == UserName && e.ProductId == ProductId);
+                (e => e.UserName == userName && e.ProductId == productId);
             if (cartItem != null)
             {
                 try
@@ -76,10 +77,10 @@ namespace BenriShop.ApiRepository.CartItems
             return false;
         }
 
-        public async Task<CartItem> GetCartItem(string UserName, int ProductId)
+        public async Task<CartItem> GetCartItem(string userName, int productId)
         {
             return await _context.CartItems.FirstOrDefaultAsync
-                (e => e.UserName == UserName && e.ProductId == ProductId);
+                (e => e.UserName == userName && e.ProductId == productId);
         }
 
         public async Task<IEnumerable<CartItem>> GetCartItems(string userName)
@@ -87,18 +88,18 @@ namespace BenriShop.ApiRepository.CartItems
             return await _context.CartItems.Where(x => x.UserName == userName).ToListAsync();
         }
 
-        public async Task<CartItem> UpdateCartItem(CartItem CartItem)
+        public async Task<CartItem> UpdateCartItem(CartItem cartItem)
         {
             var result = await _context.CartItems.FirstOrDefaultAsync
-                (e => e.UserName == CartItem.UserName && e.ProductId == CartItem.ProductId);
+                (e => e.UserName == cartItem.UserName && e.ProductId == cartItem.ProductId);
 
             if (result != null)
             {
-                result.ProductId = CartItem.ProductId;
-                result.UserName = CartItem.UserName;
-                result.QuantityInCart = CartItem.QuantityInCart;
-                result.Product = CartItem.Product;
-                result.Account = CartItem.Account;
+                result.ProductId = cartItem.ProductId;
+                result.UserName = cartItem.UserName;
+                result.QuantityInCart = cartItem.QuantityInCart;
+                result.Product = cartItem.Product;
+                result.Account = cartItem.Account;
 
                 await _context.SaveChangesAsync();
 

@@ -14,11 +14,11 @@ namespace BenriShop.ApiRepository.OrderItems
         {
             this._context = context;
         }
-        public async Task<OrderItem> AddOrderItem(OrderItem OrderItem)
+        public async Task<OrderItem> AddOrderItem(OrderItem orderItem)
         {
             try
             {
-                var result = await _context.OrderItems.AddAsync(OrderItem);
+                var result = await _context.OrderItems.AddAsync(orderItem);
                 await _context.SaveChangesAsync();
                 return result.Entity;
             }
@@ -28,10 +28,10 @@ namespace BenriShop.ApiRepository.OrderItems
             }
         }
 
-        public async Task<bool> DeleteOrderItem(string OrderId, int ProductId)
+        public async Task<bool> DeleteOrderItem(string orderId, int productId)
         {
             var orderItem = await _context.OrderItems.FirstOrDefaultAsync
-                (e => e.OrderId == OrderId && e.ProductId == ProductId);
+                (e => e.OrderId == orderId && e.ProductId == productId);
             if (orderItem != null)
             {
                 try
@@ -49,29 +49,29 @@ namespace BenriShop.ApiRepository.OrderItems
             return false;
         }
 
-        public async Task<OrderItem> GetOrderItem(string OrderId, int ProductId)
+        public async Task<OrderItem> GetOrderItem(string orderId, int productId)
         {
             return await _context.OrderItems.FirstOrDefaultAsync
-                (e => e.OrderId == OrderId && e.ProductId == ProductId);
+                (e => e.OrderId == orderId && e.ProductId == productId);
         }
 
-        public async Task<IEnumerable<OrderItem>> GetOrderItems(string OrderId)
+        public async Task<IEnumerable<OrderItem>> GetOrderItems(string orderId)
         {
-            return await _context.OrderItems.Where(x => x.OrderId == OrderId).ToListAsync();
+            return await _context.OrderItems.Where(x => x.OrderId == orderId).ToListAsync();
         }
 
-        public async Task<OrderItem> UpdateOrderItem(OrderItem OrderItem)
+        public async Task<OrderItem> UpdateOrderItem(OrderItem orderItem)
         {
             var result = await _context.OrderItems.FirstOrDefaultAsync
-                (e => e.OrderId == OrderItem.OrderId && e.ProductId == OrderItem.ProductId);
+                (e => e.OrderId == orderItem.OrderId && e.ProductId == orderItem.ProductId);
 
             if (result != null)
             {
-                result.ProductId = OrderItem.ProductId;
-                result.OrderId = OrderItem.OrderId;
-                result.QuantityInOrder = OrderItem.QuantityInOrder;
-                result.Order = OrderItem.Order;
-                result.Product = OrderItem.Product;
+                result.ProductId = orderItem.ProductId;
+                result.OrderId = orderItem.OrderId;
+                result.QuantityInOrder = orderItem.QuantityInOrder;
+                result.Order = orderItem.Order;
+                result.Product = orderItem.Product;
 
                 await _context.SaveChangesAsync();
 

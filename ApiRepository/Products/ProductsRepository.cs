@@ -96,19 +96,19 @@ namespace BenriShop.ApiRepository.Products
         //    return result;
         //}
 
-        public async Task<Product> GetProduct(int ProductId)
+        public async Task<Product> GetProduct(int productId)
         {
 
-            var product = await _context.Products.FirstOrDefaultAsync(e => e.ProductId == ProductId);
+            var product = await _context.Products.FirstOrDefaultAsync(e => e.ProductId == productId);
 
             //_context.Image.Where(x => x.Imageid.Contains("select * from [image] where ProductId = "+ProductId+";")).Select(x => new { x., x.Name }).ToList();
 
             IQueryable<Image> query = _context.Images;
 
-            if (!string.IsNullOrEmpty(ProductId.ToString()))
+            if (!string.IsNullOrEmpty(productId.ToString()))
             {
                 //query = query.Where(e => e.Productid.Contains(ProductId.ToString()));
-                query = query.Where(e => e.ProductId == ProductId).
+                query = query.Where(e => e.ProductId == productId).
                     Select(i => new Image
                     {
                         Link = i.Link
@@ -126,17 +126,17 @@ namespace BenriShop.ApiRepository.Products
             return await _context.Products.ToListAsync();
         }
 
-        public async Task<bool> AddImage(int ProductId, string ImageId, string ImageLink)
+        public async Task<bool> AddImage(int productId, string imageId, string imageLink)
         {
-            var product = await _context.Products.FindAsync(ProductId);
+            var product = await _context.Products.FindAsync(productId);
             if (product == null)
             {
                 return false;
             }
             Image img = new Image();
             //img.Product = product;
-            img.Imageid = ImageId;
-            img.Link = ImageLink;
+            img.Imageid = imageId;
+            img.Link = imageLink;
             img.ProductId = product.ProductId;
 
             try

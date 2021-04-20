@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Stripe;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BenriShop.Controllers
 {
@@ -11,6 +8,6 @@ namespace BenriShop.Controllers
     [ApiController]
     public class PaymentController : ControllerBase
     {
-
+            
     }
 }
