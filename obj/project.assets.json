@@ -8699,11 +8699,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ngomi\\source\\repos\\BenriShop\\BenriShop\\BenriShop.csproj",
+      "projectUniqueName": "C:\\Users\\ngomi\\Source\\Repos\\BenriShop\\BenriShop.csproj",
       "projectName": "BenriShop",
-      "projectPath": "C:\\Users\\ngomi\\source\\repos\\BenriShop\\BenriShop\\BenriShop.csproj",
+      "projectPath": "C:\\Users\\ngomi\\Source\\Repos\\BenriShop\\BenriShop.csproj",
       "packagesPath": "C:\\Users\\ngomi\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ngomi\\source\\repos\\BenriShop\\BenriShop\\obj\\",
+      "outputPath": "C:\\Users\\ngomi\\Source\\Repos\\BenriShop\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\ngomi\\AppData\\Roaming\\NuGet\\NuGet.Config",

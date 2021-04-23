@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "c+9hss036c4bcLmOnYy9jnVH/wrV4wrQtSBC4GJUtXA2m711Wr4dWEYFpHTReC9L9qNRhN6PYnxTkTEIalEMFQ==",
+  "dgSpecHash": "jKA5ZVrelzGxYPZ5gm8Nlz9V1XBxwQoeFfL/AoV0OH+dynmI1zo6GAumsQOYPtrUQ0kz+4VUZGkwbatvmxpZJQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\ngomi\\source\\repos\\BenriShop\\BenriShop\\BenriShop.csproj",
+  "projectFilePath": "C:\\Users\\ngomi\\Source\\Repos\\BenriShop\\BenriShop.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ngomi\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\3.1.8\\microsoft.aspnetcore.authentication.jwtbearer.3.1.8.nupkg.sha512",
     "C:\\Users\\ngomi\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\3.1.8\\microsoft.aspnetcore.cryptography.internal.3.1.8.nupkg.sha512",

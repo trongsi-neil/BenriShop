@@ -123,7 +123,16 @@ namespace BenriShop.ApiRepository.Products
 
         public async Task<IEnumerable<Product>> GetProducts()
         {
-            return await _context.Products.ToListAsync();
+            var product = _context.Products.ToList();
+            var lst = new List<Product>();
+            foreach(Product pro in product)
+            {
+                var temp = await GetProduct(pro.ProductId);
+                lst.Add(temp);
+            }
+
+            //return await _context.Products.ToListAsync();
+            return lst;
         }
 
         public async Task<bool> AddImage(int productId, string imageId, string imageLink)
