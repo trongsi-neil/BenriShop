@@ -414,3 +414,5 @@ C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\Microsoft.AspN
 C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Identity.Core.dll
 C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Identity.Stores.dll
 C:\Users\Neil's PC\source\repos\BenriShop\bin\Debug\netcoreapp3.1\Stripe.net.dll
+C:\Users\ngomi\source\repos\BenriShop\BenriShop\bin\Debug\netcoreapp3.1\Stripe.net.dll
+C:\Users\ngomi\source\repos\BenriShop\BenriShop\obj\Debug\netcoreapp3.1\BenriShop.csprojAssemblyReference.cache

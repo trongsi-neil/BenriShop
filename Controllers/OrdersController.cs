@@ -121,7 +121,14 @@ namespace BenriShop.Controllers
             try
             {
                 _ = _orderRepository.AddOrder(order);
-                var cartItems = _orderRepository.GetCartItems(order.UserName);
+                if(await _orderRepository.AddItemFromCartToOrder(order.OrderId, order.UserName))
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }    
                 
                 return order;
             }catch

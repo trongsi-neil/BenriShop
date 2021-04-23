@@ -1,26 +1,28 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Neil's PC\\source\\repos\\BenriShop\\BenriShop.csproj": {}
+    "C:\\Users\\ngomi\\source\\repos\\BenriShop\\BenriShop\\BenriShop.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Neil's PC\\source\\repos\\BenriShop\\BenriShop.csproj": {
+    "C:\\Users\\ngomi\\source\\repos\\BenriShop\\BenriShop\\BenriShop.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Neil's PC\\source\\repos\\BenriShop\\BenriShop.csproj",
+        "projectUniqueName": "C:\\Users\\ngomi\\source\\repos\\BenriShop\\BenriShop\\BenriShop.csproj",
         "projectName": "BenriShop",
-        "projectPath": "C:\\Users\\Neil's PC\\source\\repos\\BenriShop\\BenriShop.csproj",
-        "packagesPath": "C:\\Users\\Neil's PC\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Neil's PC\\source\\repos\\BenriShop\\obj\\",
+        "projectPath": "C:\\Users\\ngomi\\source\\repos\\BenriShop\\BenriShop\\BenriShop.csproj",
+        "packagesPath": "C:\\Users\\ngomi\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\ngomi\\source\\repos\\BenriShop\\BenriShop\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Neil's PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\ngomi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 19.1.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\DevExpress 19.1\\Components\\System\\Components\\Packages": {},
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
@@ -93,7 +95,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     }

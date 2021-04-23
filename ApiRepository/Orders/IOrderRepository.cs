@@ -39,6 +39,6 @@ namespace BenriShop.ApiRepository.Orders
         /// <returns></returns>
         public Task<bool> DeleteOrder(string orderId);
         public Task<IEnumerable<CartItem>> GetCartItems(string userName);
-        public Task<bool> AddItemFromCartToOrder(string orderId, CartItem cartItem);
+        public Task<bool> AddItemFromCartToOrder(string orderId, string userName);
     }
 }

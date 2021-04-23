@@ -88,46 +88,47 @@ namespace BenriShop.ApiRepository.Orders
         {
             return await _context.CartItems.Where(x => x.UserName == userName).ToListAsync();
         }
-        public async Task<bool> AddItemFromCartToOrder(string orderId, CartItem cartItem)
+        public async Task<bool> AddItemFromCartToOrder(string orderId, string userName)
         {
-            IOrderItemRepository _orderItemRepository = new OrderItemRepository(_context);
-            ICartItemRepository _cartItemRepository = new CartItemRepository(_context);
+           //IOrderItemRepository _orderItemRepository = new OrderItemRepository(_context);
+            //ICartItemRepository _cartItemRepository = new CartItemRepository(_context);
 
+            //try
+            //{
+            //    var order = await _context.Orders.FindAsync(orderId);
+            //    OrderItem orderItem = new OrderItem();
+            //    orderItem.OrderId = order.OrderId;
+            //    orderItem.ProductId = cartItem.ProductId;
+            //    orderItem.QuantityInOrder = cartItem.QuantityInCart;
+            //    orderItem.Order = order;
+            //    orderItem.Product = cartItem.Product;
+
+            //    await _orderItemRepository.AddOrderItem(orderItem);
+            //    await _cartItemRepository.DeleteCartItem(order.UserName, cartItem.ProductId);
+            //    return true;
+            //}catch(Exception ex)
+            //{
+            //    Console.WriteLine(ex.ToString());
+            //    return false;
+            //}
             try
             {
-                var order = await _context.Orders.FindAsync(orderId);
-                OrderItem orderItem = new OrderItem();
-                orderItem.OrderId = order.OrderId;
-                orderItem.ProductId = cartItem.ProductId;
-                orderItem.QuantityInOrder = cartItem.QuantityInCart;
-                orderItem.Order = order;
-                orderItem.Product = cartItem.Product;
+                //IOrderItemRepository _orderItemRepository = new OrderItemRepository(_context);
 
-                await _orderItemRepository.AddOrderItem(orderItem);
-                await _cartItemRepository.DeleteCartItem(order.UserName, cartItem.ProductId);
-                return true;
-            }catch(Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-                return false;
-            }
-            /*try
-            {
-                IOrderItemRepository _orderItemRepository = new OrderItemRepository(_context);
-                var order = await _context.Orders.FindAsync(orderId);
-                var cartItems = await benriShopContext.CartItems.Where(x => x.UserName == order.UserName).ToListAsync();
+                var order =  _context.Orders.FirstOrDefault( x => x.OrderId == orderId);
+                var cartItems = _context.CartItems.Where(x => x.UserName == userName).ToList();
 
-                foreach (CartItem cartItem in cartItems)
+                foreach (CartItem item in cartItems)
                 {
                     OrderItem orderItem = new OrderItem();
                     orderItem.OrderId = order.OrderId;
-                    orderItem.ProductId = cartItem.ProductId;
-                    orderItem.QuantityInOrder = cartItem.QuantityInCart;
+                    orderItem.ProductId = item.ProductId;
+                    orderItem.QuantityInOrder = item.QuantityInCart;
                     orderItem.Order = order;
-                    orderItem.Product = cartItem.Product;
+                    orderItem.Product = item.Product;
 
-                    await _orderItemRepository.AddOrderItem(orderItem);
-                    _context.CartItems.Remove(cartItem);
+                    _context.OrderItems.Add(orderItem);
+                    _context.CartItems.Remove(item);
                 }
                 await _context.SaveChangesAsync();
 
@@ -137,7 +138,7 @@ namespace BenriShop.ApiRepository.Orders
             {
                 Console.WriteLine(ex.ToString());
                 return false;
-            }*/
+            }
 
         }
     }
