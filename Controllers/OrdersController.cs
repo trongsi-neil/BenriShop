@@ -96,12 +96,13 @@ namespace BenriShop.Controllers
             }
 
             Order order = new Order();
-            var account = await _orderRepository.GetAccount(userName);
+            var orders = await _orderRepository.GetOrders(userName);
+            orders.ToList();
 
-            order.UserName = account.UserName;
-            if (account.Orders != null)
+            order.UserName = userName;
+            if (orders.Count() != 0)
             {
-                for (int i = 0; i <= account.Orders.Count; i++)
+                for (int i = 0; i <= orders.Count(); i++)
                 {
                     var oldOrder = await _orderRepository.GetOrder(userName + "_" + i);
                     if (oldOrder == null)
@@ -119,8 +120,16 @@ namespace BenriShop.Controllers
 
             try
             {
-                _ = _orderRepository.AddItemsFromCartToOrder(order.OrderId);
                 _ = _orderRepository.AddOrder(order);
+                if(await _orderRepository.AddItemFromCartToOrder(order.OrderId, order.UserName))
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }    
+                
                 return order;
             }catch
             {

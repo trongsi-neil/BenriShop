@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using BenriShop.ApiRepository.Products;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using BenriShop.Models.ViewModel;
 
 namespace BenriShop.Controllers
 {
@@ -123,7 +124,7 @@ namespace BenriShop.Controllers
         /// <returns></returns>
         // GET: api/Products
         [HttpGet("GetProducts")]
-        public async Task<IEnumerable<Product>> GetProducts()
+        public async Task<IEnumerable<ProductView>> GetProducts()
         {
             return await _productRepository.GetProducts();
         }
@@ -134,7 +135,7 @@ namespace BenriShop.Controllers
         /// <returns></returns>
        // GET: api/Products/5
        [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProduct(int id)
+        public async Task<ActionResult<ProductView>> GetProduct(int id)
         {
             var product = await _productRepository.GetProduct(id);
 
@@ -166,7 +167,9 @@ namespace BenriShop.Controllers
             if (objFile.files.Length > 0)
             {
                 objFile.Id = objFile.ProductId + "_" + objFile.files.FileName;
-                objFile.Link = _environment.WebRootPath + "\\images\\" + objFile.Id;
+                //objFile.Id = new Guid().ToString();
+//                objFile.Link = _environment.WebRootPath + "\\images\\" + objFile.Id;
+                objFile.Link = "\\images\\" + objFile.Id;
                 if (objFile.Id.Length > 20)
                 {
                     return BadRequest("File's name is longer 20 character");

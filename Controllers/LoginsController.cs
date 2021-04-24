@@ -45,8 +45,8 @@ namespace BenriShop.Controllers
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
                     //new Claim("UserName", user.UserName.ToString()),
-                    new Claim("FullName", user.FullName),
-                    new Claim("PhoneNumber", user.PhoneNumber),
+                    //new Claim("FullName", user.FullName),
+                    //new Claim("PhoneNumber", user.PhoneNumber),
                     new Claim(ClaimTypes.Name, user.UserName.ToString()),
                     new Claim(ClaimTypes.Role, user.Role)
                    };

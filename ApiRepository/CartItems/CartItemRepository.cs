@@ -17,16 +17,34 @@ namespace BenriShop.ApiRepository.CartItems
         }
         public async Task<CartItem> AddCartItem(CartItem cartItem)
         {
-            try
+
+            //var product = (from pro in _context.Products
+            //                        join sizeColor in _context.SizeOfProductHadColors on pro.ProductId equals sizeColor.ProductId
+            //                        where pro.ProductId == cartItem.ProductId && sizeColor.SizeId == Size && sizeColor.ColorId == Color
+            //                        select sizeColor.QuantityInSizeOfColor, pro.ProductId).ToList();
+
+            var productQuantity = _context.SizeOfProductHadColors.First(x => x.ProductId == cartItem.ProductId && x.ColorId == cartItem.SizeOfProductHadColors.ColorId && x.SizeId == cartItem.SizeOfProductHadColors.SizeId).QuantityInSizeOfColor; 
+
+            
+            if (cartItem.QuantityInCart < productQuantity)
             {
-                var result = await _context.CartItems.AddAsync(cartItem);
-                await _context.SaveChangesAsync();
-                return result.Entity;
+                try
+                {
+                    var result = await _context.CartItems.AddAsync(cartItem);
+                    await _context.SaveChangesAsync();
+                    return result.Entity;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
             }
-            catch (Exception ex)
+            else
             {
-                throw ex;
+                return null;
             }
+
+
         }
 
         /*public async Task<bool> AddItemsFromCartToOrder(string orderId)

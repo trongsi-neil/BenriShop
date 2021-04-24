@@ -1,5 +1,6 @@
 ﻿using BenriShop.ApiRepository.Accounts;
 using BenriShop.Models;
+using BenriShop.Models.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,8 +12,8 @@ namespace BenriShop.ApiRepository.Products
 {
     public interface IProductsRepository
     {
-        Task<IEnumerable<Product>> GetProducts();
-        Task<Product> GetProduct(int productId);
+        Task<IEnumerable<ProductView>> GetProducts();
+        Task<ProductView> GetProduct(int productId);
         Task<Product> AddProduct(Product product);
         Task<Product> UpdateProduct(Product product);
         Task<bool> DeleteProduct(int productId);
