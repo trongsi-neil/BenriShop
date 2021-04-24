@@ -2,7 +2,7 @@
 
 namespace BenriShop.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -130,31 +130,6 @@ namespace BenriShop.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CARTITEM",
-                columns: table => new
-                {
-                    PRODUCTID = table.Column<int>(unicode: false, maxLength: 20, nullable: false),
-                    USERNAME = table.Column<string>(unicode: false, maxLength: 20, nullable: false),
-                    QUANTITYINCART = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CARTITEM", x => new { x.PRODUCTID, x.USERNAME });
-                    table.ForeignKey(
-                        name: "FK_CARTITEM_PRODUCT_PRODUCTID",
-                        column: x => x.PRODUCTID,
-                        principalTable: "PRODUCT",
-                        principalColumn: "PRODUCTID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CARTITEM_ACCOUNT_USERNAME",
-                        column: x => x.USERNAME,
-                        principalTable: "ACCOUNT",
-                        principalColumn: "USERNAME",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "HAVE_TAG",
                 columns: table => new
                 {
@@ -254,6 +229,40 @@ namespace BenriShop.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "CARTITEM",
+                columns: table => new
+                {
+                    PRODUCTID = table.Column<int>(unicode: false, maxLength: 20, nullable: false),
+                    USERNAME = table.Column<string>(unicode: false, maxLength: 20, nullable: false),
+                    QUANTITYINCART = table.Column<int>(nullable: false),
+                    SizeOfProductHadColorsSizeId = table.Column<string>(nullable: true),
+                    SizeOfProductHadColorsColorId = table.Column<string>(nullable: true),
+                    SizeOfProductHadColorsProductId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CARTITEM", x => new { x.PRODUCTID, x.USERNAME });
+                    table.ForeignKey(
+                        name: "FK_CARTITEM_PRODUCT_PRODUCTID",
+                        column: x => x.PRODUCTID,
+                        principalTable: "PRODUCT",
+                        principalColumn: "PRODUCTID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CARTITEM_ACCOUNT_USERNAME",
+                        column: x => x.USERNAME,
+                        principalTable: "ACCOUNT",
+                        principalColumn: "USERNAME",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CARTITEM_SIZEOFPRODUCTHADCOLOR_SizeOfProductHadColorsSizeId_SizeOfProductHadColorsColorId_SizeOfProductHadColorsProductId",
+                        columns: x => new { x.SizeOfProductHadColorsSizeId, x.SizeOfProductHadColorsColorId, x.SizeOfProductHadColorsProductId },
+                        principalTable: "SIZEOFPRODUCTHADCOLOR",
+                        principalColumns: new[] { "SIZEID", "COLORID", "PRODUCTID" },
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "ADDED_FK",
                 table: "CARTITEM",
@@ -263,6 +272,11 @@ namespace BenriShop.Migrations
                 name: "IX_CARTITEM_USERNAME",
                 table: "CARTITEM",
                 column: "USERNAME");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CARTITEM_SizeOfProductHadColorsSizeId_SizeOfProductHadColorsColorId_SizeOfProductHadColorsProductId",
+                table: "CARTITEM",
+                columns: new[] { "SizeOfProductHadColorsSizeId", "SizeOfProductHadColorsColorId", "SizeOfProductHadColorsProductId" });
 
             migrationBuilder.CreateIndex(
                 name: "HAVE_TAG_FK",

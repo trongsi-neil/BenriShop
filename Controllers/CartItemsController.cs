@@ -86,7 +86,7 @@ namespace BenriShop.Controllers
         // POST: api/CartItems/AddCartItem
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [Authorize(Roles = "Customer")]
+        //[Authorize(Roles = "Customer")]
         [HttpPost("AddCartItem")]
         public async Task<ActionResult<CartItem>> AddCartItem(CartItem cartItem)
         {
