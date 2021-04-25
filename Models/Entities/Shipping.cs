@@ -7,6 +7,6 @@
         public int Cost { get; set; }
         public int Status { get; set; }
         public string Note { get; set; }
-        public Order Order { get; set; }
+        public virtual Order Order { get; set; }
     }
 }

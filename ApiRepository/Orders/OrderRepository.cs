@@ -90,31 +90,9 @@ namespace BenriShop.ApiRepository.Orders
         }
         public async Task<bool> AddItemFromCartToOrder(string orderId, string userName)
         {
-           //IOrderItemRepository _orderItemRepository = new OrderItemRepository(_context);
-            //ICartItemRepository _cartItemRepository = new CartItemRepository(_context);
-
-            //try
-            //{
-            //    var order = await _context.Orders.FindAsync(orderId);
-            //    OrderItem orderItem = new OrderItem();
-            //    orderItem.OrderId = order.OrderId;
-            //    orderItem.ProductId = cartItem.ProductId;
-            //    orderItem.QuantityInOrder = cartItem.QuantityInCart;
-            //    orderItem.Order = order;
-            //    orderItem.Product = cartItem.Product;
-
-            //    await _orderItemRepository.AddOrderItem(orderItem);
-            //    await _cartItemRepository.DeleteCartItem(order.UserName, cartItem.ProductId);
-            //    return true;
-            //}catch(Exception ex)
-            //{
-            //    Console.WriteLine(ex.ToString());
-            //    return false;
-            //}
             try
             {
-                //IOrderItemRepository _orderItemRepository = new OrderItemRepository(_context);
-
+          
                 var order =  _context.Orders.FirstOrDefault( x => x.OrderId == orderId);
                 var cartItems = _context.CartItems.Where(x => x.UserName == userName).ToList();
                 if (cartItems.Count == 0) return false;

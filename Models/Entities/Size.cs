@@ -7,6 +7,6 @@ namespace BenriShop.Models
     {
         public string SizeId { get; set; }
 
-        public List<SizeOfProductHadColor> SizeOfProductHadColors { get; set; }
+        public virtual ICollection<SizeOfProductHadColor> SizeOfProductHadColors { get; set; }
     }
 }

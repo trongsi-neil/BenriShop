@@ -7,6 +7,6 @@ namespace BenriShop.Models
     {
         public string TagId { get; set; }
 
-        public List<HaveTag> HaveTags { get; set; }
+        public virtual ICollection<HaveTag> HaveTags { get; set; }
     }
 }

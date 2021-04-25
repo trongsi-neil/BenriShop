@@ -7,6 +7,6 @@ namespace BenriShop.Models
     {
         public string CategoryId { get; set; }
 
-        public List<Product> Products { get; set; }
+        public virtual ICollection<Product> Products { get; set; }
     }
 }

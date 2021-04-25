@@ -9,6 +9,6 @@ namespace BenriShop.Models
         public string Imageid { get; set; }
         public string Link { get; set; }
 
-        public Product Product { get; set; }
+        public virtual Product Product { get; set; }
     }
 }

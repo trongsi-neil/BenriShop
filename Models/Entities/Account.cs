@@ -19,7 +19,7 @@ namespace BenriShop.Models
         public string FullName { get; set; }
         public string Role { get; set; }
 
-        public List<CartItem> CartItems { get; set; }
-        public List<Order> Orders { get; set; }
+        public virtual ICollection<CartItem> CartItems { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
     }
 }
