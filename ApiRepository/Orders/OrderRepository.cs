@@ -55,7 +55,7 @@ namespace BenriShop.ApiRepository.Orders
 
         public async Task<Order> GetOrder(string orderId)
         {
-            return await _context.Orders.FirstOrDefaultAsync(e => e.UserName == orderId);
+            return await _context.Orders.FirstOrDefaultAsync(e => e.OrderId == orderId);
         }
 
         public async Task<IEnumerable<Order>> GetOrders(string userName)
@@ -117,13 +117,16 @@ namespace BenriShop.ApiRepository.Orders
 
                 var order =  _context.Orders.FirstOrDefault( x => x.OrderId == orderId);
                 var cartItems = _context.CartItems.Where(x => x.UserName == userName).ToList();
-
+                if (cartItems.Count == 0) return false;
                 foreach (CartItem item in cartItems)
                 {
                     OrderItem orderItem = new OrderItem();
                     orderItem.OrderId = order.OrderId;
                     orderItem.ProductId = item.ProductId;
                     orderItem.QuantityInOrder = item.QuantityInCart;
+
+                    orderItem.Color = item.Color;
+                    orderItem.Size = item.Size;
                     orderItem.Order = order;
                     orderItem.Product = item.Product;
 

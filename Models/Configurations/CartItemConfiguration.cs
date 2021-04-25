@@ -18,9 +18,6 @@ namespace BenriShop.Models.Configurations
             builder.HasIndex(e => e.ProductId)
                 .HasName("ADDED_FK");
 
-            //builder.HasIndex(e => e.UserName)
-            //    .HasName("HAVE_ITEM_IN_CART_FK");
-
             builder.HasOne(x => x.Product).WithMany(x => x.CartItems).HasForeignKey(x => x.ProductId);
             
             builder.Property(e => e.ProductId)
@@ -29,6 +26,7 @@ namespace BenriShop.Models.Configurations
                 .IsUnicode(false);
 
             builder.HasOne(x => x.Account).WithMany(x => x.CartItems).HasForeignKey(x => x.UserName);
+
             builder.Property(e => e.UserName)
                 .HasColumnName("USERNAME")
                 .HasMaxLength(20)

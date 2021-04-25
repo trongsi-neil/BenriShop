@@ -416,4 +416,3 @@ C:\Users\ngomi\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\Microsoft.AspNetCo
 C:\Users\ngomi\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Identity.Core.dll
 C:\Users\ngomi\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Identity.Stores.dll
 C:\Users\ngomi\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\Stripe.net.dll
-C:\Users\ngomi\Source\Repos\BenriShop\obj\Debug\netcoreapp3.1\BenriShop.csprojAssemblyReference.cache

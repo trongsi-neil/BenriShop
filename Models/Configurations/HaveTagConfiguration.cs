@@ -13,13 +13,13 @@ namespace BenriShop.Models.Configurations
         {
             builder.HasKey(e => new { e.ProductId, e.TagId });
 
-            builder.ToTable("HAVE_TAG");
+            builder.ToTable("HAVETAG");
 
             builder.HasIndex(e => e.ProductId)
-                .HasName("HAVE_TAG_FK");
+                .HasName("HAVETAG_FK");
 
             builder.HasIndex(e => e.TagId)
-                .HasName("HAVE_TAG2_FK");
+                .HasName("HAVETAG2_FK");
 
             builder.Property(e => e.ProductId)
                 .HasColumnName("PRODUCTID")

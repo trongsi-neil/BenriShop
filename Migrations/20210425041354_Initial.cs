@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BenriShop.Migrations
 {
@@ -72,6 +73,7 @@ namespace BenriShop.Migrations
                 {
                     ORDERID = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     USERNAME = table.Column<string>(unicode: false, maxLength: 20, nullable: true),
+                    OrderDate = table.Column<DateTime>(nullable: false),
                     PAYMENT = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
@@ -130,7 +132,34 @@ namespace BenriShop.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "HAVE_TAG",
+                name: "CARTITEM",
+                columns: table => new
+                {
+                    PRODUCTID = table.Column<int>(unicode: false, maxLength: 20, nullable: false),
+                    USERNAME = table.Column<string>(unicode: false, maxLength: 20, nullable: false),
+                    QUANTITYINCART = table.Column<int>(nullable: false),
+                    Size = table.Column<string>(nullable: true),
+                    Color = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CARTITEM", x => new { x.PRODUCTID, x.USERNAME });
+                    table.ForeignKey(
+                        name: "FK_CARTITEM_PRODUCT_PRODUCTID",
+                        column: x => x.PRODUCTID,
+                        principalTable: "PRODUCT",
+                        principalColumn: "PRODUCTID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CARTITEM_ACCOUNT_USERNAME",
+                        column: x => x.USERNAME,
+                        principalTable: "ACCOUNT",
+                        principalColumn: "USERNAME",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "HAVETAG",
                 columns: table => new
                 {
                     PRODUCTID = table.Column<int>(unicode: false, maxLength: 20, nullable: false),
@@ -138,15 +167,15 @@ namespace BenriShop.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_HAVE_TAG", x => new { x.PRODUCTID, x.TAGID });
+                    table.PrimaryKey("PK_HAVETAG", x => new { x.PRODUCTID, x.TAGID });
                     table.ForeignKey(
-                        name: "FK_HAVE_TAG_PRODUCT_PRODUCTID",
+                        name: "FK_HAVETAG_PRODUCT_PRODUCTID",
                         column: x => x.PRODUCTID,
                         principalTable: "PRODUCT",
                         principalColumn: "PRODUCTID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_HAVE_TAG_TAG_TAGID",
+                        name: "FK_HAVETAG_TAG_TAGID",
                         column: x => x.TAGID,
                         principalTable: "TAG",
                         principalColumn: "TAGID",
@@ -178,7 +207,9 @@ namespace BenriShop.Migrations
                 {
                     PRODUCTID = table.Column<int>(unicode: false, maxLength: 20, nullable: false),
                     ORDERID = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
-                    QUANTITYINORDER = table.Column<int>(nullable: false)
+                    QUANTITYINORDER = table.Column<int>(nullable: false),
+                    Size = table.Column<string>(nullable: true),
+                    Color = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -229,40 +260,6 @@ namespace BenriShop.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "CARTITEM",
-                columns: table => new
-                {
-                    PRODUCTID = table.Column<int>(unicode: false, maxLength: 20, nullable: false),
-                    USERNAME = table.Column<string>(unicode: false, maxLength: 20, nullable: false),
-                    QUANTITYINCART = table.Column<int>(nullable: false),
-                    SizeOfProductHadColorsSizeId = table.Column<string>(nullable: true),
-                    SizeOfProductHadColorsColorId = table.Column<string>(nullable: true),
-                    SizeOfProductHadColorsProductId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CARTITEM", x => new { x.PRODUCTID, x.USERNAME });
-                    table.ForeignKey(
-                        name: "FK_CARTITEM_PRODUCT_PRODUCTID",
-                        column: x => x.PRODUCTID,
-                        principalTable: "PRODUCT",
-                        principalColumn: "PRODUCTID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CARTITEM_ACCOUNT_USERNAME",
-                        column: x => x.USERNAME,
-                        principalTable: "ACCOUNT",
-                        principalColumn: "USERNAME",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CARTITEM_SIZEOFPRODUCTHADCOLOR_SizeOfProductHadColorsSizeId_SizeOfProductHadColorsColorId_SizeOfProductHadColorsProductId",
-                        columns: x => new { x.SizeOfProductHadColorsSizeId, x.SizeOfProductHadColorsColorId, x.SizeOfProductHadColorsProductId },
-                        principalTable: "SIZEOFPRODUCTHADCOLOR",
-                        principalColumns: new[] { "SIZEID", "COLORID", "PRODUCTID" },
-                        onDelete: ReferentialAction.Restrict);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "ADDED_FK",
                 table: "CARTITEM",
@@ -274,18 +271,13 @@ namespace BenriShop.Migrations
                 column: "USERNAME");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CARTITEM_SizeOfProductHadColorsSizeId_SizeOfProductHadColorsColorId_SizeOfProductHadColorsProductId",
-                table: "CARTITEM",
-                columns: new[] { "SizeOfProductHadColorsSizeId", "SizeOfProductHadColorsColorId", "SizeOfProductHadColorsProductId" });
-
-            migrationBuilder.CreateIndex(
-                name: "HAVE_TAG_FK",
-                table: "HAVE_TAG",
+                name: "HAVETAG_FK",
+                table: "HAVETAG",
                 column: "PRODUCTID");
 
             migrationBuilder.CreateIndex(
-                name: "HAVE_TAG2_FK",
-                table: "HAVE_TAG",
+                name: "HAVETAG2_FK",
+                table: "HAVETAG",
                 column: "TAGID");
 
             migrationBuilder.CreateIndex(
@@ -340,7 +332,7 @@ namespace BenriShop.Migrations
                 name: "CARTITEM");
 
             migrationBuilder.DropTable(
-                name: "HAVE_TAG");
+                name: "HAVETAG");
 
             migrationBuilder.DropTable(
                 name: "IMAGE");

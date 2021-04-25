@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace BenriShop.Models
+﻿namespace BenriShop.Models
 {
     public partial class Shipping
     {
@@ -10,7 +7,6 @@ namespace BenriShop.Models
         public int Cost { get; set; }
         public int Status { get; set; }
         public string Note { get; set; }
-
         public Order Order { get; set; }
     }
 }

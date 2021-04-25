@@ -23,16 +23,21 @@ namespace BenriShop.ApiRepository.CartItems
             //                        where pro.ProductId == cartItem.ProductId && sizeColor.SizeId == Size && sizeColor.ColorId == Color
             //                        select sizeColor.QuantityInSizeOfColor, pro.ProductId).ToList();
 
-            var productQuantity = _context.SizeOfProductHadColors.First(x => x.ProductId == cartItem.ProductId && x.ColorId == cartItem.SizeOfProductHadColors.ColorId && x.SizeId == cartItem.SizeOfProductHadColors.SizeId).QuantityInSizeOfColor; 
+            var productQuantity = _context.SizeOfProductHadColors.First(x => x.ProductId == cartItem.ProductId && x.ColorId == cartItem.Color && x.SizeId == cartItem.Size).QuantityInSizeOfColor; 
 
             
-            if (cartItem.QuantityInCart < productQuantity)
+            if (cartItem.QuantityInCart <= productQuantity)
             {
                 try
                 {
-                    var result = await _context.CartItems.AddAsync(cartItem);
+                    _context.SizeOfProductHadColors.First(x => x.ProductId == cartItem.ProductId && x.ColorId == cartItem.Color && x.SizeId == cartItem.Size)
+                        .QuantityInSizeOfColor = productQuantity - cartItem.QuantityInCart;
+
+                    _context.CartItems.Add(cartItem);
+                    
                     await _context.SaveChangesAsync();
-                    return result.Entity;
+
+                    return cartItem;
                 }
                 catch (Exception ex)
                 {

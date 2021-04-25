@@ -100,34 +100,46 @@ namespace BenriShop.Controllers
             orders.ToList();
 
             order.UserName = userName;
-            if (orders.Count() != 0)
-            {
-                for (int i = 0; i <= orders.Count(); i++)
-                {
-                    var oldOrder = await _orderRepository.GetOrder(userName + "_" + i);
-                    if (oldOrder == null)
-                    {
-                        order.OrderId = userName + "_" + i;
-                        break;
-                    }
-                }
-            }else
-            {
-                order.OrderId = userName + "_" + 0;
-            }
-            
+
+            //if (orders.Count() != 0)
+            //{
+            //    for (int i = 0; i <= orders.Count(); i++)
+            //    {
+            //        var oldOrder = await _orderRepository.GetOrder(userName + "_" + i);
+            //        if (oldOrder == null)
+            //        {
+            //            order.OrderId = userName + "_" + i;
+            //            break;
+            //        }
+            //    }
+            //}else
+            //{
+            //    order.OrderId = userName + "_" + 0;
+            //}
+            //Guid g = Guid.NewGuid();
+
+            order.OrderId = Guid.NewGuid().ToString();
+
             order.Payment = payment;
 
             try
             {
-                _ = _orderRepository.AddOrder(order);
-                if(await _orderRepository.AddItemFromCartToOrder(order.OrderId, order.UserName))
+
+                if(await _orderRepository.AddOrder(order) != null)
                 {
-                    return Ok();
+                    if(await _orderRepository.AddItemFromCartToOrder(order.OrderId, order.UserName))
+                    {
+                        return Ok();
+                    }
+                    else
+                    {
+                        await _orderRepository.DeleteOrder(order.OrderId);
+                        return BadRequest("Không thể chuyển CartItem sang OrderItem");
+                    }
                 }
                 else
                 {
-                    return BadRequest();
+                    return BadRequest("Không thể thêm Order");
                 }    
                 
                 return order;

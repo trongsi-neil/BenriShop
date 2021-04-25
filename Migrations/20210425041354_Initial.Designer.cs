@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BenriShop.Migrations
 {
     [DbContext(typeof(BenriShopContext))]
-    [Migration("20210423144658_Initial")]
+    [Migration("20210425041354_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -78,18 +78,15 @@ namespace BenriShop.Migrations
                         .HasMaxLength(20)
                         .IsUnicode(false);
 
+                    b.Property<string>("Color")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("QuantityInCart")
                         .HasColumnName("QUANTITYINCART")
                         .HasColumnType("int");
 
-                    b.Property<string>("SizeOfProductHadColorsColorId")
-                        .HasColumnType("varchar(10)");
-
-                    b.Property<int?>("SizeOfProductHadColorsProductId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SizeOfProductHadColorsSizeId")
-                        .HasColumnType("varchar(3)");
+                    b.Property<string>("Size")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ProductId", "UserName");
 
@@ -97,8 +94,6 @@ namespace BenriShop.Migrations
                         .HasName("ADDED_FK");
 
                     b.HasIndex("UserName");
-
-                    b.HasIndex("SizeOfProductHadColorsSizeId", "SizeOfProductHadColorsColorId", "SizeOfProductHadColorsProductId");
 
                     b.ToTable("CARTITEM");
                 });
@@ -146,12 +141,12 @@ namespace BenriShop.Migrations
                     b.HasKey("ProductId", "TagId");
 
                     b.HasIndex("ProductId")
-                        .HasName("HAVE_TAG_FK");
+                        .HasName("HAVETAG_FK");
 
                     b.HasIndex("TagId")
-                        .HasName("HAVE_TAG2_FK");
+                        .HasName("HAVETAG2_FK");
 
-                    b.ToTable("HAVE_TAG");
+                    b.ToTable("HAVETAG");
                 });
 
             modelBuilder.Entity("BenriShop.Models.Image", b =>
@@ -191,6 +186,9 @@ namespace BenriShop.Migrations
                         .HasMaxLength(50)
                         .IsUnicode(false);
 
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("Payment")
                         .HasColumnName("PAYMENT")
                         .HasColumnType("bit");
@@ -223,9 +221,15 @@ namespace BenriShop.Migrations
                         .HasMaxLength(50)
                         .IsUnicode(false);
 
+                    b.Property<string>("Color")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("QuantityInOrder")
                         .HasColumnName("QUANTITYINORDER")
                         .HasColumnType("int");
+
+                    b.Property<string>("Size")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ProductId", "OrderId");
 
@@ -395,10 +399,6 @@ namespace BenriShop.Migrations
                         .HasForeignKey("UserName")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("BenriShop.Models.SizeOfProductHadColor", "SizeOfProductHadColors")
-                        .WithMany()
-                        .HasForeignKey("SizeOfProductHadColorsSizeId", "SizeOfProductHadColorsColorId", "SizeOfProductHadColorsProductId");
                 });
 
             modelBuilder.Entity("BenriShop.Models.HaveTag", b =>
