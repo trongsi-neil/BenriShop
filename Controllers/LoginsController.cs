@@ -23,14 +23,19 @@ namespace BenriShop.Controllers
             _configuration = config;
             _context = context;
         }
-
+        /// <summary>
+        /// Đăng nhập với 1 đối tượng được truyền vào và trả về tokken tương ứng
+        /// </summary>
+        /// <param name="_account"></param>
+        /// <returns></returns>
+        // POST: api/Logins
         [HttpPost]
         public async Task<IActionResult> Post(Account _account)
         {
 
-            if (_account != null && _account.Username != null && _account.Password != null)
+            if (_account != null && _account.UserName != null && _account.Password != null)
             {
-                var user = await GetAcount(_account.Username, _account.Password);
+                var user = await GetAcount(_account.UserName, _account.Password);
 
                 if (user != null)
                 {
@@ -39,10 +44,10 @@ namespace BenriShop.Controllers
                     new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                    //new Claim("UserName", user.Username.ToString()),
-                    new Claim("FullName", user.Fullname),
-                    new Claim("PhoneNumber", user.Phonenumber),
-                    new Claim(ClaimTypes.Name, user.Username.ToString()),
+                    //new Claim("UserName", user.UserName.ToString()),
+                    //new Claim("FullName", user.FullName),
+                    //new Claim("PhoneNumber", user.PhoneNumber),
+                    new Claim(ClaimTypes.Name, user.UserName.ToString()),
                     new Claim(ClaimTypes.Role, user.Role)
                    };
 
@@ -61,13 +66,18 @@ namespace BenriShop.Controllers
             }
             else
             {
-                return BadRequest();
+                return BadRequest("Some parameter is null");
             }
         }
-
-        private async Task<Account> GetAcount(string username, string password)
+        /// <summary>
+        /// Tìm tài khoản trong database với username và password được truyền vào.
+        /// </summary>
+        /// <param name="UserName"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        private async Task<Account> GetAcount(string UserName, string password)
         {
-            return await _context.Account.FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
+            return await _context.Accounts.FirstOrDefaultAsync(u => u.UserName == UserName && u.Password == password);
         }
     }
 }

@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BenriShop.Models;
 using Microsoft.AspNetCore.Authorization;
+using BenriShop.ApiRepository.Products;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using BenriShop.Models.ViewModel;
 
 namespace BenriShop.Controllers
 {
@@ -14,106 +18,126 @@ namespace BenriShop.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly BenriShopContext _context;
+        private readonly IProductsRepository _productRepository;
+        public static IWebHostEnvironment _environment;
 
-        public ProductsController(BenriShopContext context)
+        public ProductsController(IProductsRepository productRepository, IWebHostEnvironment environment)
         {
-            _context = context;
+            this._productRepository = productRepository;
+
+            _environment = environment; 
         }
 
+        public class FileUpload
+        {
+            public int ProductId { get; set; }
+
+            public string Id { get; set; }
+
+            public string Link { get; set; }
+
+            public IFormFile files { get; set; }
+        }
 
         #region Admin
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin, Mod")]
         // PUT: api/Products/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutProduct(int id, Product product)
+        /// <summary>
+        /// Sửa thông tin sản phẩm
+        /// </summary>
+        /// <param id="ProductId"></param>
+        /// <returns></returns>
+        [HttpPut("UpdateProduct/{id}")]
+        public async Task<IActionResult> UpdateProduct(int id, Product product)
         {
-            if (id != product.Productid)
+            if (id != product.ProductId)
             {
-                return BadRequest();
+                return BadRequest("Wrong of ProductId");
             }
-
-            _context.Entry(product).State = EntityState.Modified;
+            var _product = await _productRepository.GetProduct(product.ProductId);
+            
+            if (_product == null)
+            {
+                return NotFound("Not found this product with this productId");
+            }
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _productRepository.UpdateProduct(product);
+                return Ok("Update product successfully");
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProductExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest("Error when call _productRepository.UpdateProduct(product)");
             }
 
-            return NoContent();
         }
 
         // POST: api/Products
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPost]
-        public async Task<ActionResult<Product>> PostProduct(Product product)
+        /// <summary>
+        /// Thêm sản phẩm vào cửa hàng
+        /// </summary>
+        /// <param product="Product"></param>
+        /// <returns></returns>
+        [HttpPost("AddProduct")]
+        [Authorize(Roles = "Admin, Mod")]
+        public async Task<ActionResult<Product>> AddProduct(Product product)
         {
-            _context.Product.Add(product);
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
+                await _productRepository.AddProduct(product);
+                return CreatedAtAction("GetProduct", new { id = product.ProductId }, product);
+            }catch
             {
-                if (ProductExists(product.Productid))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest("Error when call _productRepository.AddProduct(product)");
             }
-
-            return CreatedAtAction("GetProduct", new { id = product.Productid }, product);
         }
 
-
+        /// <summary>
+        /// Xóa sản phẩm bằng cách truyền vào productId
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // DELETE: api/Products/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Product>> DeleteProduct(string id)
+        [HttpDelete("{productId}")]
+        public async Task<ActionResult<Product>> DeleteProduct(int productId)
         {
-            var product = await _context.Product.FindAsync(id);
-            if (product == null)
+            if (await _productRepository.DeleteProduct(productId))
             {
-                return NotFound();
+                return Ok("Delete successfully!");
             }
-
-            _context.Product.Remove(product);
-            await _context.SaveChangesAsync();
-
-            return product;
+            else
+            {
+                return BadRequest("Error when call _productRepository.DeleteProduct(productId)");
+            }
         }
         #endregion
 
         #region Users
-
+        /// <summary>
+        /// Lấy tất cả sản phẩm trong database
+        /// </summary>
+        /// <returns></returns>
         // GET: api/Products
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProduct()
+        [HttpGet("GetProducts")]
+        public async Task<IEnumerable<ProductView>> GetProducts()
         {
-            return await _context.Product.ToListAsync();
+            return await _productRepository.GetProducts();
         }
-
-        // GET: api/Products/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProduct(string id)
+        /// <summary>
+        /// Lấy một sản phẩm bằng cách truyền vào productId
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+       // GET: api/Products/5
+       [HttpGet("{id}")]
+        public async Task<ActionResult<ProductView>> GetProduct(int id)
         {
-            var product = await _context.Product.FindAsync(id);
+            var product = await _productRepository.GetProduct(id);
 
             if (product == null)
             {
@@ -127,10 +151,54 @@ namespace BenriShop.Controllers
 
         #region Method
 
-        private bool ProductExists(int id)
+        /*private bool ProductExists(int id)
         {
             return _context.Product.Any(e => e.Productid == id);
+        }*/
+        /// <summary>
+        /// Nhận hình tải lên và lưu vào thư mục images
+        /// </summary>
+        /// <param name="objFile"></param>
+        /// <returns></returns>
+        [HttpPost("UploadImage")]
+        //[Route("api/[controller]/uploadimage")]
+        public async Task<ActionResult> UploadImage([FromForm] FileUpload objFile)
+        {
+            if (objFile.files.Length > 0)
+            {
+                objFile.Id = objFile.ProductId + "_" + objFile.files.FileName;
+                //objFile.Id = new Guid().ToString();
+//                objFile.Link = _environment.WebRootPath + "\\images\\" + objFile.Id;
+                objFile.Link = "\\images\\" + objFile.Id;
+                if (objFile.Id.Length > 20)
+                {
+                    return BadRequest("File's name is longer 20 character");
+                }
+                try
+                {
+                    if (!Directory.Exists(_environment.WebRootPath + "\\images\\"))
+                    {
+                        Directory.CreateDirectory(_environment.WebRootPath + "\\images\\");
+                    }
+                    using (FileStream fileStream = System.IO.File.Create(objFile.Link))
+                    {
+                        objFile.files.CopyTo(fileStream);
+                        fileStream.Flush();
+                        await _productRepository.AddImage(objFile.ProductId, objFile.Id, objFile.Link);
+                        return Ok("Upload image is successful");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+            else
+            {
+                return BadRequest("Fail in upload image!");
+            }
         }
+
         #endregion
 
     }

@@ -1,26 +1,28 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Neil's PC\\Source\\Repos\\BenriShop\\BenriShop.csproj": {}
+    "C:\\Users\\ngomi\\Source\\Repos\\BenriShop\\BenriShop.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Neil's PC\\Source\\Repos\\BenriShop\\BenriShop.csproj": {
+    "C:\\Users\\ngomi\\Source\\Repos\\BenriShop\\BenriShop.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Neil's PC\\Source\\Repos\\BenriShop\\BenriShop.csproj",
+        "projectUniqueName": "C:\\Users\\ngomi\\Source\\Repos\\BenriShop\\BenriShop.csproj",
         "projectName": "BenriShop",
-        "projectPath": "C:\\Users\\Neil's PC\\Source\\Repos\\BenriShop\\BenriShop.csproj",
-        "packagesPath": "C:\\Users\\Neil's PC\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Neil's PC\\Source\\Repos\\BenriShop\\obj\\",
+        "projectPath": "C:\\Users\\ngomi\\Source\\Repos\\BenriShop\\BenriShop.csproj",
+        "packagesPath": "C:\\Users\\ngomi\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\ngomi\\Source\\Repos\\BenriShop\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Neil's PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\ngomi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 19.1.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\DevExpress 19.1\\Components\\System\\Components\\Packages": {},
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
@@ -40,11 +42,15 @@
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
           "dependencies": {
-            "Microsoft.AspNet.WebPages": {
+            "Microsoft.AspNet.WebApi.Core": {
               "target": "Package",
-              "version": "[3.2.7, )"
+              "version": "[5.2.7, )"
             },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[3.1.8, )"
+            },
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
               "version": "[3.1.8, )"
             },
@@ -61,6 +67,10 @@
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
               "version": "[3.1.5, )"
+            },
+            "Stripe.net": {
+              "target": "Package",
+              "version": "[39.45.0, )"
             },
             "System.Collections": {
               "target": "Package",
@@ -89,7 +99,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     }

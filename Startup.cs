@@ -1,5 +1,10 @@
 using BenriShop.ApiRepository.Accounts;
+using BenriShop.ApiRepository.CartItems;
+using BenriShop.ApiRepository.OrderItems;
+using BenriShop.ApiRepository.Orders;
+using BenriShop.ApiRepository.Products;
 using BenriShop.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,8 +38,20 @@ namespace BenriShop
         {
             var connection = Configuration.GetConnectionString("BenriShopDatabase");
 
-
             //services.AddDbContextPool<InventoryContext>(options => options.UseSqlServer(connection));
+            services.AddHttpClient();
+
+            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            //.AddCookie(options =>
+            //{
+            //    options.LoginPath = "/Account/Login";
+            //    options.AccessDeniedPath = "/User/Forbidden/";
+            //});
+
+            //services.AddSession(options =>
+            //{
+            //    options.IdleTimeout = TimeSpan.FromMinutes(30);
+            //});
 
             services.AddDbContext<BenriShopContext>(op => op.UseSqlServer(connection));
 
@@ -48,7 +65,10 @@ namespace BenriShop
              * be provided and it will be available throughout the entire scope of that HTTP request.
             */
            services.AddScoped<IAccountRepository, AccountRepository>();
-           // services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+           services.AddScoped<IProductsRepository, ProductsRepository>();
+           services.AddScoped<ICartItemRepository, CartItemRepository>();
+           services.AddScoped<IOrderItemRepository, OrderItemRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
 
 
 
@@ -98,6 +118,7 @@ namespace BenriShop
 
             app.UseAuthorization();
 
+            app.UseStaticFiles();
 
             app.UseEndpoints(endpoints =>
             {

@@ -6,6 +6,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BenriShop.Models;
+using BenriShop.ApiRepository.Orders;
+using BenriShop.ApiRepository.CartItems;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using BenriShop.ApiRepository.Accounts;
 
 namespace BenriShop.Controllers
 {
@@ -13,111 +18,175 @@ namespace BenriShop.Controllers
     [ApiController]
     public class OrdersController : ControllerBase
     {
-        private readonly BenriShopContext _context;
+        private readonly IOrderRepository _orderRepository;
 
-        public OrdersController(BenriShopContext context)
+        public OrdersController(IOrderRepository orderItemRepository)
         {
-            _context = context;
+            this._orderRepository = orderItemRepository;
         }
-
-        // GET: api/Orders
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Order>>> GetOrder()
+        /// <summary>
+        /// Lấy tất cả đơn hàng của 1 tài khoản bằng cách truyền vào userName
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns></returns>
+        // GET: api/Orders/GetOrders/userName
+        [Authorize]
+        [HttpGet("GetOrders/{userName}")]
+        public async Task<IEnumerable<Order>> GetOrders(string userName)
         {
-            return await _context.Order.ToListAsync();
-        }
-
-        // GET: api/Orders/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Order>> GetOrder(string id)
-        {
-            var order = await _context.Order.FindAsync(id);
-
-            if (order == null)
+            var identity = User.Identity as ClaimsIdentity;
+            if (identity.RoleClaimType == "Customer")
             {
-                return NotFound();
+                if (identity.Name != userName)
+                {
+                    return (IEnumerable<Order>)Conflict("Can't access to diffirent account");
+                }
             }
 
-            return order;
+            var orders = await _orderRepository.GetOrders(userName);
+            if (orders != null)
+            {
+                return orders;
+            }
+            return (IEnumerable<Order>)NotFound("Error of GetOrders");
         }
+        /// <summary>
+        /// Lấy 1 đơn hàng bằng cách truyền vào 1 orderId
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        // GET: api/Orders/GetOrder/orderId
+        [Authorize]
+        [HttpGet("GetOrder/{orderId}")]
+        public async Task<ActionResult<Order>> GetOrder(string orderId)
+        {
+            var identity = User.Identity as ClaimsIdentity;
+            var order = await _orderRepository.GetOrder(orderId);
+            if (identity.RoleClaimType == "Customer")
+            {
+                if (identity.Name != order.UserName)
+                {
+                    return Conflict("Can't access to diffirent account");
+                }
+            }
 
-        // PUT: api/Orders/5
+            if (order != null)
+            {
+                return order;
+            }
+            return NotFound("Error of GetOrder");
+        }
+        /// <summary>
+        /// Thêm một đơn hàng từ giỏ hàng của người dùng, bằng cách truyền vào userName và payment (true là thanh toán online, false là thành toán tiền mặt khi nhận hàng)
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="payment"></param>
+        /// <returns></returns>
+        // POST: api/Orders/AddOrder/userName/true
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutOrder(string id, Order order)
+        [Authorize(Roles = "Customer")]
+        [HttpPost("AddOrder/{userName}/{payment}")]
+        public async Task<ActionResult<Order>> AddOrder(string userName, bool payment)
         {
-            if (id != order.Orderid)
+            var identity = User.Identity as ClaimsIdentity;
+            if (identity.Name != userName)
             {
-                return BadRequest();
+                return Conflict("Can't access to diffirent account");
             }
 
-            _context.Entry(order).State = EntityState.Modified;
+            Order order = new Order();
+            var orders = await _orderRepository.GetOrders(userName);
+            orders.ToList();
+
+            order.UserName = userName;
+
+            //if (orders.Count() != 0)
+            //{
+            //    for (int i = 0; i <= orders.Count(); i++)
+            //    {
+            //        var oldOrder = await _orderRepository.GetOrder(userName + "_" + i);
+            //        if (oldOrder == null)
+            //        {
+            //            order.OrderId = userName + "_" + i;
+            //            break;
+            //        }
+            //    }
+            //}else
+            //{
+            //    order.OrderId = userName + "_" + 0;
+            //}
+            //Guid g = Guid.NewGuid();
+
+            order.OrderId = Guid.NewGuid().ToString();
+
+            order.Payment = payment;
 
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!OrderExists(id))
+
+                if(await _orderRepository.AddOrder(order) != null)
                 {
-                    return NotFound();
+                    if(await _orderRepository.AddItemFromCartToOrder(order.OrderId, order.UserName))
+                    {
+                        return Ok();
+                    }
+                    else
+                    {
+                        await _orderRepository.DeleteOrder(order.OrderId);
+                        return BadRequest("Không thể chuyển CartItem sang OrderItem");
+                    }
                 }
                 else
                 {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Orders
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPost]
-        public async Task<ActionResult<Order>> PostOrder(Order order)
-        {
-            _context.Order.Add(order);
-            try
+                    return BadRequest("Không thể thêm Order");
+                }    
+                
+                return order;
+            }catch
             {
-                await _context.SaveChangesAsync();
+                return BadRequest("Error in AddItemsFromCartToOrder or AddOrder");
             }
-            catch (DbUpdateException)
-            {
-                if (OrderExists(order.Orderid))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return CreatedAtAction("GetOrder", new { id = order.Orderid }, order);
         }
-
-        // DELETE: api/Orders/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Order>> DeleteOrder(string id)
+        /// <summary>
+        /// Xóa một đơn hàng bằng cách truyền vào username và orderId
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        // DELETE: api/Orders/DeleteOrder/userName/orderId
+        [Authorize]
+        [HttpDelete("DeleteOrder/{userName}/{orderId}")]
+        public async Task<ActionResult<Order>> DeleteOrder(string userName, string orderId)
         {
-            var order = await _context.Order.FindAsync(id);
+            var identity = User.Identity as ClaimsIdentity;
+            if (identity.RoleClaimType == "Customer")
+            {
+                if (identity.Name != userName)
+                {
+                    return Conflict("Can't access to diffirent account");
+                }
+            }
+
+            var order = await _orderRepository.GetOrder(orderId);
             if (order == null)
             {
-                return NotFound();
+                return NotFound("Not found this order");
             }
-
-            _context.Order.Remove(order);
-            await _context.SaveChangesAsync();
-
-            return order;
+            try
+            {
+                _ = _orderRepository.DeleteOrder(orderId);
+                return Ok("Delete order is successful");
+            }
+            catch
+            {
+                return BadRequest("Error in DeleteOrder");
+            }
         }
 
-        private bool OrderExists(string id)
+        /*private bool OrderExists(string id)
         {
-            return _context.Order.Any(e => e.Orderid == id);
-        }
+            return _context.Orders.Any(e => e.OrderId == id);
+        }*/
     }
 }

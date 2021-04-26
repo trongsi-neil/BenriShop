@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using BenriShop.Models;
 using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
-using System.Web.Helpers;
 using System.Net.Http;
 using BenriShop.ApiRepository.Accounts;
 using System.Security.Claims;
@@ -22,6 +21,7 @@ namespace BenriShop.Controllers
     {
         private readonly IAccountRepository _accountRepository;
 
+
         public AccountsController(IAccountRepository accountRepository)
         {
             this._accountRepository = accountRepository;
@@ -32,9 +32,9 @@ namespace BenriShop.Controllers
         /// Lấy toàn bộ danh sach tài khoản của database
         /// </summary>
         /// <returns></returns>
-        // GET: api/Accounts 
+        // GET: api/Accounts/GetAccounts 
         [Authorize(Roles = "Admin")]
-        [HttpGet]
+        [HttpGet("GetAccounts")]
         public async Task<ActionResult<IEnumerable<Account>>> GetAccounts()
         {
             try
@@ -54,26 +54,27 @@ namespace BenriShop.Controllers
         /// </summary>
         /// <param name="account"></param>
         /// <returns></returns>
+        // POST: api/Accounts/AddModAccount 
         [HttpPost("AddModAccount")]
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Account>> AddModAccount(Account account)
         {
-            var _account = await _accountRepository.GetAccount(account.Username);
+            var _account = await _accountRepository.GetAccount(account.UserName);
 
             if (_account != null)
             {
-                return Conflict();
+                return Conflict("Parameter account is not null");
             }
             try
             {
                 account.Role = Role.Mod;
                 await _accountRepository.AddAccount(account);
+                return Ok("Add mod account successful!");
             }
             catch (DbUpdateException)
             {
-                throw;
+                return BadRequest("Error when AddAccount");
             }
-            return CreatedAtAction("GetAccount", new { id = account.Username }, account);
         }
 
 
@@ -82,6 +83,8 @@ namespace BenriShop.Controllers
         /// Lấy danh sách tài khoản Mod
         /// </summary>
         /// <returns></returns>
+        // GET: api/Accounts/GetModAccounts
+        [Authorize(Roles = "Admin")]
         [HttpGet("GetModAccounts")]
         public async Task<ActionResult<IEnumerable<Account>>> GetModAccounts()
         {
@@ -103,28 +106,24 @@ namespace BenriShop.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        // PUT: api/Accounts/ChangeRoleOfAccount
         [Authorize (Roles = "Admin")]
-        [HttpPut("ChangeRoleOfAccount/{id}")]
-        public async Task<IActionResult> ChangeRoleOfAccount(string id, Account account)
+        [HttpPut("ChangeRoleOfAccount")]
+        public async Task<IActionResult> ChangeRoleOfAccount(Account account)
         {
-            var username = account.Username;
+            var username = account.UserName;
             var role = account.Role;
 
             var _account = await _accountRepository.GetAccount(username);
 
             if (_account == null)
             {
-                return NotFound();
-            }
-
-            if (id != username)
-            {
-                return BadRequest();
+                return NotFound("Not found this account in database");
             }
 
             if (_account.Role == role || role == "" || role == null )
             {
-                return BadRequest();
+                return BadRequest("Error of parameter role");
             }
             _account.Role = role;
 
@@ -135,36 +134,40 @@ namespace BenriShop.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                return NoContent();         
+                return BadRequest("Error when call UpdateAccount(_account)");         
             }
  
         }
-
-        // DELETE: api/Accounts/5
-       // [Authorize]
-        [HttpDelete("Delete/{id}")]
-        public async Task<ActionResult<Account>> DeleteAccount(string id)
+        /// <summary>
+        /// Xóa tài khoản bằng cách truyền vào username
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        // DELETE: api/Accounts/DeleteAccount/userName
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("DeleteAccount/{userName}")]
+        public async Task<ActionResult<Account>> DeleteAccount(string userName)
         {
-            var account = await _accountRepository.GetAccount(id);
+            var account = await _accountRepository.GetAccount(userName);
             if (account == null)
             {
-                return NotFound("Không tìm thấy tài khoản này");
+                return NotFound("Can't found account with this username");
             }
             try
             {
-               if (await _accountRepository.DeleteAccountAsync(id))
+               if (await _accountRepository.DeleteAccountAsync(userName))
                 {
-                    return Ok("Xóa tài khoản thành công");
+                    return Ok("Delete account successful");
                 }
                 else
                 {
-                    return BadRequest("Xóa tài khoản không thành công");
+                    return BadRequest("Error when call DeleteAccountAsync(userName)");
                 }
                
             }
             catch (DbUpdateException)
             {
-                return account;
+                return BadRequest("DbUpdateException in DeleteAccount");
             }
 
         }
@@ -174,72 +177,83 @@ namespace BenriShop.Controllers
         #region User
 
         #region Authorize
-
-        // GET: api/Accounts/5
+        /// <summary>
+        /// Lấy thông tin tài khoản bằng cách truyền vào username
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        // GET: api/Accounts/GetAccountInformation/userName
         [Authorize]
-        [HttpGet("GetAccountInformation/{id}")]
-        public async Task<ActionResult<Account>> GetAccountInformation(string id)
+        [HttpGet("GetAccountInformation/{userName}")]
+        public async Task<ActionResult<Account>> GetAccountInformation(string userName)
         {
             var identity = User.Identity as ClaimsIdentity;
             var accountRole = await _accountRepository.GetAccount(identity.Name);
             if (accountRole.Role == "Admin")
             {
-                var account = await _accountRepository.GetAccount(id);
+                var account = await _accountRepository.GetAccount(userName);
                 if (account == null)
                 {
-                    return NotFound();
+                    return NotFound("Can't found the account with id: " + userName);
                 }
                 return account;
             }
             else
             {
-                if(identity.Name == id)
+                if(identity.Name == userName)
                 {
-                    var account = await _accountRepository.GetAccount(id);
+                    var account = await _accountRepository.GetAccount(userName);
                     if (account == null)
                     {
-                        return NotFound();
+                        return NotFound("Can't found the account with id: " + userName);
                     }
                     return account;
                 }
                 else
                 {
-                    BadRequest("Không có quyền truy cập");
+                    BadRequest("Not authorized");
                 }
             }
-            return BadRequest("Không truy cập được");
+            return BadRequest("Can't access to database!");
         }
+        /// <summary>
+        /// Thay đổi thông tin tài khoản bằng cách truyền vào username và một đối tượng Account
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="account"></param>
+        /// <returns></returns>
         // PUT: api/Accounts/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [Authorize]
-        [HttpPut("ChangeAccountInformation/{id}")]
-        public async Task<IActionResult> ChangeAccountInformation(string id, Account account)
+        [HttpPut("ChangeAccountInformation/{userName}")]
+        public async Task<IActionResult> ChangeAccountInformation(string userName, Account account)
         {
             var identity = User.Identity as ClaimsIdentity;
 
             if (identity != null)
             {
-                if (id != account.Username || identity.Name != account.Username)
+                if (userName != account.UserName || identity.Name != account.UserName)
                 {
-                    return BadRequest();
+                    return BadRequest("Parameter username is diffirent with acount's username");
                 }
 
-                var _account = await _accountRepository.GetAccount(id);
+                var _account = await _accountRepository.GetAccount(userName);
 
                 if (_account == null)
                 {
-                    return NotFound();
+                    return NotFound("Not found account with this username");
                 }
 
                 try
                 {
+                    account.Role = _account.Role;
                     await _accountRepository.UpdateAccount(account);
                     return Ok("Update account successfully");
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException ex)
                 {
-                    throw;
+                    return BadRequest(ex.ToString() + "Error in ChangeAccountInformation()");
                 }
             }
             return NoContent();
@@ -250,48 +264,68 @@ namespace BenriShop.Controllers
 
 
         #region AllowAnonymous
-
-        // POST: api/Accounts
+        /// <summary>
+        /// Tạo tài khoản với role là Customer bằng cách truyền vào 1 đối tượng Account
+        /// </summary>
+        /// <param name="account"></param>
+        /// <returns></returns>
+        // POST: api/Accounts/CreateAccount
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost("CreateAccount")]
         [AllowAnonymous]
         public async Task<ActionResult<Account>> CreateAccount(Account account)
         {
-            var _account = await _accountRepository.GetAccount(account.Username);
-           
+            var _account = await _accountRepository.GetAccount(account.UserName);
+
             if (_account != null)
             {
-                return Conflict("Tài khoản đã bị trùng");
+                return Conflict("This user name is existed");
             }
             try
             {
                 //Khách chỉ tạo đươc tài khoản là Customer
                 account.Role = Role.Customer;
+                if (account.Address == null)
+                {
+                    account.Address = "";
+                }
+                if (account.FullName == null)
+                {
+                    account.Address = "";
+                }
+                if (account.PhoneNumber == null)
+                {
+                    account.PhoneNumber = "";
+                }
                 await _accountRepository.AddAccount(account);
+                return Ok("Add account is successful");
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException ex)
             {
-                throw;
+                return BadRequest(ex.ToString() + "Error in CreateAccount()");
             }
-
-            return CreatedAtAction("GetAccount", new { id = account.Username }, account);
         }
-
-        [HttpPost("CheckAccount")]
+        /// <summary>
+        /// Kiểm tra tài khoản đã tồn tại trong database chưa
+        /// </summary>
+        /// <param name="account"></param>
+        /// <returns></returns>
+        // POST: api/Accounts/CheckAccountAsync
+        [HttpPost("CheckAccountAsync")]
         [AllowAnonymous]
         public async Task<IActionResult> CheckAccountAsync(Account account)
         {
 
-            var _account = await _accountRepository.GetAccount(account.Username);
-
+            var _account = await _accountRepository.GetAccount(account.UserName);
+            
             if (_account != null)
             {
-                return Conflict("Trùng tài khoản");
+                return Conflict("This user name is existed");
             }
             else
             {
-                return Ok("Có thể tạo");
+                return Ok("User name can be use");
             }
         }
 
