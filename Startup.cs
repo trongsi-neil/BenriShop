@@ -4,6 +4,7 @@ using BenriShop.ApiRepository.OrderItems;
 using BenriShop.ApiRepository.Orders;
 using BenriShop.ApiRepository.Products;
 using BenriShop.Models;
+using BenriShop.Models.Entities;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -16,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Stripe;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,7 +39,8 @@ namespace BenriShop
         public void ConfigureServices(IServiceCollection services)
         {
             var connection = Configuration.GetConnectionString("BenriShopDatabase");
-
+            services.AddControllersWithViews();
+            services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
             //services.AddDbContextPool<InventoryContext>(options => options.UseSqlServer(connection));
             services.AddHttpClient();
 
@@ -69,6 +72,7 @@ namespace BenriShop
            services.AddScoped<ICartItemRepository, CartItemRepository>();
            services.AddScoped<IOrderItemRepository, OrderItemRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
+          
 
 
 
@@ -105,6 +109,9 @@ namespace BenriShop
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+#pragma warning disable CS0618 // Type or member is obsolete
+            StripeConfiguration.SetApiKey(Configuration.GetSection("Stripe")["SecretKey"]);
+#pragma warning restore CS0618 // Type or member is obsolete
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -118,7 +125,6 @@ namespace BenriShop
 
             app.UseAuthorization();
 
-            app.UseStaticFiles();
 
             app.UseEndpoints(endpoints =>
             {
