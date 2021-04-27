@@ -315,6 +315,7 @@ namespace BenriShop.Migrations
                     b.HasKey("OrderId", "ShippingId");
 
                     b.HasIndex("OrderId")
+                        .IsUnique()
                         .HasName("HAVE_SHIPMENT_FK");
 
                     b.ToTable("SHIPPING");
@@ -458,9 +459,9 @@ namespace BenriShop.Migrations
             modelBuilder.Entity("BenriShop.Models.Shipping", b =>
                 {
                     b.HasOne("BenriShop.Models.Order", "Order")
-                        .WithMany("Shippings")
-                        .HasForeignKey("OrderId")
-                        .HasConstraintName("FK_SHIPPING_HAVE_SHIP_ORDER")
+                        .WithOne("Shippings")
+                        .HasForeignKey("BenriShop.Models.Shipping", "OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 

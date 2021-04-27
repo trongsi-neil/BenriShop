@@ -32,11 +32,7 @@ namespace BenriShop.Models.Configurations
 
             builder.Property(e => e.Status).HasColumnName("STATUS");
 
-            builder.HasOne(d => d.Order)
-                .WithMany(p => p.Shippings)
-                .HasForeignKey(d => d.OrderId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_SHIPPING_HAVE_SHIP_ORDER");
+
         }
     }
 }

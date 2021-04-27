@@ -13,6 +13,7 @@ namespace BenriShop.Models
 
         public virtual Account Account { get; set; }
         public virtual ICollection<OrderItem> OrderItems { get; set; }
-        public virtual ICollection<Shipping> Shippings { get; set; }
+
+        public virtual Shipping Shippings { get; set; }
     }
 }

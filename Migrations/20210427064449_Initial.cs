@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BenriShop.Migrations
 {
-    public partial class Innitial : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -124,11 +124,11 @@ namespace BenriShop.Migrations
                 {
                     table.PrimaryKey("PK_SHIPPING", x => new { x.ORDERID, x.SHIPPINGID });
                     table.ForeignKey(
-                        name: "FK_SHIPPING_HAVE_SHIP_ORDER",
+                        name: "FK_SHIPPING_ORDER_ORDERID",
                         column: x => x.ORDERID,
                         principalTable: "ORDER",
                         principalColumn: "ORDERID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -308,7 +308,8 @@ namespace BenriShop.Migrations
             migrationBuilder.CreateIndex(
                 name: "HAVE_SHIPMENT_FK",
                 table: "SHIPPING",
-                column: "ORDERID");
+                column: "ORDERID",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "COLOR_HAVE_SIZE_FK",
