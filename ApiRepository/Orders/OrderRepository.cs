@@ -84,10 +84,6 @@ namespace BenriShop.ApiRepository.Orders
             return null;
         }
 
-        public async Task<IEnumerable<CartItem>> GetCartItems(string userName)
-        {
-            return await _context.CartItems.Where(x => x.UserName == userName).ToListAsync();
-        }
         public async Task<bool> AddItemFromCartToOrder(string orderId, string userName)
         {
             try

@@ -3,6 +3,7 @@ using BenriShop.ApiRepository.CartItems;
 using BenriShop.ApiRepository.OrderItems;
 using BenriShop.ApiRepository.Orders;
 using BenriShop.ApiRepository.Products;
+using BenriShop.ApiRepository.Shipping;
 using BenriShop.Models;
 using BenriShop.Models.Entities;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -72,6 +73,7 @@ namespace BenriShop
            services.AddScoped<ICartItemRepository, CartItemRepository>();
            services.AddScoped<IOrderItemRepository, OrderItemRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IShippingRepository, ShippingRepository>();
           
 
 
