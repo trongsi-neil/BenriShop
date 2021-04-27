@@ -118,7 +118,7 @@ namespace BenriShop
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseStaticFiles();
             app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -127,6 +127,7 @@ namespace BenriShop
 
             app.UseAuthorization();
 
+         
 
             app.UseEndpoints(endpoints =>
             {

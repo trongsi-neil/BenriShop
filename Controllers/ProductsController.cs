@@ -75,7 +75,7 @@ namespace BenriShop.Controllers
 
         }
 
-        // POST: api/Products
+        // POST: api/Products/AddProduct
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         /// <summary>
@@ -155,6 +155,7 @@ namespace BenriShop.Controllers
         {
             return _context.Product.Any(e => e.Productid == id);
         }*/
+        //POST: api/Product/UploadImage
         /// <summary>
         /// Nhận hình tải lên và lưu vào thư mục images
         /// </summary>
@@ -180,7 +181,7 @@ namespace BenriShop.Controllers
                     {
                         Directory.CreateDirectory(_environment.WebRootPath + "\\images\\");
                     }
-                    using (FileStream fileStream = System.IO.File.Create(objFile.Link))
+                    using (FileStream fileStream = System.IO.File.Create(_environment.WebRootPath + objFile.Link))
                     {
                         objFile.files.CopyTo(fileStream);
                         fileStream.Flush();
