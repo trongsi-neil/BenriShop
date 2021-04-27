@@ -74,7 +74,8 @@ namespace BenriShop.Migrations
                     ORDERID = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     USERNAME = table.Column<string>(unicode: false, maxLength: 20, nullable: true),
                     OrderDate = table.Column<DateTime>(nullable: false),
-                    PAYMENT = table.Column<bool>(nullable: false)
+                    PAYMENT = table.Column<bool>(nullable: false),
+                    Status = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
