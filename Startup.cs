@@ -71,7 +71,7 @@ namespace BenriShop
            services.AddScoped<IProductsRepository, ProductsRepository>();
            services.AddScoped<ICartItemRepository, CartItemRepository>();
            services.AddScoped<IOrderItemRepository, OrderItemRepository>();
-           services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
           
 
 

@@ -1,5 +1,4 @@
 ﻿using BenriShop.Models;
-using BenriShop.Models.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,15 +8,6 @@ namespace BenriShop.ApiRepository.Orders
 {
     public interface IOrderRepository
     {
-
-        /// <summary>
-        /// Lấy tất cả đơn hàng của theo status
-        /// </summary>
-        /// <param name="userName"></param>
-        /// <returns></returns>
-        public Task<IEnumerable<OrderView>> GetOrdersByStatus(string userName);
-
-
         /// <summary>
         /// Lấy tất cả đơn hàng của 1 tài khoản bằng cách truyền vào username
         /// </summary>
@@ -48,7 +38,7 @@ namespace BenriShop.ApiRepository.Orders
         /// <param name="OrderId"></param>
         /// <returns></returns>
         public Task<bool> DeleteOrder(string orderId);
-
+        public Task<IEnumerable<CartItem>> GetCartItems(string userName);
         public Task<bool> AddItemFromCartToOrder(string orderId, string userName);
     }
 }

@@ -11,7 +11,6 @@ using BenriShop.ApiRepository.CartItems;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using BenriShop.ApiRepository.Accounts;
-using BenriShop.Models.ViewModel;
 
 namespace BenriShop.Controllers
 {
@@ -25,34 +24,6 @@ namespace BenriShop.Controllers
         {
             this._orderRepository = orderItemRepository;
         }
-
-        /// <summary>
-        /// Lấy tất cả đơn hàng theo trạng thái
-        /// </summary>
-        /// <param name="userName"></param>
-        /// <returns></returns>
-        // GET: api/Orders/GetOrders/userName
-        [Authorize(Roles = "Mod, Admin")]
-        [HttpGet("GetOrders/{status}")]
-        public async Task<IEnumerable<OrderView>> GetOrdersByStatus(string status)
-        {
-            //var identity = User.Identity as ClaimsIdentity;
-            //if (identity.RoleClaimType == "Customer")
-            //{
-            //    if (identity.Name != userName)
-            //    {
-            //        return (IEnumerable<Order>)Conflict("Can't access to diffirent account");
-            //    }
-            //}
-
-            var orders = await _orderRepository.GetOrdersByStatus(status);
-            if (orders != null)
-            {
-                return orders;
-            }
-            return (IEnumerable<OrderView>)NotFound("Error of GetOrders");
-        }
-
         /// <summary>
         /// Lấy tất cả đơn hàng của 1 tài khoản bằng cách truyền vào userName
         /// </summary>
@@ -79,8 +50,6 @@ namespace BenriShop.Controllers
             }
             return (IEnumerable<Order>)NotFound("Error of GetOrders");
         }
-
-
         /// <summary>
         /// Lấy 1 đơn hàng bằng cách truyền vào 1 orderId
         /// </summary>
@@ -107,8 +76,6 @@ namespace BenriShop.Controllers
             }
             return NotFound("Error of GetOrder");
         }
-
-
         /// <summary>
         /// Thêm một đơn hàng từ giỏ hàng của người dùng, bằng cách truyền vào userName và payment (true là thanh toán online, false là thành toán tiền mặt khi nhận hàng)
         /// </summary>
@@ -133,6 +100,23 @@ namespace BenriShop.Controllers
             orders.ToList();
 
             order.UserName = userName;
+
+            //if (orders.Count() != 0)
+            //{
+            //    for (int i = 0; i <= orders.Count(); i++)
+            //    {
+            //        var oldOrder = await _orderRepository.GetOrder(userName + "_" + i);
+            //        if (oldOrder == null)
+            //        {
+            //            order.OrderId = userName + "_" + i;
+            //            break;
+            //        }
+            //    }
+            //}else
+            //{
+            //    order.OrderId = userName + "_" + 0;
+            //}
+            //Guid g = Guid.NewGuid();
 
             order.OrderId = Guid.NewGuid().ToString();
 
@@ -164,8 +148,6 @@ namespace BenriShop.Controllers
                 return BadRequest("Error in AddItemsFromCartToOrder or AddOrder");
             }
         }
-
-
         /// <summary>
         /// Xóa một đơn hàng bằng cách truyền vào username và orderId
         /// </summary>
@@ -202,5 +184,9 @@ namespace BenriShop.Controllers
             }
         }
 
+        /*private bool OrderExists(string id)
+        {
+            return _context.Orders.Any(e => e.OrderId == id);
+        }*/
     }
 }

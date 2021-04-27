@@ -7,7 +7,6 @@ using BenriShop.ApiRepository.Orders;
 using Microsoft.EntityFrameworkCore;
 using BenriShop.ApiRepository.OrderItems;
 using BenriShop.ApiRepository.CartItems;
-using BenriShop.Models.ViewModel;
 
 namespace BenriShop.ApiRepository.Orders
 {
@@ -64,70 +63,6 @@ namespace BenriShop.ApiRepository.Orders
             return await _context.Orders.Where(x => x.UserName == userName).ToListAsync();
         }
 
-
-        public async Task<IEnumerable<OrderView>> GetOrdersByStatus(string status)
-        {
-            var orders = await _context.Orders.Where(x => x.Status == status).ToListAsync();
-            List<OrderView> orderViews = new List<OrderView>();
-
-
-
-
-
-            ShippingView shippingView = new ShippingView();
-
-
-
-            foreach (Order item in orders)
-            {
-                var orderView = new OrderView(); 
-                if(item != null)
-                {
-                    var lstOrderItem = _context.OrderItems.Where(x => x.OrderId == item.OrderId).ToList();
-                    List<OrderItemView> orderItemsView = new List<OrderItemView>();
-                    foreach(OrderItem orderItem in lstOrderItem)
-                    {
-                        OrderItemView orderItemView = new OrderItemView();
-                        if(orderItem != null)
-                        {
-                            orderItemView.OrderId = orderItem.OrderId;
-                            orderItemView.ProductId = orderItem.ProductId;
-                            orderItemView.Color = orderItem.Color;
-                            orderItemView.Size = orderItem.Size;
-                            orderItemView.QuantityInOrder = orderItem.QuantityInOrder;
-                        }
-                        orderItemsView.Add(orderItemView);
-                    }
-
-
-                    var ship = _context.Shippings.FirstOrDefault(x => x.OrderId == item.OrderId);
-                        ShippingView shipView = new ShippingView();
-                        if (ship != null)
-                        {
-                            shipView.ShippingId = ship.ShippingId;
-                            shipView.Cost = ship.Status;
-                            shipView.Note = ship.Note;
-                            shipView.Status = ship.Status;
-                        }
-                       
-                    
-
-
-                    orderView.OrderId = item.OrderId;
-                    orderView.UserName = item.UserName;
-                    orderView.OrderDate = item.OrderDate;
-                    orderView.Status = item.Status;
-                    orderView.Payment = item.Payment;
-                    orderView.OrderItems = orderItemsView;
-                    orderView.Shippings = shipView;
-
-                }
-                orderViews.Add(orderView);
-            }
-
-            return orderViews;
-        }
-
         public async Task<Order> UpdateOrder(Order order)
         {
             var result = await _context.Orders.FirstOrDefaultAsync(e => e.OrderId == order.OrderId);
@@ -149,6 +84,10 @@ namespace BenriShop.ApiRepository.Orders
             return null;
         }
 
+        public async Task<IEnumerable<CartItem>> GetCartItems(string userName)
+        {
+            return await _context.CartItems.Where(x => x.UserName == userName).ToListAsync();
+        }
         public async Task<bool> AddItemFromCartToOrder(string orderId, string userName)
         {
             try

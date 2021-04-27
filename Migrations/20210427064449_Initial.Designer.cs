@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BenriShop.Migrations
 {
     [DbContext(typeof(BenriShopContext))]
-    [Migration("20210427071755_Initial")]
+    [Migration("20210427064449_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -192,9 +192,6 @@ namespace BenriShop.Migrations
                     b.Property<bool>("Payment")
                         .HasColumnName("PAYMENT")
                         .HasColumnType("bit");
-
-                    b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
                         .HasColumnName("USERNAME")

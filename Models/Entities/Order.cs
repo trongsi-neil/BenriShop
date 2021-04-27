@@ -11,8 +11,6 @@ namespace BenriShop.Models
         public DateTime OrderDate { set; get; }
         public bool Payment { get; set; }
 
-        public string Status { get; set; }
-
         public virtual Account Account { get; set; }
         public virtual ICollection<OrderItem> OrderItems { get; set; }
 
