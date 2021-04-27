@@ -191,6 +191,9 @@ namespace BenriShop.Migrations
                         .HasColumnName("PAYMENT")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("UserName")
                         .HasColumnName("USERNAME")
                         .HasColumnType("varchar(20)")

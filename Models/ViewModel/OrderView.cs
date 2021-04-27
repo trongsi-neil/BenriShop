@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace BenriShop.Models
+namespace BenriShop.Models.ViewModel
 {
-    public partial class Order
+    public class OrderView
     {
         public string OrderId { get; set; }
         public string UserName { get; set; }
@@ -13,9 +15,8 @@ namespace BenriShop.Models
 
         public string Status { get; set; }
 
-        public virtual Account Account { get; set; }
-        public virtual ICollection<OrderItem> OrderItems { get; set; }
+        public ICollection<OrderItemView> OrderItems { get; set; }
 
-        public virtual Shipping Shippings { get; set; }
+        public ShippingView Shippings { get; set; }
     }
 }
