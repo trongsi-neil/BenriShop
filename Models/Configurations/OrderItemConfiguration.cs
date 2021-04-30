@@ -11,39 +11,59 @@ namespace BenriShop.Models.Configurations
     {
         public void Configure(EntityTypeBuilder<OrderItem> builder)
         {
-            builder.HasKey(e => new { e.ProductId, e.OrderId });
+            builder.HasKey(e => new { e.UserName, e.OrderId, e.OrderItemId });
 
-            builder.ToTable("ORDERITEM");
+            builder.ToTable("ORDER_ITEM");
 
-            builder.HasIndex(e => e.OrderId)
+            builder.HasIndex(e => new { e.UserName, e.OrderId })
                 .HasName("HAVE_ITEM_FK");
 
-            builder.HasIndex(e => e.ProductId)
-                .HasName("ORDERED_FK");
+            builder.HasIndex(e => new { e.SizeId, e.ColorId, e.ProductId })
+                .HasName("HAVE_PRODUCT_FK");
 
-            builder.Property(e => e.ProductId)
-                .HasColumnName("PRODUCTID")
-                .HasMaxLength(20)
+            builder.Property(e => e.UserName)
+                .HasColumnName("USER_NAME")
+                .HasMaxLength(40)
                 .IsUnicode(false);
 
             builder.Property(e => e.OrderId)
-                .HasColumnName("ORDERID")
-                .HasMaxLength(50)
+                .HasColumnName("ORDER_ID")
+                .HasMaxLength(200)
                 .IsUnicode(false);
 
-            builder.Property(e => e.QuantityInOrder).HasColumnName("QUANTITYINORDER");
+            builder.Property(e => e.OrderItemId)
+                .HasColumnName("ORDER_ITEM_ID")
+                .HasMaxLength(200)
+                .IsUnicode(false);
+
+            builder.Property(e => e.ColorId)
+                .IsRequired()
+                .HasColumnName("COLOR_ID")
+                .HasMaxLength(100)
+                .IsUnicode(false);
+
+            builder.Property(e => e.ProductId).HasColumnName("PRODUCT_ID");
+
+            builder.Property(e => e.QuantityInOrder).HasColumnName("QUANTITY_IN_ORDER");
+
+            builder.Property(e => e.SizeId)
+                .IsRequired()
+                .HasColumnName("SIZE_ID")
+                .HasMaxLength(100)
+                .IsUnicode(false);
 
             builder.HasOne(d => d.Order)
-                .WithMany(p => p.OrderItems)
-                .HasForeignKey(d => d.OrderId)
+                .WithMany(p => p.OrderItem)
+                .HasForeignKey(d => new { d.UserName, d.OrderId })
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ORDERITE_HAVE_ITEM_ORDER");
+                .HasConstraintName("FK_ORDER_IT_HAVE_ITEM_ORDER");
 
-            builder.HasOne(d => d.Product)
-                .WithMany(p => p.OrderItems)
-                .HasForeignKey(d => d.ProductId)
+            builder.HasOne(d => d.SizeOfProductHadColor)
+                .WithMany(p => p.OrderItem)
+                .HasForeignKey(d => new { d.SizeId, d.ColorId, d.ProductId })
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ORDERITE_ORDERED_PRODUCT");
+                .HasConstraintName("FK_ORDER_IT_HAVE_PROD_SIZE_OF_");
+
 
         }
     }

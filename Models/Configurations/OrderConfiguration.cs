@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BenriShop.Models;
 
 namespace BenriShop.Models.Configurations
 {
@@ -11,29 +12,32 @@ namespace BenriShop.Models.Configurations
     {
         public void Configure(EntityTypeBuilder<Order> builder)
         {
+            builder.HasKey(e => new { e.UserName, e.OrderId });
+
             builder.ToTable("ORDER");
 
             builder.HasIndex(e => e.UserName)
-                .HasName("ORDER_FK");
+                .HasName("HAD_ORDER_FK");
+
+            builder.Property(e => e.UserName)
+                .HasColumnName("USER_NAME")
+                .HasMaxLength(40)
+                .IsUnicode(false);
 
             builder.Property(e => e.OrderId)
-                .HasColumnName("ORDERID")
-                .HasMaxLength(50)
+                .HasColumnName("ORDER_ID")
+                .HasMaxLength(200)
                 .IsUnicode(false);
 
             builder.Property(e => e.Payment).HasColumnName("PAYMENT");
 
-            builder.Property(e => e.UserName)
-                .HasColumnName("USERNAME")
-                .HasMaxLength(20)
-                .IsUnicode(false);
+            builder.Property(e => e.Status).HasColumnName("STATUS");
 
-            builder.HasOne(d => d.Account)
-                .WithMany(p => p.Orders)
+            builder.HasOne(d => d.UserNameNavigation)
+                .WithMany(p => p.Order)
                 .HasForeignKey(d => d.UserName)
-                .HasConstraintName("fk_order_order_account");
-
-
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ORDER_HAD_ORDER_ACCOUNT");
 
 
         }

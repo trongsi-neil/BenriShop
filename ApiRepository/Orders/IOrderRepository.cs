@@ -15,7 +15,7 @@ namespace BenriShop.ApiRepository.Orders
         /// </summary>
         /// <param name="userName"></param>
         /// <returns></returns>
-        public Task<IEnumerable<OrderView>> GetOrdersByStatus(string userName);
+        public Task<IEnumerable<OrderView>> GetOrdersByStatus(int status);
 
 
         /// <summary>

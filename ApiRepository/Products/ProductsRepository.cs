@@ -62,11 +62,11 @@ namespace BenriShop.ApiRepository.Products
                 result.ProductDescription = product.ProductDescription;
                 result.Price = product.Price;
                 result.StorageQuantity = product.StorageQuantity;
-                result.CartItems = product.CartItems;
-                result.HaveTags = product.HaveTags;
-                result.Images = product.Images;
-                result.OrderItems = product.OrderItems;
-                result.SizeOfProductHadColors = product.SizeOfProductHadColors;
+                //result.CartItems = product.CartItems;
+                //result.HaveTags = product.HaveTags;
+                //result.Images = product.Images;
+                //result.OrderItems = product.OrderItems;
+                //result.SizeOfProductHadColors = product.SizeOfProductHadColors;
                 try
                 {
                     await _context.SaveChangesAsync();
@@ -191,7 +191,7 @@ namespace BenriShop.ApiRepository.Products
             }
             Image img = new Image();
             //img.Product = product;
-            img.Imageid = imageId;
+          //  img.Imageid = imageId;
             img.Link = imageLink;
             img.ProductId = product.ProductId;
 

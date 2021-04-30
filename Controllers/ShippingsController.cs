@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using BenriShop.Models;
 using BenriShop.ApiRepository.Shipping;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using BenriShop.Models;
 
 namespace BenriShop.Controllers
 {

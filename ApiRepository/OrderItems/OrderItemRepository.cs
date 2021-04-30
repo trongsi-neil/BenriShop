@@ -71,7 +71,7 @@ namespace BenriShop.ApiRepository.OrderItems
                 result.OrderId = orderItem.OrderId;
                 result.QuantityInOrder = orderItem.QuantityInOrder;
                 result.Order = orderItem.Order;
-                result.Product = orderItem.Product;
+               // result.Product = orderItem.Product;
 
                 await _context.SaveChangesAsync();
 

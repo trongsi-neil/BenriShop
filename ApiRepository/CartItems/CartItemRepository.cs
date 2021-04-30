@@ -23,14 +23,14 @@ namespace BenriShop.ApiRepository.CartItems
             //                        where pro.ProductId == cartItem.ProductId && sizeColor.SizeId == Size && sizeColor.ColorId == Color
             //                        select sizeColor.QuantityInSizeOfColor, pro.ProductId).ToList();
 
-            var productQuantity = _context.SizeOfProductHadColors.First(x => x.ProductId == cartItem.ProductId && x.ColorId == cartItem.Color && x.SizeId == cartItem.Size).QuantityInSizeOfColor; 
+            var productQuantity = _context.SizeOfProductHadColors.First(x => x.ProductId == cartItem.ProductId && x.ColorId == cartItem.ColorId && x.SizeId == cartItem.SizeId).QuantityInSizeOfColor; 
 
             
             if (cartItem.QuantityInCart <= productQuantity)
             {
                 try
                 {
-                    _context.SizeOfProductHadColors.First(x => x.ProductId == cartItem.ProductId && x.ColorId == cartItem.Color && x.SizeId == cartItem.Size)
+                    _context.SizeOfProductHadColors.First(x => x.ProductId == cartItem.ProductId && x.ColorId == cartItem.ColorId && x.SizeId == cartItem.SizeId)
                         .QuantityInSizeOfColor = productQuantity - cartItem.QuantityInCart;
 
                     _context.CartItems.Add(cartItem);
@@ -121,8 +121,8 @@ namespace BenriShop.ApiRepository.CartItems
                 result.ProductId = cartItem.ProductId;
                 result.UserName = cartItem.UserName;
                 result.QuantityInCart = cartItem.QuantityInCart;
-                result.Product = cartItem.Product;
-                result.Account = cartItem.Account;
+               // result.Product = cartItem.Product;
+               // result.Account = cartItem.Account;
 
                 await _context.SaveChangesAsync();
 

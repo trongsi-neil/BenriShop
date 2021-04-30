@@ -1,9 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BenriShop.Models.Configurations
 {
@@ -11,41 +7,53 @@ namespace BenriShop.Models.Configurations
     {
         public void Configure(EntityTypeBuilder<CartItem> builder)
         {
-            builder.HasKey(e => new { e.ProductId, e.UserName });
+            builder.HasKey(e => new { e.UserName, e.CartItemId });
 
-            builder.ToTable("CARTITEM");
+            builder.ToTable("CART_ITEM");
 
-            builder.HasIndex(e => e.ProductId)
-                .HasName("ADDED_FK");
+            builder.HasIndex(e => e.UserName)
+                .HasName("HAVE_ITEM_IN_CART_FK");
 
-            builder.HasOne(x => x.Product).WithMany(x => x.CartItems).HasForeignKey(x => x.ProductId);
-            
-            builder.Property(e => e.ProductId)
-                .HasColumnName("PRODUCTID")
-                .HasMaxLength(20)
-                .IsUnicode(false);
-
-            builder.HasOne(x => x.Account).WithMany(x => x.CartItems).HasForeignKey(x => x.UserName);
+            builder.HasIndex(e => new { e.SizeId, e.ColorId, e.ProductId })
+                .HasName("HAD_PRODUCT_FK");
 
             builder.Property(e => e.UserName)
-                .HasColumnName("USERNAME")
-                .HasMaxLength(20)
+                .HasColumnName("USER_NAME")
+                .HasMaxLength(40)
                 .IsUnicode(false);
 
+            builder.Property(e => e.CartItemId)
+                .HasColumnName("CART_ITEM_ID")
+                .HasMaxLength(200)
+                .IsUnicode(false);
 
-            builder.Property(e => e.QuantityInCart).HasColumnName("QUANTITYINCART");
+            builder.Property(e => e.ColorId)
+                .IsRequired()
+                .HasColumnName("COLOR_ID")
+                .HasMaxLength(100)
+                .IsUnicode(false);
 
-            //builder.HasOne(d => d.Product)
-            //    .WithMany(p => p.CartItem)
-            //    .HasForeignKey(d => d.Productid)
-            //    .OnDelete(DeleteBehavior.ClientSetNull)
-            //    .HasConstraintName("FK_CARTITEM_ADDED_PRODUCT");
+            builder.Property(e => e.ProductId).HasColumnName("PRODUCT_ID");
 
-            //builder.HasOne(d => d.UsernameNavigation)
-            //    .WithMany(p => p.Cartitem)
-            //    .HasForeignKey(d => d.Username)
-            //    .OnDelete(DeleteBehavior.ClientSetNull)
-            //    .HasConstraintName("FK_CARTITEM_HAVE_ITEM_ACCOUNT");
+            builder.Property(e => e.QuantityInCart).HasColumnName("QUANTITY_IN_CART");
+
+            builder.Property(e => e.SizeId)
+                .IsRequired()
+                .HasColumnName("SIZE_ID")
+                .HasMaxLength(100)
+                .IsUnicode(false);
+
+            builder.HasOne(d => d.UserNameNavigation)
+                .WithMany(p => p.CartItem)
+                .HasForeignKey(d => d.UserName)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_CART_ITE_HAVE_ITEM_ACCOUNT");
+
+            builder.HasOne(d => d.SizeOfProductHadColor)
+                .WithMany(p => p.CartItem)
+                .HasForeignKey(d => new { d.SizeId, d.ColorId, d.ProductId })
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_CART_ITE_HAD_PRODU_SIZE_OF_");
 
         }
     }

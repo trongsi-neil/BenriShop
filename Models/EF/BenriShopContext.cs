@@ -2,6 +2,7 @@
 using BenriShop.Models.Configurations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using BenriShop.Models;
 
 namespace BenriShop.Models
 {
@@ -409,16 +410,6 @@ namespace BenriShop.Models
             modelBuilder.ApplyConfiguration(new SizeOfProductHadColorConfiguration());
             modelBuilder.ApplyConfiguration(new TagConfiguration());
 
-            //modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
-            //modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("AppUserRoles").HasKey(x => new { x.UserId, x.RoleId });
-            //modelBuilder.Entity<IdentityUserLogin<Guid>>().ToTable("AppUserLogins").HasKey(x => x.UserId);
-
-            //modelBuilder.Entity<IdentityRoleClaim<Guid>>().ToTable("AppRoleClaims");
-            //modelBuilder.Entity<IdentityUserToken<Guid>>().ToTable("AppUserTokens").HasKey(x => x.UserId);
-
-            //Data seeding
-            //modelBuilder.Seed();
-            //base.OnModelCreating(modelBuilder);
             OnModelCreatingPartial(modelBuilder);
         }
 

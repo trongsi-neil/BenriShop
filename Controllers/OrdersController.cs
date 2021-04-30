@@ -34,7 +34,7 @@ namespace BenriShop.Controllers
         // GET: api/Orders/GetOrders/userName
         [Authorize(Roles = "Mod, Admin")]
         [HttpGet("GetOrders/{status}")]
-        public async Task<IEnumerable<OrderView>> GetOrdersByStatus(string status)
+        public async Task<IEnumerable<OrderView>> GetOrdersByStatus(int status)
         {
             //var identity = User.Identity as ClaimsIdentity;
             //if (identity.RoleClaimType == "Customer")

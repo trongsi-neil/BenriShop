@@ -5,8 +5,13 @@ namespace BenriShop.Models
 {
     public partial class Tag
     {
+        public Tag()
+        {
+            HaveTag = new HashSet<HaveTag>();
+        }
+
         public string TagId { get; set; }
 
-        public virtual ICollection<HaveTag> HaveTags { get; set; }
+        public virtual ICollection<HaveTag> HaveTag { get; set; }
     }
 }

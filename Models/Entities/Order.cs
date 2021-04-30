@@ -5,17 +5,19 @@ namespace BenriShop.Models
 {
     public partial class Order
     {
-        public string OrderId { get; set; }
+        public Order()
+        {
+            OrderItem = new HashSet<OrderItem>();
+            Shipping = new HashSet<Shipping>();
+        }
+
         public string UserName { get; set; }
-
-        public DateTime OrderDate { set; get; }
+        public string OrderId { get; set; }
         public bool Payment { get; set; }
+        public int Status { get; set; }
 
-        public string Status { get; set; }
-
-        public virtual Account Account { get; set; }
-        public virtual ICollection<OrderItem> OrderItems { get; set; }
-
-        public virtual Shipping Shippings { get; set; }
+        public virtual Account UserNameNavigation { get; set; }
+        public virtual ICollection<OrderItem> OrderItem { get; set; }
+        public virtual ICollection<Shipping> Shipping { get; set; }
     }
 }

@@ -7,5 +7,8 @@ namespace BenriShop.Models
     {
         public int ProductId { get; set; }
         public string TagId { get; set; }
+
+        public virtual Product Product { get; set; }
+        public virtual Tag Tag { get; set; }
     }
 }

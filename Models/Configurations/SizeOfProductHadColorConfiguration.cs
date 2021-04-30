@@ -11,9 +11,9 @@ namespace BenriShop.Models.Configurations
     {
         public void Configure(EntityTypeBuilder<SizeOfProductHadColor> builder)
         {
-            builder.HasKey(e => new {e.SizeId, e.ColorId, e.ProductId });
+            builder.HasKey(e => new { e.SizeId, e.ColorId, e.ProductId });
 
-            builder.ToTable("SIZEOFPRODUCTHADCOLOR");
+            builder.ToTable("SIZE_OF_PRODUCT_HAD_COLOR");
 
             builder.HasIndex(e => e.ColorId)
                 .HasName("COLOR_HAVE_SIZE_FK");
@@ -25,39 +25,36 @@ namespace BenriShop.Models.Configurations
                 .HasName("SIZE_HAVE_COLOR_FK");
 
             builder.Property(e => e.SizeId)
-                .HasColumnName("SIZEID")
-                .HasMaxLength(3)
+                .HasColumnName("SIZE_ID")
+                .HasMaxLength(100)
                 .IsUnicode(false);
 
             builder.Property(e => e.ColorId)
-                .HasColumnName("COLORID")
-                .HasMaxLength(10)
+                .HasColumnName("COLOR_ID")
+                .HasMaxLength(100)
                 .IsUnicode(false);
 
-            builder.Property(e => e.ProductId)
-                .HasColumnName("PRODUCTID")
-                .HasMaxLength(20)
-                .IsUnicode(false);
+            builder.Property(e => e.ProductId).HasColumnName("PRODUCT_ID");
 
-            builder.Property(e => e.QuantityInSizeOfColor).HasColumnName("QUANTITYINSIZEOFCOLOR");
+            builder.Property(e => e.QuantityInSizeOfColor).HasColumnName("QUANTITY_IN_SIZE_OF_COLOR");
 
             builder.HasOne(d => d.Color)
-                .WithMany(p => p.SizeOfProductHadColors)
+                .WithMany(p => p.SizeOfProductHadColor)
                 .HasForeignKey(d => d.ColorId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_SIZEOFPR_COLOR_HAV_COLOR");
+                .HasConstraintName("FK_SIZE_OF__COLOR_HAV_COLOR");
 
             builder.HasOne(d => d.Product)
-                .WithMany(p => p.SizeOfProductHadColors)
+                .WithMany(p => p.SizeOfProductHadColor)
                 .HasForeignKey(d => d.ProductId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_SIZEOFPR_PRODUCT_H_PRODUCT");
+                .HasConstraintName("FK_SIZE_OF__PRODUCT_H_PRODUCT");
 
             builder.HasOne(d => d.Size)
-                .WithMany(p => p.SizeOfProductHadColors)
+                .WithMany(p => p.SizeOfProductHadColor)
                 .HasForeignKey(d => d.SizeId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_SIZEOFPR_SIZE_HAVE_SIZE");
+                .HasConstraintName("FK_SIZE_OF__SIZE_HAVE_SIZE");
 
         }
     }
