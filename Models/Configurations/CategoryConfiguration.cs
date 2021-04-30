@@ -15,7 +15,7 @@ namespace BenriShop.Models.Configurations
 
             builder.Property(e => e.CategoryId)
                 .HasColumnName("CATEGORYID")
-                .HasMaxLength(10)
+                .HasMaxLength(100)
                 .IsUnicode(false);
         }
     }

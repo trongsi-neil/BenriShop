@@ -11,7 +11,7 @@ namespace BenriShop.Models.Configurations
 
             builder.Property(e => e.ColorId)
                 .HasColumnName("COLORID")
-                .HasMaxLength(10)
+                .HasMaxLength(100)
                 .IsUnicode(false);
         }
     }

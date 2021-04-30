@@ -2,7 +2,7 @@
 
 namespace BenriShop.Migrations
 {
-    public partial class Initial : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -10,7 +10,7 @@ namespace BenriShop.Migrations
                 name: "ACCOUNT",
                 columns: table => new
                 {
-                    USERNAME = table.Column<string>(unicode: false, maxLength: 20, nullable: false),
+                    USERNAME = table.Column<string>(unicode: false, maxLength: 40, nullable: false),
                     PASSWORD = table.Column<string>(unicode: false, maxLength: 40, nullable: false),
                     ROLE = table.Column<string>(unicode: false, maxLength: 20, nullable: false),
                     PHONENUMBER = table.Column<string>(unicode: false, maxLength: 12, nullable: true),
@@ -26,7 +26,7 @@ namespace BenriShop.Migrations
                 name: "CATEGORY",
                 columns: table => new
                 {
-                    CATEGORYID = table.Column<string>(unicode: false, maxLength: 10, nullable: false)
+                    CATEGORYID = table.Column<string>(unicode: false, maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -37,7 +37,7 @@ namespace BenriShop.Migrations
                 name: "COLOR",
                 columns: table => new
                 {
-                    COLORID = table.Column<string>(unicode: false, maxLength: 10, nullable: false)
+                    COLORID = table.Column<string>(unicode: false, maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -48,7 +48,7 @@ namespace BenriShop.Migrations
                 name: "SIZE",
                 columns: table => new
                 {
-                    SIZEID = table.Column<string>(unicode: false, maxLength: 3, nullable: false)
+                    SIZEID = table.Column<string>(unicode: false, maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {

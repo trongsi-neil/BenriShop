@@ -15,7 +15,7 @@ namespace BenriShop.Models.Configurations
 
             builder.Property(e => e.SizeId)
                 .HasColumnName("SIZEID")
-                .HasMaxLength(3)
+                .HasMaxLength(100)
                 .IsUnicode(false);
         }
     }

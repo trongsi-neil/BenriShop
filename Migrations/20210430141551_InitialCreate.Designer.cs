@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BenriShop.Migrations
 {
     [DbContext(typeof(BenriShopContext))]
-    [Migration("20210430131612_Initial")]
-    partial class Initial
+    [Migration("20210430141551_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,8 +24,8 @@ namespace BenriShop.Migrations
                 {
                     b.Property<string>("UserName")
                         .HasColumnName("USERNAME")
-                        .HasColumnType("varchar(20)")
-                        .HasMaxLength(20)
+                        .HasColumnType("varchar(40)")
+                        .HasMaxLength(40)
                         .IsUnicode(false);
 
                     b.Property<string>("Address")
@@ -114,8 +114,8 @@ namespace BenriShop.Migrations
                 {
                     b.Property<string>("CategoryId")
                         .HasColumnName("CATEGORYID")
-                        .HasColumnType("varchar(10)")
-                        .HasMaxLength(10)
+                        .HasColumnType("varchar(100)")
+                        .HasMaxLength(100)
                         .IsUnicode(false);
 
                     b.HasKey("CategoryId");
@@ -127,8 +127,8 @@ namespace BenriShop.Migrations
                 {
                     b.Property<string>("ColorId")
                         .HasColumnName("COLORID")
-                        .HasColumnType("varchar(10)")
-                        .HasMaxLength(10)
+                        .HasColumnType("varchar(100)")
+                        .HasMaxLength(100)
                         .IsUnicode(false);
 
                     b.HasKey("ColorId");
@@ -374,8 +374,8 @@ namespace BenriShop.Migrations
                 {
                     b.Property<string>("SizeId")
                         .HasColumnName("SIZEID")
-                        .HasColumnType("varchar(3)")
-                        .HasMaxLength(3)
+                        .HasColumnType("varchar(100)")
+                        .HasMaxLength(100)
                         .IsUnicode(false);
 
                     b.HasKey("SizeId");

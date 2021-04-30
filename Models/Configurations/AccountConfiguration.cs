@@ -11,7 +11,7 @@ namespace BenriShop.Models.Configurations
 
             builder.ToTable("ACCOUNT");
 
-            builder.Property(e => e.UserName).HasColumnName("USERNAME").HasMaxLength(20).IsUnicode(false);
+            builder.Property(e => e.UserName).HasColumnName("USERNAME").HasMaxLength(40).IsUnicode(false);
 
             builder.Property(e => e.Address).HasColumnName("ADDRESS").HasMaxLength(300);
 
