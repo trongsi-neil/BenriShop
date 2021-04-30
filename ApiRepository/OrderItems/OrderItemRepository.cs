@@ -67,11 +67,15 @@ namespace BenriShop.ApiRepository.OrderItems
 
             if (result != null)
             {
-                result.ProductId = orderItem.ProductId;
+                result.UserName = orderItem.UserName;
                 result.OrderId = orderItem.OrderId;
+                result.OrderItemId = orderItem.OrderItemId;
                 result.QuantityInOrder = orderItem.QuantityInOrder;
+                result.SizeId = orderItem.SizeId;
+                result.ColorId = orderItem.ColorId;
+                result.ProductId = orderItem.ProductId;
                 result.Order = orderItem.Order;
-               // result.Product = orderItem.Product;
+                result.SizeOfProductHadColor = orderItem.SizeOfProductHadColor;
 
                 await _context.SaveChangesAsync();
 

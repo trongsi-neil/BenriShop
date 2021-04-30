@@ -17,6 +17,6 @@ namespace BenriShop.Models.ViewModel
 
         public ICollection<OrderItemView> OrderItems { get; set; }
 
-        public ShippingView Shippings { get; set; }
+        public ShippingView Shipping { get; set; }
     }
 }

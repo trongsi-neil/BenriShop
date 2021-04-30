@@ -14,7 +14,6 @@ namespace BenriShop.Models.ViewModel
 
         public List<HaveTagView> HaveTags { get; set; }
         public List<ImageView> Images { get; set; }
-
         public List<SizeOfProductHadColorView> SizeOfProductHadColors { get; set; }
     }
 }

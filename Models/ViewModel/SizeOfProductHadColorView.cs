@@ -9,6 +9,7 @@ namespace BenriShop.Models.ViewModel
     {
         public string SizeId { get; set; }
         public string ColorId { get; set; }
+        public ProductView Product { get; set; }
         public int QuantityInSizeOfColor { get; set; }
     }
 }

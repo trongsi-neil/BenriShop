@@ -422,3 +422,4 @@ C:\Users\ngomi\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bs
 C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\System.Net.Http.Formatting.dll
 C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\System.Web.Http.dll
 C:\Users\Neil's PC\Source\Repos\BenriShop\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
+C:\Users\Neil's PC\Source\Repos\BenriShop\obj\Debug\netcoreapp3.1\BenriShop.csprojAssemblyReference.cache

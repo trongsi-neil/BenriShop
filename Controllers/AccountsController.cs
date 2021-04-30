@@ -76,9 +76,6 @@ namespace BenriShop.Controllers
                 return BadRequest("Error when AddAccount");
             }
         }
-
-
-
         /// <summary>
         /// Lấy danh sách tài khoản Mod
         /// </summary>
@@ -99,8 +96,6 @@ namespace BenriShop.Controllers
                     "Error retrieving data from the database");
             }
         }
-
-
         /// <summary>
         /// Thay đổi quyền của tài khoản
         /// </summary>

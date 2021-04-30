@@ -70,13 +70,7 @@ namespace BenriShop.ApiRepository.Orders
             var orders = await _context.Orders.Where(x => x.Status == status).ToListAsync();
             List<OrderView> orderViews = new List<OrderView>();
 
-
-
-
-
             ShippingView shippingView = new ShippingView();
-
-
 
             foreach (Order item in orders)
             {
@@ -91,9 +85,10 @@ namespace BenriShop.ApiRepository.Orders
                         if(orderItem != null)
                         {
                             orderItemView.OrderId = orderItem.OrderId;
+                            orderItemView.OrderItemId = orderItem.OrderItemId;
                             orderItemView.ProductId = orderItem.ProductId;
-                            //orderItemView.Color = orderItem.Color;
-                            //orderItemView.Size = orderItem.Size;
+                            orderItemView.ColorId = orderItem.ColorId;
+                            orderItemView.SizeId = orderItem.SizeId;
                             orderItemView.QuantityInOrder = orderItem.QuantityInOrder;
                         }
                         orderItemsView.Add(orderItemView);
@@ -101,14 +96,18 @@ namespace BenriShop.ApiRepository.Orders
 
 
                     var ship = _context.Shippings.FirstOrDefault(x => x.OrderId == item.OrderId);
-                        ShippingView shipView = new ShippingView();
-                        if (ship != null)
-                        {
-                            //shipView.ShippingId = ship.ShippingId;
-                            //shipView.Cost = ship.Status;
-                            //shipView.Note = ship.Note;
-                            //shipView.Status = ship.Status;
-                        }
+                    ShippingView shipView = new ShippingView();
+                    if (ship != null)
+                    {
+                        //OrderView order = new OrderView();
+                        //order.OrderId = ship.OrderId;
+                        //order.OrderItems = 
+
+                        //shipView.Note = ship.Note;
+                        //shipView.Order = ship.Order;
+                        //shipView.ShipAdress = ship.ShipAdress;
+                        //shipView.Status = ship.Status;
+                    }
                        
                     
 
@@ -119,7 +118,7 @@ namespace BenriShop.ApiRepository.Orders
                     //orderView.Status = item.Status;
                     orderView.Payment = item.Payment;
                     orderView.OrderItems = orderItemsView;
-                    orderView.Shippings = shipView;
+                    orderView.Shipping = shipView;
 
                 }
                 orderViews.Add(orderView);
