@@ -13,7 +13,7 @@ namespace BenriShop.Models.ViewModel
         public DateTime OrderDate { set; get; }
         public bool Payment { get; set; }
 
-        public string Status { get; set; }
+        public int Status { get; set; }
 
         public ICollection<OrderItemView> OrderItems { get; set; }
 

@@ -57,16 +57,17 @@ namespace BenriShop.ApiRepository.Products
 
             if (result != null)
             {
+                result.Category = product.Category;
                 result.CategoryId = product.CategoryId;
-                result.ProductName = product.ProductName;
-                result.ProductDescription = product.ProductDescription;
+                result.HaveTag = product.HaveTag;
+                result.Image = product.Image;
                 result.Price = product.Price;
+                result.ProductDescription = product.ProductDescription;
+                result.ProductId = product.ProductId;
+                result.ProductName = product.ProductName;
+                result.SizeOfProductHadColor = product.SizeOfProductHadColor;
                 result.StorageQuantity = product.StorageQuantity;
-                //result.CartItems = product.CartItems;
-                //result.HaveTags = product.HaveTags;
-                //result.Images = product.Images;
-                //result.OrderItems = product.OrderItems;
-                //result.SizeOfProductHadColors = product.SizeOfProductHadColors;
+
                 try
                 {
                     await _context.SaveChangesAsync();
@@ -189,11 +190,13 @@ namespace BenriShop.ApiRepository.Products
             {
                 return false;
             }
-            Image img = new Image();
-            //img.Product = product;
-          //  img.Imageid = imageId;
-            img.Link = imageLink;
-            img.ProductId = product.ProductId;
+            Image img = new Image
+            {
+                //img.Product = product;
+                //  img.Imageid = imageId;
+                Link = imageLink,
+                ProductId = product.ProductId
+            };
 
             try
             {

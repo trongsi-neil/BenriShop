@@ -39,7 +39,6 @@ namespace BenriShop.Models.Configurations
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_ORDER_HAD_ORDER_ACCOUNT");
 
-
         }
     }
 }

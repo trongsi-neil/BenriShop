@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BenriShop.Migrations
 {
     [DbContext(typeof(BenriShopContext))]
-    [Migration("20210430141551_InitialCreate")]
+    [Migration("20210501014816_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -332,9 +332,9 @@ namespace BenriShop.Migrations
                         .HasMaxLength(200)
                         .IsUnicode(false);
 
-                    b.Property<string>("ShipAddress")
+                    b.Property<string>("ShipAdress")
                         .IsRequired()
-                        .HasColumnName("SHIP_ADDRESS")
+                        .HasColumnName("SHIP_ADRESS")
                         .HasColumnType("nvarchar(1000)")
                         .HasMaxLength(1000);
 

@@ -14,11 +14,9 @@ namespace BenriShop.ApiRepository.Orders
     public class OrderRepository : IOrderRepository
     {
         private readonly BenriShopContext _context;
-        private readonly BenriShopContext benriShopContext;
         public OrderRepository(BenriShopContext context)
         {
             this._context = context;
-            this.benriShopContext = context;
         }
         public async Task<Order> AddOrder(Order order)
         {
@@ -99,23 +97,19 @@ namespace BenriShop.ApiRepository.Orders
                     ShippingView shipView = new ShippingView();
                     if (ship != null)
                     {
-                        //OrderView order = new OrderView();
-                        //order.OrderId = ship.OrderId;
-                        //order.OrderItems = 
-
-                        //shipView.Note = ship.Note;
-                        //shipView.Order = ship.Order;
-                        //shipView.ShipAdress = ship.ShipAdress;
-                        //shipView.Status = ship.Status;
+                        shipView.Note = ship.Note;
+                        shipView.Order = ship.Order;
+                        shipView.ShipAdress = ship.ShipAdress;
+                        shipView.ShipPhoneNumber = ship.ShipPhoneNumber;
+                        shipView.ShippingCost = ship.ShippingCost;
+                        shipView.ShipFullName = ship.ShipFullName;
+                        shipView.ShippingId = ship.ShippingId;
                     }
-                       
-                    
-
 
                     orderView.OrderId = item.OrderId;
                     orderView.UserName = item.UserName;
-                    //orderView.OrderDate = item.OrderDate;
-                    //orderView.Status = item.Status;
+                    //orderView.OrderDate = item;
+                    orderView.Status = item.Status;
                     orderView.Payment = item.Payment;
                     orderView.OrderItems = orderItemsView;
                     orderView.Shipping = shipView;
@@ -134,11 +128,12 @@ namespace BenriShop.ApiRepository.Orders
             if (result != null)
             {
                 result.OrderId = order.OrderId;
-                result.UserName = order.UserName;
+                result.OrderItem = order.OrderItem;
                 result.Payment = order.Payment;
-                //result.Account = result.Account;
-                //result.OrderItems = order.OrderItems;
-                //result.Shippings = order.Shippings;
+                result.Shipping = result.Shipping;
+                result.Status = order.Status;
+                result.UserName = order.UserName;
+                result.UserNameNavigation = order.UserNameNavigation;
 
                 await _context.SaveChangesAsync();
 
@@ -158,15 +153,17 @@ namespace BenriShop.ApiRepository.Orders
                 if (cartItems.Count == 0) return false;
                 foreach (CartItem item in cartItems)
                 {
-                    OrderItem orderItem = new OrderItem();
-                    orderItem.OrderId = order.OrderId;
-                    orderItem.ProductId = item.ProductId;
-                    orderItem.QuantityInOrder = item.QuantityInCart;
+                    OrderItem orderItem = new OrderItem
+                    {
+                        OrderId = order.OrderId,
+                        ProductId = item.ProductId,
+                        QuantityInOrder = item.QuantityInCart,
 
-                    orderItem.ColorId = item.ColorId;
-                    orderItem.SizeId = item.SizeId;
-                    orderItem.Order = order;
-                 
+                        ColorId = item.ColorId,
+                        SizeId = item.SizeId,
+                        Order = order
+                    };
+
 
                     _context.OrderItems.Add(orderItem);
                     _context.CartItems.Remove(item);

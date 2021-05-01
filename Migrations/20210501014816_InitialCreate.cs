@@ -115,7 +115,7 @@ namespace BenriShop.Migrations
                     SHIPPING_ID = table.Column<string>(unicode: false, maxLength: 200, nullable: false),
                     SHIP_PHONE_NUMBER = table.Column<string>(unicode: false, maxLength: 12, nullable: false),
                     SHIP_FULL_NAME = table.Column<string>(maxLength: 200, nullable: false),
-                    SHIP_ADDRESS = table.Column<string>(maxLength: 1000, nullable: false),
+                    SHIP_ADRESS = table.Column<string>(maxLength: 1000, nullable: false),
                     SHIPPING_COST = table.Column<int>(nullable: false),
                     NOTE = table.Column<string>(maxLength: 2000, nullable: true),
                     USER_NAME = table.Column<string>(unicode: false, maxLength: 40, nullable: false),

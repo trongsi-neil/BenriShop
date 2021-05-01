@@ -224,7 +224,7 @@ namespace BenriShop.Controllers
         [HttpPut("ChangeAccountInformation/{userName}")]
         public async Task<IActionResult> ChangeAccountInformation(string userName, Account account)
         {
-            var identity = User.Identity as ClaimsIdentity;
+            ClaimsIdentity identity = User.Identity as ClaimsIdentity;
 
             if (identity != null)
             {
@@ -333,7 +333,7 @@ namespace BenriShop.Controllers
         [HttpPost("getname2")]
         public Object GetName2()
         {
-            var identity = User.Identity as ClaimsIdentity;
+            ClaimsIdentity identity = User.Identity as ClaimsIdentity;
             if (identity != null)
             {
                 return identity.Name;

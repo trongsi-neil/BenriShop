@@ -330,9 +330,9 @@ namespace BenriShop.Migrations
                         .HasMaxLength(200)
                         .IsUnicode(false);
 
-                    b.Property<string>("ShipAddress")
+                    b.Property<string>("ShipAdress")
                         .IsRequired()
-                        .HasColumnName("SHIP_ADDRESS")
+                        .HasColumnName("SHIP_ADRESS")
                         .HasColumnType("nvarchar(1000)")
                         .HasMaxLength(1000);
 

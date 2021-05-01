@@ -52,33 +52,6 @@ namespace BenriShop.ApiRepository.CartItems
 
         }
 
-        /*public async Task<bool> AddItemsFromCartToOrder(string orderId)
-        {
-            try
-            {
-                IOrderItemRepository _orderItemRepository = new OrderItemRepository(_context);
-                var order = await _context.Orders.FindAsync(orderId);
-                var account = await _context.Accounts.FirstOrDefaultAsync(e => e.UserName == order.UserName);
-                for (int i = 0; i < account.CartItems.Count; i++)
-                {
-                    OrderItem orderItem = new OrderItem();
-                    orderItem.OrderId = order.OrderId;
-                    orderItem.ProductId = account.CartItems[i].ProductId;
-                    orderItem.QuantityInOrder = account.CartItems[i].QuantityInCart;
-                    orderItem.Order = order;
-                    orderItem.Product = account.CartItems[i].Product;
-
-                    await _orderItemRepository.AddOrderItem(orderItem);
-                    account.CartItems.RemoveAt(i);
-                }
-                await _context.SaveChangesAsync();
-                return true;
-            }catch
-            {
-                return false;
-            }
-        }*/
-
         public async Task<bool> DeleteCartItem(string userName, int productId)
         {
             var cartItem = await _context.CartItems.FirstOrDefaultAsync
@@ -118,11 +91,14 @@ namespace BenriShop.ApiRepository.CartItems
 
             if (result != null)
             {
+                result.CartItemId = cartItem.CartItemId;
+                result.ColorId = cartItem.ColorId;
                 result.ProductId = cartItem.ProductId;
-                result.UserName = cartItem.UserName;
                 result.QuantityInCart = cartItem.QuantityInCart;
-               // result.Product = cartItem.Product;
-               // result.Account = cartItem.Account;
+                result.SizeId = cartItem.SizeId;
+                result.SizeOfProductHadColor = cartItem.SizeOfProductHadColor;
+                result.UserName = cartItem.UserName;
+                result.UserNameNavigation = cartItem.UserNameNavigation;
 
                 await _context.SaveChangesAsync();
 

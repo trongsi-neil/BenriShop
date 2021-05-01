@@ -27,9 +27,9 @@ namespace BenriShop.Models.Configurations
                 .HasMaxLength(200)
                 .IsUnicode(false);
 
-            builder.Property(e => e.ShipAddress)
+            builder.Property(e => e.ShipAdress)
                 .IsRequired()
-                .HasColumnName("SHIP_ADDRESS")
+                .HasColumnName("SHIP_ADRESS")
                 .HasMaxLength(1000);
 
             builder.Property(e => e.ShipFullName)
