@@ -21,6 +21,7 @@ namespace BenriShop.ApiRepository.Products
         {
             try
             {
+                product.StorageQuantity = 0;
                 var result = await _context.Products.AddAsync(product);
                 await _context.SaveChangesAsync();
                 return result.Entity;
@@ -236,7 +237,7 @@ namespace BenriShop.ApiRepository.Products
 
         public async Task<bool> AddSizeAndColor(SizeOfProductHadColor _sizeOfProductHadColor)
         {
-            var product = _context.Products.FindAsync(_sizeOfProductHadColor.ProductId);
+            var product = await _context.Products.FindAsync(_sizeOfProductHadColor.ProductId);
             if (product == null)
             {
                 Console.WriteLine("Can not found product!");
@@ -245,7 +246,8 @@ namespace BenriShop.ApiRepository.Products
 
             try
             {
-                var result = await _context.SizeOfProductHadColors.AddAsync(_sizeOfProductHadColor);
+                var result = _context.SizeOfProductHadColors.AddAsync(_sizeOfProductHadColor);
+                product.StorageQuantity += _sizeOfProductHadColor.QuantityInSizeOfColor;
                 await _context.SaveChangesAsync();
                 return true;
             }

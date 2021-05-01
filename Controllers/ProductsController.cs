@@ -128,7 +128,7 @@ namespace BenriShop.Controllers
             {
                 if (await _productRepository.AddSizeAndColor(sizeOfProductHadColor))
                 {
-                    return Ok("Add tag is successfully!");
+                    return Ok("Add size and color is successfully!");
                 }else
                 {
                     return BadRequest("Error in AddSizeAndColor!");
