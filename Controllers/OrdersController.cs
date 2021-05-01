@@ -89,7 +89,7 @@ namespace BenriShop.Controllers
         // GET: api/Orders/GetOrder/orderId
         [Authorize]
         [HttpGet("GetOrder/{orderId}")]
-        public async Task<ActionResult<Order>> GetOrder(string orderId)
+        public async Task<ActionResult<OrderView>> GetOrder(string orderId)
         {
             var identity = User.Identity as ClaimsIdentity;
             var order = await _orderRepository.GetOrder(orderId);
@@ -193,8 +193,14 @@ namespace BenriShop.Controllers
             }
             try
             {
-                _ = _orderRepository.DeleteOrder(orderId);
-                return Ok("Delete order is successful");
+                if(await _orderRepository.DeleteOrder(orderId))
+                {
+                    return Ok("Delete order is successful");
+                }
+                else
+                {
+                    return BadRequest("Error in DeleteOrder");
+                }
             }
             catch
             {

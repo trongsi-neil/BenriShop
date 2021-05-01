@@ -34,27 +34,89 @@ namespace BenriShop.ApiRepository.Orders
 
         public async Task<bool> DeleteOrder(string orderId)
         {
-            var order = await _context.Orders.FindAsync(orderId);
+            var order = _context.Orders.FirstOrDefault(x =>x.OrderId == orderId);
+
+            //var orders = await _context.Orders.Where(e => e.OrderId == orderId).ToListAsync();
+
             if (order != null)
             {
                 try
                 {
-                    _context.Orders.Remove(order);
+                    var lstOrderItems = await _context.OrderItems.Where(x => x.OrderId == order.OrderId).ToListAsync();
+                    foreach(OrderItem orderItem in lstOrderItems)
+                    {
+                        _context.OrderItems.Remove(orderItem);
+                    }
+                    var result =_context.Orders.Remove(order);
                     await _context.SaveChangesAsync();
+                    return true;
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex);
                     return false;
                 }
-                return true;
             }
             return false;
         }
 
-        public async Task<Order> GetOrder(string orderId)
+        public async Task<OrderView> GetOrder(string orderId)
         {
-            return await _context.Orders.FirstOrDefaultAsync(e => e.OrderId == orderId);
+            var orders = await _context.Orders.Where(e => e.OrderId == orderId).ToListAsync();
+            
+            List<OrderView> orderViews = new List<OrderView>();
+
+            ShippingView shippingView = new ShippingView();
+
+            foreach (Order item in orders)
+            {
+                var orderView = new OrderView();
+                if (item != null)
+                {
+                    var lstOrderItem = _context.OrderItems.Where(x => x.OrderId == item.OrderId).ToList();
+                    List<OrderItemView> orderItemsView = new List<OrderItemView>();
+                    foreach (OrderItem orderItem in lstOrderItem)
+                    {
+                        OrderItemView orderItemView = new OrderItemView();
+                        if (orderItem != null)
+                        {
+                            orderItemView.OrderId = orderItem.OrderId;
+                            orderItemView.OrderItemId = orderItem.OrderItemId;
+                            orderItemView.ProductId = orderItem.ProductId;
+                            orderItemView.ColorId = orderItem.ColorId;
+                            orderItemView.SizeId = orderItem.SizeId;
+                            orderItemView.QuantityInOrder = orderItem.QuantityInOrder;
+                        }
+                        orderItemsView.Add(orderItemView);
+                    }
+
+
+                    var ship = _context.Shippings.FirstOrDefault(x => x.OrderId == item.OrderId);
+                    ShippingView shipView = new ShippingView();
+                    if (ship != null)
+                    {
+                        shipView.Note = ship.Note;
+                        shipView.Order = ship.Order;
+                        shipView.ShipAdress = ship.ShipAdress;
+                        shipView.ShipPhoneNumber = ship.ShipPhoneNumber;
+                        shipView.ShippingCost = ship.ShippingCost;
+                        shipView.ShipFullName = ship.ShipFullName;
+                        shipView.ShippingId = ship.ShippingId;
+                    }
+
+                    orderView.OrderId = item.OrderId;
+                    orderView.UserName = item.UserName;
+                    //orderView.OrderDate = item;
+                    orderView.Status = item.Status;
+                    orderView.Payment = item.Payment;
+                    orderView.OrderItems = orderItemsView;
+                    orderView.Shipping = shipView;
+
+                }
+                orderViews.Add(orderView);
+            }
+
+            return orderViews[0];
         }
 
         public async Task<IEnumerable<Order>> GetOrders(string userName)
@@ -161,7 +223,10 @@ namespace BenriShop.ApiRepository.Orders
 
                         ColorId = item.ColorId,
                         SizeId = item.SizeId,
-                        Order = order
+                        OrderItemId = item.CartItemId,
+                        UserName =item.UserName,
+                       
+                        //Order = order
                     };
 
 

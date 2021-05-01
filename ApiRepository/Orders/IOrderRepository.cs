@@ -29,7 +29,7 @@ namespace BenriShop.ApiRepository.Orders
         /// </summary>
         /// <param name="OrderId"></param>
         /// <returns></returns>
-        public Task<Order> GetOrder(string orderId);
+        public Task<OrderView> GetOrder(string orderId);
         /// <summary>
         /// Thêm 1 đơn hàng bằng cách truyền vào 1 đối tượng Order với đầy đủ value
         /// </summary>
