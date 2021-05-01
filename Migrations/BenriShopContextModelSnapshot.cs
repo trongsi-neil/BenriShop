@@ -272,8 +272,10 @@ namespace BenriShop.Migrations
             modelBuilder.Entity("BenriShop.Models.Product", b =>
                 {
                     b.Property<int>("ProductId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("PRODUCT_ID")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("CategoryId")
                         .IsRequired()

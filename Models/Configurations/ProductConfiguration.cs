@@ -18,7 +18,7 @@ namespace BenriShop.Models.Configurations
 
             builder.Property(e => e.ProductId)
                 .HasColumnName("PRODUCT_ID")
-                .ValueGeneratedNever();
+                .ValueGeneratedOnAdd();
 
             builder.Property(e => e.CategoryId)
                 .IsRequired()

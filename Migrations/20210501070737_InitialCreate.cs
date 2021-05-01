@@ -90,7 +90,8 @@ namespace BenriShop.Migrations
                 name: "PRODUCT",
                 columns: table => new
                 {
-                    PRODUCT_ID = table.Column<int>(nullable: false),
+                    PRODUCT_ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     CATEGORY_ID = table.Column<string>(unicode: false, maxLength: 100, nullable: false),
                     PRODUCT_NAME = table.Column<string>(maxLength: 200, nullable: false),
                     PRODUCT_DESCRIPTION = table.Column<string>(maxLength: 2000, nullable: false),

@@ -193,7 +193,7 @@ namespace BenriShop.ApiRepository.Products
             Image img = new Image
             {
                 //img.Product = product;
-                //  img.Imageid = imageId;
+                ImageId = imageId,
                 Link = imageLink,
                 ProductId = product.ProductId
             };
@@ -207,6 +207,51 @@ namespace BenriShop.ApiRepository.Products
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+        public async Task<bool> AddTag (int productId, string tagId)
+        {
+            var product =  _context.Products.FindAsync(productId);
+            var tag = _context.Tags.FindAsync(tagId);
+            if (product == null || tag == null)
+            {
+                Console.WriteLine("Can not found product or tag!");
+                return false;
+            }
+            HaveTag haveTag = new HaveTag();
+            haveTag.TagId = tagId;
+            haveTag.ProductId = productId;
+
+            try 
+            {
+                var result = await _context.HaveTags.AddAsync(haveTag);
+                await _context.SaveChangesAsync();
+                return true;
+            }catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> AddSizeAndColor(SizeOfProductHadColor _sizeOfProductHadColor)
+        {
+            var product = _context.Products.FindAsync(_sizeOfProductHadColor.ProductId);
+            if (product == null)
+            {
+                Console.WriteLine("Can not found product!");
+                return false;
+            }
+
+            try
+            {
+                var result = await _context.SizeOfProductHadColors.AddAsync(_sizeOfProductHadColor);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
             }
         }
     }

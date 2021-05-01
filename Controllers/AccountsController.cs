@@ -217,7 +217,7 @@ namespace BenriShop.Controllers
         /// <param name="id"></param>
         /// <param name="account"></param>
         /// <returns></returns>
-        // PUT: api/Accounts/5
+        // PUT: api/Accounts/ChangeAccountInformation/{userName}
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [Authorize]

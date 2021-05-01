@@ -96,6 +96,50 @@ namespace BenriShop.Controllers
                 return BadRequest("Error when call _productRepository.AddProduct(product)");
             }
         }
+        /// <summary>
+        /// Thêm tag cho 1 sản phẩm bằng cách truyền vào 1 đối tượng HaveTag
+        /// </summary>
+        /// <param name="haveTag"></param>
+        /// <returns></returns>
+        [HttpPost("AddTag")]
+        public async Task<ActionResult<Product>> AddTag(HaveTag haveTag)
+        {
+            try
+            {
+                if (await _productRepository.AddTag(haveTag.ProductId, haveTag.TagId))
+                {
+                    return Ok("Add tag is successfully!");
+                }else
+                {
+                    return BadRequest("Error in AddTag!");
+                }
+            }
+            catch
+            {
+                return BadRequest("Error in AddTag!");
+            }
+        }
+
+        //POST: api/Product/AddSizeAndColor
+        [HttpPost("AddSizeAndColor")]
+        public async Task<ActionResult> AddSizeAndColor(SizeOfProductHadColor sizeOfProductHadColor)
+        {
+            try
+            {
+                if (await _productRepository.AddSizeAndColor(sizeOfProductHadColor))
+                {
+                    return Ok("Add tag is successfully!");
+                }else
+                {
+                    return BadRequest("Error in AddSizeAndColor!");
+                }
+                
+            }
+            catch
+            {
+                return BadRequest("Error in AddSizeAndColor!");
+            }
+        }
 
         /// <summary>
         /// Xóa sản phẩm bằng cách truyền vào productId
@@ -122,7 +166,7 @@ namespace BenriShop.Controllers
         /// Lấy tất cả sản phẩm trong database
         /// </summary>
         /// <returns></returns>
-        // GET: api/Products
+        // GET: api/Products/GetProducts
         [HttpGet("GetProducts")]
         public async Task<IEnumerable<ProductView>> GetProducts()
         {
@@ -171,9 +215,9 @@ namespace BenriShop.Controllers
                 //objFile.Id = new Guid().ToString();
 //                objFile.Link = _environment.WebRootPath + "\\images\\" + objFile.Id;
                 objFile.Link = "\\images\\" + objFile.Id;
-                if (objFile.Id.Length > 20)
+                if (objFile.Id.Length > 200)
                 {
-                    return BadRequest("File's name is longer 20 character");
+                    return BadRequest("File's name is longer 200 character");
                 }
                 try
                 {
@@ -185,8 +229,13 @@ namespace BenriShop.Controllers
                     {
                         objFile.files.CopyTo(fileStream);
                         fileStream.Flush();
-                        await _productRepository.AddImage(objFile.ProductId, objFile.Id, objFile.Link);
-                        return Ok("Upload image is successful");
+                        if (await _productRepository.AddImage(objFile.ProductId, objFile.Id, objFile.Link))
+                        {
+                            return Ok("Upload image is successful");
+                        }else
+                        {
+                            return NotFound("Error in AddImage");
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -199,8 +248,7 @@ namespace BenriShop.Controllers
                 return BadRequest("Fail in upload image!");
             }
         }
-
+        
         #endregion
-
     }
 }

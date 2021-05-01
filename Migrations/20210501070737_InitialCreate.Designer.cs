@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BenriShop.Migrations
 {
     [DbContext(typeof(BenriShopContext))]
-    [Migration("20210501014816_InitialCreate")]
+    [Migration("20210501070737_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -274,8 +274,10 @@ namespace BenriShop.Migrations
             modelBuilder.Entity("BenriShop.Models.Product", b =>
                 {
                     b.Property<int>("ProductId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("PRODUCT_ID")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("CategoryId")
                         .IsRequired()
