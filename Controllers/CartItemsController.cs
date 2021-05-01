@@ -3,6 +3,7 @@ using BenriShop.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -48,34 +49,35 @@ namespace BenriShop.Controllers
         /// <param name="productId"></param>
         /// <param name="cartItem"></param>
         /// <returns></returns>
-        // PUT: api/CartItems/UpdateCartItem/userName/1
+        // PUT: api/CartItems/UpdateCartItem
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [Authorize(Roles = "Customer")]
-        [HttpPut("UpdateCartItem/{userName}/{productId}")]
-        public async Task<IActionResult> UpdateCartItem(string userName, int productId, CartItem cartItem)
+        [HttpPut("UpdateCartItem")]
+        public async Task<IActionResult> UpdateCartItem(CartItem cartItem)
         {
             var identity = User.Identity as ClaimsIdentity;
-            if (identity.Name != userName)
+            if (identity.Name != cartItem.UserName)
             {
                 return Conflict("Can't access to diffirent account");
             }
-            if (productId != cartItem.ProductId || userName != cartItem.UserName)
-            {
-                return BadRequest("Wrong of productId or userName");
-            }
 
-            var _product = await _cartItemRepository.GetCartItem(cartItem.UserName, cartItem.ProductId);
-
-            try
+            if (_cartItemRepository.GetCartItem(cartItem.CartItemId) != null)
             {
-                await _cartItemRepository.UpdateCartItem(cartItem);
-                return Ok("Update cartItem successfully");
-            }
-            catch (DbUpdateConcurrencyException)
+                try
+                {
+                    await _cartItemRepository.UpdateCartItem(cartItem);
+                    return Ok("Update cartItem successfully");
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    return BadRequest("Error when call _cartItemRepository.UpdateCartItem(cartItem)");
+                }
+            }else
             {
-                return BadRequest("Error when call _cartItemRepository.UpdateCartItem(cartItem)");
+                return BadRequest("This cartItem is not found in database");
             }
+            
             
         }
         /// <summary>
@@ -97,6 +99,7 @@ namespace BenriShop.Controllers
             }
             try
             {
+                cartItem.CartItemId = Guid.NewGuid().ToString();
                 await _cartItemRepository.AddCartItem(cartItem);
                 return Ok("Add cart item is successful");
             }catch
@@ -111,17 +114,18 @@ namespace BenriShop.Controllers
         /// <param name="userName"></param>
         /// <param name="productId"></param>
         /// <returns></returns>
-        // DELETE: api/CartItems/DeleteCartItem/userName/1
+        // DELETE: api/CartItems/DeleteCartItem/cartItemId
         [Authorize(Roles = "Customer")]
-        [HttpDelete("DeleteCartItem/{userName}/{productId}")]
-        public async Task<ActionResult<CartItem>> DeleteCartItem(string userName, int productId)
+        [HttpDelete("DeleteCartItem/{cartItemId}")]
+        public async Task<ActionResult<CartItem>> DeleteCartItem(string cartItemId)
         {
             var identity = User.Identity as ClaimsIdentity;
-            if (identity.Name != userName)
+            var cartItem = await _cartItemRepository.GetCartItem(cartItemId);
+            if (identity.Name != cartItem.UserName)
             {
                 return NotFound("Can't accesss to diffirent account");
             }
-            if (await _cartItemRepository.DeleteCartItem(userName, productId))
+            if (await _cartItemRepository.DeleteCartItem(cartItemId))
             {
                 return Ok("Delete successfully!");
             }

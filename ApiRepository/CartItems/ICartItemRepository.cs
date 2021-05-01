@@ -20,7 +20,7 @@ namespace BenriShop.ApiRepository.CartItems
         /// <param name="userName"></param>
         /// <param name="productId"></param>
         /// <returns></returns>
-        public Task<CartItem> GetCartItem(string userName, int productId);
+        public Task<CartItem> GetCartItem(string cartItemId);
         /// <summary>
         /// Thêm 1 sản phẩm vào giỏ hàng bằng cách truyền vào 1 đối tượng CartItem
         /// </summary>
@@ -39,7 +39,7 @@ namespace BenriShop.ApiRepository.CartItems
         /// <param name="userName"></param>
         /// <param name="productId"></param>
         /// <returns></returns>
-        public Task<bool> DeleteCartItem(string userName, int productId);
+        public Task<bool> DeleteCartItem(string cartItemId);
         /// <summary>
         /// Chuyển tất cả sản phẩm của giỏ hàng sang 1 đơn hàng để tiến hành đặt hàng bằng cách truyền vào OrderId
         /// </summary>
