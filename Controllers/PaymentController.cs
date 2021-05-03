@@ -1,4 +1,5 @@
-﻿using BenriShop.Models;
+﻿using BenriShop.ApiRepository.Orders;
+using BenriShop.Models;
 using Microsoft.AspNetCore.Mvc;
 using Stripe;
 using StripeWebApp.Models;
@@ -12,13 +13,15 @@ namespace BenriShop.Controllers
     [ApiController]
     public class PaymentController : ControllerBase
     {
+        private readonly BenriShopContext _context = new BenriShopContext();
+        private readonly IOrderRepository _orderRepository = new OrderRepository(new BenriShopContext());
         public PaymentController()
         {
             StripeConfiguration.ApiKey = "sk_test_51Ih3a7CcmRncbbOZDTGV9kbogZ3heUlbHBoIZjbCMDHjhQr7r1VSDZbgpfUwlTcOdoH41iHTTDJYvZCfa9MtKPbl00BGoDbMDe";
         }
         // POST: api/Payment/Charge
         [HttpPost("Charge")]
-        public IActionResult Charge(PayModelView data)
+        public async Task<IActionResult> ChargeAsync(PayModelView data)
         {
             //Get token
             var options = new TokenCreateOptions
@@ -58,8 +61,16 @@ namespace BenriShop.Controllers
             });
             if (charge.Status == "succeeded")
             {
-                string BalanceTransactionId = charge.BalanceTransactionId;
-                return Ok("Charge is created!");
+                try
+                {
+                    var order = await _context.Orders.FindAsync(data.OrderId);
+                    order.Payment = true;
+                    _ = _orderRepository.UpdateOrder(order);
+                    return Ok("Pay is sucessful");
+                }catch (Exception ex)
+                {
+                    return BadRequest("Error in UpdateOrder but charge is created");
+                }
             }
 
             return BadRequest("Error when create charge!");

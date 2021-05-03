@@ -120,7 +120,7 @@ namespace BenriShop.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [Authorize(Roles = "Customer")]
         [HttpPost("AddOrder/{userName}/{payment}")]
-        public async Task<ActionResult<Order>> AddOrder(string userName, bool payment)
+        public async Task<ActionResult<Order>> AddOrder(string userName)
         {
             var identity = User.Identity as ClaimsIdentity;
             if (identity.Name != userName)
@@ -136,7 +136,7 @@ namespace BenriShop.Controllers
 
             order.OrderId = Guid.NewGuid().ToString();
 
-            order.Payment = payment;
+            order.Payment = false;
 
             try
             {
