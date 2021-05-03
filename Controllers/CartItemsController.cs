@@ -1,5 +1,6 @@
 ﻿using BenriShop.ApiRepository.CartItems;
 using BenriShop.Models;
+using BenriShop.Models.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -28,19 +29,19 @@ namespace BenriShop.Controllers
         // GET: api/CartItems/GetCartItems/userName
         [Authorize(Roles = "Customer")]
         [HttpGet("GetCartItems/{userName}")]
-        public async Task<IEnumerable<CartItem>> GetCartItems(string userName)
+        public async Task<IEnumerable<CartItemView>> GetCartItems(string userName)
         {
             var identity = User.Identity as ClaimsIdentity;
             if (identity.Name != userName)
             {
-                return (IEnumerable<CartItem>)Conflict("Can't access to diffirent account");
+                return (IEnumerable<CartItemView>)Conflict("Can't access to diffirent account");
             }
             var cartItems = _cartItemRepository.GetCartItems(userName);
             if (cartItems != null)
             {
                 return await cartItems;
             }
-            return (IEnumerable<CartItem>)NotFound("Error of GetCartItem");
+            return (IEnumerable<CartItemView>)NotFound("Error of GetCartItem");
         }
         /// <summary>
         /// Cập nhật số lượng của 1 sản phẩm trong 1 giỏ hàng

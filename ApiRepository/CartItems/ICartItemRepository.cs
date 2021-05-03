@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BenriShop.Models;
+using BenriShop.Models.ViewModel;
 
 namespace BenriShop.ApiRepository.CartItems
 {
@@ -13,7 +14,7 @@ namespace BenriShop.ApiRepository.CartItems
         /// </summary>
         /// <param name="userName"></param>
         /// <returns></returns>
-        public Task<IEnumerable<CartItem>> GetCartItems(string userName);
+        public Task<IEnumerable<CartItemView>> GetCartItems(string userName);
         /// <summary>
         /// Lấy 1 sản phẩm trong giỏ hàng bằng cách truyền vào username và ProductId
         /// </summary>

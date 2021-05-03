@@ -1,5 +1,7 @@
 ﻿using BenriShop.ApiRepository.OrderItems;
+using BenriShop.ApiRepository.Products;
 using BenriShop.Models;
+using BenriShop.Models.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -18,20 +20,39 @@ namespace BenriShop.ApiRepository.CartItems
         public async Task<CartItem> AddCartItem(CartItem cartItem)
         {
 
-            //var product = (from pro in _context.Products
-            //                        join sizeColor in _context.SizeOfProductHadColors on pro.ProductId equals sizeColor.ProductId
-            //                        where pro.ProductId == cartItem.ProductId && sizeColor.SizeId == Size && sizeColor.ColorId == Color
-            //                        select sizeColor.QuantityInSizeOfColor, pro.ProductId).ToList();
-            //Lấy số lượng sản phẩm cùng loại còn trong database
-            var productQuantity = _context.SizeOfProductHadColors.First(x => x.ProductId == cartItem.ProductId && x.ColorId == cartItem.ColorId && x.SizeId == cartItem.SizeId).QuantityInSizeOfColor; 
             
-            if (cartItem.QuantityInCart <= productQuantity)
+            //Lấy số lượng sản phẩm cùng loại còn trong database
+            var productDetailQuantity = _context.SizeOfProductHadColors.First(x => x.ProductId == cartItem.ProductId && x.ColorId == cartItem.ColorId && x.SizeId == cartItem.SizeId).QuantityInSizeOfColor;
+            //Lấy số lượng tổng của sản phẩm còn trong database
+            var productQuantity = _context.Products.First(x => x.ProductId == cartItem.ProductId).StorageQuantity;
+            //Kiểm tra sản phẩm đã được thêm vào giỏ hàng trước đó hay chưa, nếu đã được thêm thì tăng số lượng lên 1
+            var cartItemIsExist = _context.CartItems.First(x => x.UserName == cartItem.UserName && x.ProductId == cartItem.ProductId && x.SizeId == cartItem.SizeId && x.ColorId == cartItem.ColorId);
+            if (cartItemIsExist != null)
+            {
+                if (cartItemIsExist.QuantityInCart <= productDetailQuantity)
+                {
+                    cartItemIsExist.QuantityInCart += cartItem.QuantityInCart;
+                    //Trừ đi số lượng vừa được thêm vào giỏ hàng
+                    _context.SizeOfProductHadColors.First(x => x.ProductId == cartItem.ProductId && x.ColorId == cartItem.ColorId && x.SizeId == cartItem.SizeId)
+                        .QuantityInSizeOfColor = productDetailQuantity - cartItem.QuantityInCart;
+                    _context.Products.First(x => x.ProductId == cartItem.ProductId).StorageQuantity = productQuantity - cartItem.QuantityInCart;
+
+                    await _context.SaveChangesAsync();
+                    return cartItemIsExist;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            if (cartItem.QuantityInCart <= productDetailQuantity)
             {
                 try
                 {
                     //Trừ đi số lượng vừa được thêm vào giỏ hàng
                     _context.SizeOfProductHadColors.First(x => x.ProductId == cartItem.ProductId && x.ColorId == cartItem.ColorId && x.SizeId == cartItem.SizeId)
-                        .QuantityInSizeOfColor = productQuantity - cartItem.QuantityInCart;
+                        .QuantityInSizeOfColor = productDetailQuantity - cartItem.QuantityInCart;
+                    _context.Products.First(x => x.ProductId == cartItem.ProductId).StorageQuantity = productQuantity - cartItem.QuantityInCart;
 
                     _context.CartItems.Add(cartItem);
                     
@@ -57,14 +78,18 @@ namespace BenriShop.ApiRepository.CartItems
             var cartItem = await _context.CartItems.FirstOrDefaultAsync
                 (e => e.CartItemId == cartItemId);
             //Lấy số lượng sản phẩm cùng loại còn trong database
-            var productQuantity = _context.SizeOfProductHadColors.First(x => x.ProductId == cartItem.ProductId && x.ColorId == cartItem.ColorId && x.SizeId == cartItem.SizeId).QuantityInSizeOfColor;
+            var productDetailQuantity = _context.SizeOfProductHadColors.First(x => x.ProductId == cartItem.ProductId && x.ColorId == cartItem.ColorId && x.SizeId == cartItem.SizeId).QuantityInSizeOfColor;
+            //Lấy số lượng tổng của sản phẩm còn trong database
+            var productQuantity = _context.Products.First(x => x.ProductId == cartItem.ProductId).StorageQuantity;
             if (cartItem != null)
             {
                 try
                 {
                     //cộng lại số lượng mới xóa đi
                     _context.SizeOfProductHadColors.First(x => x.ProductId == cartItem.ProductId && x.ColorId == cartItem.ColorId && x.SizeId == cartItem.SizeId)
-                        .QuantityInSizeOfColor = productQuantity + cartItem.QuantityInCart;
+                        .QuantityInSizeOfColor = productDetailQuantity + cartItem.QuantityInCart;
+                    _context.Products.First(x => x.ProductId == cartItem.ProductId).StorageQuantity = productQuantity + cartItem.QuantityInCart;
+
                     _context.CartItems.Remove(cartItem);
                     await _context.SaveChangesAsync();
                 }
@@ -84,9 +109,27 @@ namespace BenriShop.ApiRepository.CartItems
                 (e => e.CartItemId == cartItemId);
         }
 
-        public async Task<IEnumerable<CartItem>> GetCartItems(string userName)
+        public async Task<IEnumerable<CartItemView>> GetCartItems(string userName)
         {
-            return await _context.CartItems.Where(x => x.UserName == userName).ToListAsync();
+            List<CartItemView> cartItemViews = new List<CartItemView>();
+            List<CartItem> cartItems = await  _context.CartItems.Where(x => x.UserName == userName).ToListAsync();
+            List<Product> products = new List<Product>();
+            foreach (CartItem cartItem in cartItems)
+            {
+                ProductsRepository productsRepository = new ProductsRepository(_context);
+                CartItemView cartItemView = new CartItemView();
+
+                cartItemView.ProductView = await productsRepository.GetProduct(cartItem.ProductId);
+                cartItemView.ProductId = cartItem.ProductId;
+                cartItemView.QuantityInCart = cartItem.QuantityInCart;
+                cartItemView.SizeId = cartItem.SizeId;
+                cartItemView.UserName = cartItem.UserName;
+                cartItemView.ColorId = cartItem.ColorId;
+                cartItemView.CartItemId = cartItem.CartItemId;
+
+                cartItemViews.Add(cartItemView);
+            }
+            return cartItemViews;
         }
 
         public async Task<CartItem> UpdateCartItem(CartItem cartItem)
