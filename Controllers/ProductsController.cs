@@ -85,12 +85,12 @@ namespace BenriShop.Controllers
         /// <returns></returns>
         [HttpPost("AddProduct")]
         [Authorize(Roles = "Admin, Mod")]
-        public async Task<ActionResult<Product>> AddProduct(Product product)
+        public async Task<ActionResult<AddProductView>> AddProduct(AddProductView addProductView)
         {
             try
             {
-                await _productRepository.AddProduct(product);
-                return CreatedAtAction("GetProduct", new { id = product.ProductId }, product);
+                var product = await _productRepository.AddProduct(addProductView);
+                return Ok("Add product sucessfull");
             }catch
             {
                 return BadRequest("Error when call _productRepository.AddProduct(product)");

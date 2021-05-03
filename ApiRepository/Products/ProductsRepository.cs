@@ -17,13 +17,19 @@ namespace BenriShop.ApiRepository.Products
         {
             this._context = context;
         }
-        public async Task<Product> AddProduct(Product product)
+        public async Task<Product> AddProduct(AddProductView addProductView)
         {
             try
             {
-                product.StorageQuantity = 0;
-                var result = await _context.Products.AddAsync(product);
+
+                addProductView.Product.StorageQuantity = 0;
+                var result = await _context.Products.AddAsync(addProductView.Product);
                 await _context.SaveChangesAsync();
+                addProductView.Product.ProductId = _context.Products.Max(p => p.ProductId);
+                addProductView.SizeOfProductHadColor.ProductId = addProductView.Product.ProductId;
+                _ = AddTag(addProductView.Product.ProductId, addProductView.HaveTag.TagId);
+                _ = AddSizeAndColor(addProductView.SizeOfProductHadColor);
+                
                 return result.Entity;
             }catch (Exception ex)
             {
@@ -229,8 +235,9 @@ namespace BenriShop.ApiRepository.Products
                 var result = await _context.HaveTags.AddAsync(haveTag);
                 await _context.SaveChangesAsync();
                 return true;
-            }catch
+            }catch(Exception ex)
             {
+                Console.WriteLine(ex.ToString());
                 return false;
             }
         }
