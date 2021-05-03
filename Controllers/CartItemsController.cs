@@ -103,7 +103,7 @@ namespace BenriShop.Controllers
                 cartItem.CartItemId = Guid.NewGuid().ToString();
                 await _cartItemRepository.AddCartItem(cartItem);
                 return Ok("Add cart item is successful");
-            }catch
+            }catch (Exception ex)
             {
                 return BadRequest("Error when call _cartItemRepository.AddCartItem(cartItem)");
             }
