@@ -8,7 +8,7 @@ namespace BenriShop.Models.ViewModel
     public class AddProductView
     {
         public Product Product { get; set; }
-        public HaveTag HaveTag { get; set; }
-        public SizeOfProductHadColor SizeOfProductHadColor {get; set;}
+        public ICollection<HaveTag> HaveTags { get; set; }
+        public ICollection<SizeOfProductHadColor> SizeOfProductHadColors {get; set;}
     }
 }

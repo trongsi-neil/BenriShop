@@ -26,10 +26,16 @@ namespace BenriShop.ApiRepository.Products
                 var result = await _context.Products.AddAsync(addProductView.Product);
                 await _context.SaveChangesAsync();
                 addProductView.Product.ProductId = _context.Products.Max(p => p.ProductId);
-                addProductView.SizeOfProductHadColor.ProductId = addProductView.Product.ProductId;
-                _ = AddTag(addProductView.Product.ProductId, addProductView.HaveTag.TagId);
-                _ = AddSizeAndColor(addProductView.SizeOfProductHadColor);
-                
+                foreach(SizeOfProductHadColor sizeOfProductHadColor in addProductView.SizeOfProductHadColors)
+                {
+                    sizeOfProductHadColor.ProductId = addProductView.Product.ProductId;
+                    _ = AddSizeAndColor(sizeOfProductHadColor);
+                }
+                foreach(HaveTag haveTag in addProductView.HaveTags)
+                {
+                    _ = AddTag(addProductView.Product.ProductId, haveTag.TagId);
+                }
+            
                 return result.Entity;
             }catch (Exception ex)
             {
