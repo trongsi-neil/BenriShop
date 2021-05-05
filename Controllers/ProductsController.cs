@@ -36,7 +36,7 @@ namespace BenriShop.Controllers
 
             public string Link { get; set; }
 
-            public IFormFile files { get; set; }
+            public List<IFormFile> files { get; set; }
         }
 
         #region Admin
@@ -209,44 +209,43 @@ namespace BenriShop.Controllers
         //[Route("api/[controller]/uploadimage")]
         public async Task<ActionResult> UploadImage([FromForm] FileUpload objFile)
         {
-            if (objFile.files.Length > 0)
+            foreach(IFormFile file in objFile.files)
             {
-                objFile.Id = objFile.ProductId + "_" + objFile.files.FileName;
-                //objFile.Id = new Guid().ToString();
-//                objFile.Link = _environment.WebRootPath + "\\images\\" + objFile.Id;
-                objFile.Link = "\\images\\" + objFile.Id;
-                if (objFile.Id.Length > 200)
+                if (file.Length > 0)
                 {
-                    return BadRequest("File's name is longer 200 character");
-                }
-                try
-                {
-                    if (!Directory.Exists(_environment.WebRootPath + "\\images\\"))
+                    objFile.Id = objFile.ProductId + "_" + file.FileName;
+                    //objFile.Id = new Guid().ToString();
+                    //                objFile.Link = _environment.WebRootPath + "\\images\\" + objFile.Id;
+                    objFile.Link = "\\images\\" + objFile.Id;
+                    if (objFile.Id.Length > 200)
                     {
-                        Directory.CreateDirectory(_environment.WebRootPath + "\\images\\");
+                        return BadRequest("File's name is longer 200 character");
                     }
-                    using (FileStream fileStream = System.IO.File.Create(_environment.WebRootPath + objFile.Link))
+                    try
                     {
-                        objFile.files.CopyTo(fileStream);
-                        fileStream.Flush();
-                        if (await _productRepository.AddImage(objFile.ProductId, objFile.Id, objFile.Link))
+                        if (!Directory.Exists(_environment.WebRootPath + "\\images\\"))
                         {
-                            return Ok("Upload image is successful");
-                        }else
+                            Directory.CreateDirectory(_environment.WebRootPath + "\\images\\");
+                        }
+                        using (FileStream fileStream = System.IO.File.Create(_environment.WebRootPath + objFile.Link))
                         {
-                            return NotFound("Error in AddImage");
+                            file.CopyTo(fileStream);
+                            fileStream.Flush();
+                            await _productRepository.AddImage(objFile.ProductId, objFile.Id, objFile.Link);
                         }
                     }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
                 }
-                catch (Exception ex)
+                else
                 {
-                    throw ex;
+                    return BadRequest("Fail in upload image!");
                 }
             }
-            else
-            {
-                return BadRequest("Fail in upload image!");
-            }
+            return Ok("Upload image is successful");
+            
         }
         
         #endregion
