@@ -4,24 +4,18 @@ using BenriShop.ApiRepository.OrderItems;
 using BenriShop.ApiRepository.Orders;
 using BenriShop.ApiRepository.Products;
 using BenriShop.ApiRepository.Shipping;
+using BenriShop.ApiRepository.Ultilities;
 using BenriShop.Models;
 using BenriShop.Models.Entities;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Stripe;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -68,13 +62,13 @@ namespace BenriShop
              * For another new HTTP request, a new instance of EmployeeRepository class will 
              * be provided and it will be available throughout the entire scope of that HTTP request.
             */
-           services.AddScoped<IAccountRepository, AccountRepository>();
-           services.AddScoped<IProductsRepository, ProductsRepository>();
-           services.AddScoped<ICartItemRepository, CartItemRepository>();
-           services.AddScoped<IOrderItemRepository, OrderItemRepository>();
+            services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<IProductsRepository, ProductsRepository>();
+            services.AddScoped<ICartItemRepository, CartItemRepository>();
+            services.AddScoped<IOrderItemRepository, OrderItemRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IShippingRepository, ShippingRepository>();
-          
+            services.AddScoped<IUltilitiesRepository, UltilitiesRepository>();
 
 
 
@@ -127,7 +121,7 @@ namespace BenriShop
 
             app.UseAuthorization();
 
-         
+
 
             app.UseEndpoints(endpoints =>
             {

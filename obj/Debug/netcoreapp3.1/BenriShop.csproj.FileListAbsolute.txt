@@ -552,7 +552,6 @@ D:\source\repos\BenriShop\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\sni.dl
 D:\source\repos\BenriShop\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.0\System.Runtime.Caching.dll
 D:\source\repos\BenriShop\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Runtime.Caching.dll
 D:\source\repos\BenriShop\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
-D:\source\repos\BenriShop\obj\Debug\netcoreapp3.1\BenriShop.csprojAssemblyReference.cache
 D:\source\repos\BenriShop\obj\Debug\netcoreapp3.1\BenriShop.AssemblyInfoInputs.cache
 D:\source\repos\BenriShop\obj\Debug\netcoreapp3.1\BenriShop.AssemblyInfo.cs
 D:\source\repos\BenriShop\obj\Debug\netcoreapp3.1\BenriShop.csproj.CoreCompileInputs.cache
@@ -566,3 +565,4 @@ D:\source\repos\BenriShop\obj\Debug\netcoreapp3.1\BenriShop.dll
 D:\source\repos\BenriShop\obj\Debug\netcoreapp3.1\BenriShop.pdb
 D:\source\repos\BenriShop\obj\Debug\netcoreapp3.1\BenriShop.genruntimeconfig.cache
 C:\Users\Neil's PC\Source\Repos\BenriShop\obj\Debug\netcoreapp3.1\BenriShop.csprojAssemblyReference.cache
+D:\source\repos\BenriShop\obj\Debug\netcoreapp3.1\BenriShop.csprojAssemblyReference.cache
