@@ -126,7 +126,7 @@ namespace BenriShop.ApiRepository.CartItems
 
         public async Task<CartItem> UpdateCartItem(CartItem cartItem)
         {
-            var result = await _context.CartItems.FirstOrDefaultAsync
+            var result = _context.CartItems.FirstOrDefault
                 (e => e.CartItemId == cartItem.CartItemId);
             int quantityUpdate = result.QuantityInCart - cartItem.QuantityInCart;
             if (result != null)
@@ -136,7 +136,6 @@ namespace BenriShop.ApiRepository.CartItems
                 UpdateQuantityAsync(cartItem.ProductId, cartItem.SizeId, cartItem.ColorId, quantityUpdate);
                 result.QuantityInCart = cartItem.QuantityInCart;
                 result.SizeId = cartItem.SizeId;
-
                 await _context.SaveChangesAsync();
 
                 return result;

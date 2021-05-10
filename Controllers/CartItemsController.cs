@@ -63,23 +63,15 @@ namespace BenriShop.Controllers
                 return Conflict("Can't access to diffirent account");
             }
 
-            if (_cartItemRepository.GetCartItem(cartItem.CartItemId) != null)
+            try
             {
-                try
-                {
-                    await _cartItemRepository.UpdateCartItem(cartItem);
-                    return Ok("Update cartItem successfully");
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    return BadRequest("Error when call _cartItemRepository.UpdateCartItem(cartItem)");
-                }
-            }else
-            {
-                return BadRequest("This cartItem is not found in database");
+                await _cartItemRepository.UpdateCartItem(cartItem);
+                return Ok("Update cartItem successfully");
             }
-            
-            
+            catch (DbUpdateConcurrencyException)
+            {
+                return BadRequest("Error when call _cartItemRepository.UpdateCartItem(cartItem)");
+            }
         }
         /// <summary>
         /// Thêm 1 sản phẩm vào giỏ hàng
