@@ -33,7 +33,7 @@ namespace BenriShop.Controllers
         /// <returns></returns>
         // GET: api/Orders/GetOrders/userName
         [Authorize(Roles = "Mod, Admin")]
-        [HttpGet("GetOrders/{status}")]
+        [HttpGet("GetOrdersByStatus/{status}")]
         public async Task<IEnumerable<OrderView>> GetOrdersByStatus(int status)
         {
             //var identity = User.Identity as ClaimsIdentity;
@@ -120,7 +120,7 @@ namespace BenriShop.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [Authorize(Roles = "Customer")]
         [HttpPost("AddOrder/{userName}")]
-        public async Task<ActionResult<Order>> AddOrder(string userName)
+        public async Task<ActionResult<Order>> AddOrder(string userName, Shipping shipping)
         {
             var identity = User.Identity as ClaimsIdentity;
             if (identity.Name != userName)
@@ -144,7 +144,10 @@ namespace BenriShop.Controllers
                 {
                     if(await _orderRepository.AddItemFromCartToOrder(order.OrderId, order.UserName))
                     {
-                        return order;
+                        shipping.OrderId = order.OrderId;
+                        shipping.UserName = order.UserName;
+                        CreatedAtAction(nameof(ShippingsController.AddShipping), shipping);
+                        return Ok(order.ToString() + shipping.ToString());
                     }
                     else
                     {
