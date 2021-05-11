@@ -119,7 +119,7 @@ namespace BenriShop.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [Authorize(Roles = "Customer")]
-        [HttpPost("AddOrder/{userName}/{payment}")]
+        [HttpPost("AddOrder/{userName}")]
         public async Task<ActionResult<Order>> AddOrder(string userName)
         {
             var identity = User.Identity as ClaimsIdentity;
@@ -140,25 +140,21 @@ namespace BenriShop.Controllers
 
             try
             {
-
                 if(await _orderRepository.AddOrder(order) != null)
                 {
                     if(await _orderRepository.AddItemFromCartToOrder(order.OrderId, order.UserName))
                     {
-                        return Ok();
+                        return order;
                     }
                     else
                     {
                         await _orderRepository.DeleteOrder(order.OrderId);
                         return BadRequest("Không thể chuyển CartItem sang OrderItem");
                     }
-                }
-                else
+                }else
                 {
                     return BadRequest("Không thể thêm Order");
-                }    
-                
-                return order;
+                }
             }catch
             {
                 return BadRequest("Error in AddItemsFromCartToOrder or AddOrder");

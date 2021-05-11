@@ -8,7 +8,6 @@ namespace BenriShop.Models.ViewModel
     public class ShippingView
     {
         public string ShippingId { get; set; }
-
         public int ShippingCost { get; set; }
         public string ShipFullName { get; set; }
         public string ShipPhoneNumber { get; set; }
