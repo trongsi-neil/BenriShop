@@ -5,6 +5,7 @@ using Stripe;
 using StripeWebApp.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BenriShop.Controllers
@@ -13,10 +14,10 @@ namespace BenriShop.Controllers
     [ApiController]
     public class PaymentController : ControllerBase
     {
-        private readonly BenriShopContext _context = new BenriShopContext();
-        private readonly IOrderRepository _orderRepository = new OrderRepository(new BenriShopContext());
-        public PaymentController()
+        private readonly BenriShopContext _context;
+        public PaymentController(BenriShopContext context)
         {
+            this._context = context;
             StripeConfiguration.ApiKey = "sk_test_51Ih3a7CcmRncbbOZDTGV9kbogZ3heUlbHBoIZjbCMDHjhQr7r1VSDZbgpfUwlTcOdoH41iHTTDJYvZCfa9MtKPbl00BGoDbMDe";
         }
         // POST: api/Payment/Charge
@@ -63,10 +64,15 @@ namespace BenriShop.Controllers
             {
                 try
                 {
-                    var order = await _context.Orders.FindAsync(data.OrderId);
-                    order.Payment = true;
-                    _ = _orderRepository.UpdateOrder(order);
-                    return Ok("Pay is sucessful");
+                    var order = _context.Orders.Where(x => x.OrderId == data.OrderId).FirstOrDefault();
+                    if (order != null)
+                    {
+                        order.Payment = true;
+                        _context.Update(order);
+                        await _context.SaveChangesAsync();
+                        return Ok("Pay is sucessful");
+                    }
+                    return Ok("Not found order but charge is created");
                 }catch (Exception ex)
                 {
                     return BadRequest("Error in UpdateOrder but charge is created");

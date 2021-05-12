@@ -565,4 +565,3 @@ D:\source\repos\BenriShop\obj\Debug\netcoreapp3.1\BenriShop.dll
 D:\source\repos\BenriShop\obj\Debug\netcoreapp3.1\BenriShop.pdb
 D:\source\repos\BenriShop\obj\Debug\netcoreapp3.1\BenriShop.genruntimeconfig.cache
 D:\source\repos\BenriShop\obj\Debug\netcoreapp3.1\BenriShop.csprojAssemblyReference.cache
-C:\Users\Neil's PC\Source\Repos\BenriShop\obj\Debug\netcoreapp3.1\BenriShop.csprojAssemblyReference.cache
