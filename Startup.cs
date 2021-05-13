@@ -53,7 +53,9 @@ namespace BenriShop
 
             services.AddDbContext<BenriShopContext>(op => op.UseSqlServer(connection));
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
 
             // Rest of the code
 

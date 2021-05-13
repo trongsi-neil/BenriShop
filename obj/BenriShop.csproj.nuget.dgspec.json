@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\nguye\\Source\\Repos\\BenriShop\\BenriShop.csproj": {}
+    "C:\\Users\\Neil's PC\\Source\\Repos\\BenriShop\\BenriShop.csproj": {}
   },
   "projects": {
-    "C:\\Users\\nguye\\Source\\Repos\\BenriShop\\BenriShop.csproj": {
+    "C:\\Users\\Neil's PC\\Source\\Repos\\BenriShop\\BenriShop.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\nguye\\Source\\Repos\\BenriShop\\BenriShop.csproj",
+        "projectUniqueName": "C:\\Users\\Neil's PC\\Source\\Repos\\BenriShop\\BenriShop.csproj",
         "projectName": "BenriShop",
-        "projectPath": "C:\\Users\\nguye\\Source\\Repos\\BenriShop\\BenriShop.csproj",
-        "packagesPath": "C:\\Users\\nguye\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\nguye\\Source\\Repos\\BenriShop\\obj\\",
+        "projectPath": "C:\\Users\\Neil's PC\\Source\\Repos\\BenriShop\\BenriShop.csproj",
+        "packagesPath": "C:\\Users\\Neil's PC\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Neil's PC\\Source\\Repos\\BenriShop\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\nguye\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Neil's PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -51,6 +51,10 @@
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
               "version": "[3.1.8, )"
+            },
+            "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
+              "target": "Package",
+              "version": "[3.0.0, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
@@ -89,6 +93,12 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.NETCore.App.Host.win-x64",
+              "version": "[3.1.14, 3.1.14]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -97,7 +107,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     }
