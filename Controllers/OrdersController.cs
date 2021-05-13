@@ -61,14 +61,14 @@ namespace BenriShop.Controllers
         // GET: api/Orders/GetOrders/userName
         [Authorize]
         [HttpGet("GetOrders/{userName}")]
-        public async Task<IEnumerable<Order>> GetOrders(string userName)
+        public async Task<IEnumerable<OrderView>> GetOrders(string userName)
         {
             var identity = User.Identity as ClaimsIdentity;
             if (identity.RoleClaimType == "Customer")
             {
                 if (identity.Name != userName)
                 {
-                    return (IEnumerable<Order>)Conflict("Can't access to diffirent account");
+                    return (IEnumerable<OrderView>)Conflict("Can't access to diffirent account");
                 }
             }
 
@@ -77,7 +77,7 @@ namespace BenriShop.Controllers
             {
                 return orders;
             }
-            return (IEnumerable<Order>)NotFound("Error of GetOrders");
+            return (IEnumerable<OrderView>)NotFound("Error of GetOrders");
         }
 
 

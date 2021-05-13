@@ -119,9 +119,62 @@ namespace BenriShop.ApiRepository.Orders
             return orderViews[0];
         }
 
-        public async Task<IEnumerable<Order>> GetOrders(string userName)
+        public async Task<IEnumerable<OrderView>> GetOrders(string userName)
         {
-            return await _context.Orders.Where(x => x.UserName == userName).ToListAsync();
+            var orders = await _context.Orders.Where(x => x.UserName == userName).ToListAsync();
+            List<OrderView> orderViews = new List<OrderView>();
+
+            ShippingView shippingView = new ShippingView();
+
+            foreach (Order item in orders)
+            {
+                var orderView = new OrderView();
+                if (item != null)
+                {
+                    var lstOrderItem = _context.OrderItems.Where(x => x.OrderId == item.OrderId).ToList();
+                    List<OrderItemView> orderItemsView = new List<OrderItemView>();
+                    foreach (OrderItem orderItem in lstOrderItem)
+                    {
+                        OrderItemView orderItemView = new OrderItemView();
+                        if (orderItem != null)
+                        {
+                            orderItemView.OrderId = orderItem.OrderId;
+                            orderItemView.OrderItemId = orderItem.OrderItemId;
+                            orderItemView.ProductId = orderItem.ProductId;
+                            orderItemView.ColorId = orderItem.ColorId;
+                            orderItemView.SizeId = orderItem.SizeId;
+                            orderItemView.QuantityInOrder = orderItem.QuantityInOrder;
+                        }
+                        orderItemsView.Add(orderItemView);
+                    }
+
+
+                    var ship = _context.Shippings.FirstOrDefault(x => x.OrderId == item.OrderId);
+                    ShippingView shipView = new ShippingView();
+                    if (ship != null)
+                    {
+                        shipView.Note = ship.Note;
+                        shipView.Order = ship.Order;
+                        shipView.ShipAdress = ship.ShipAdress;
+                        shipView.ShipPhoneNumber = ship.ShipPhoneNumber;
+                        shipView.ShippingCost = ship.ShippingCost;
+                        shipView.ShipFullName = ship.ShipFullName;
+                        shipView.ShippingId = ship.ShippingId;
+                    }
+
+                    orderView.OrderId = item.OrderId;
+                    orderView.UserName = item.UserName;
+                    //orderView.OrderDate = item;
+                    orderView.Status = item.Status;
+                    orderView.Payment = item.Payment;
+                    orderView.OrderItems = orderItemsView;
+                    orderView.Shipping = shipView;
+
+                }
+                orderViews.Add(orderView);
+            }
+
+            return orderViews;
         }
 
 

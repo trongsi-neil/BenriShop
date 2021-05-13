@@ -23,7 +23,7 @@ namespace BenriShop.ApiRepository.Orders
         /// </summary>
         /// <param name="userName"></param>
         /// <returns></returns>
-        public Task<IEnumerable<Order>> GetOrders(string userName);
+        public Task<IEnumerable<OrderView>> GetOrders(string userName);
         /// <summary>
         /// Lấy 1 đơn hàng bằng cách truyền vào OrderId
         /// </summary>
