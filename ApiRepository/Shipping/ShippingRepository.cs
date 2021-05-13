@@ -21,7 +21,7 @@ namespace BenriShop.ApiRepository.Shipping
             {
                 var result = await _context.Shippings.AddAsync(shipping);
                 await _context.SaveChangesAsync();
-                return (IActionResult)result.Entity;
+                return null;
             }
             catch (Exception ex)
             {

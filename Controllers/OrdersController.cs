@@ -12,6 +12,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using BenriShop.ApiRepository.Accounts;
 using BenriShop.Models.ViewModel;
+using BenriShop.ApiRepository.Shipping;
 
 namespace BenriShop.Controllers
 {
@@ -20,10 +21,12 @@ namespace BenriShop.Controllers
     public class OrdersController : ControllerBase
     {
         private readonly IOrderRepository _orderRepository;
+        private readonly IShippingRepository _shippingRepository;
 
-        public OrdersController(IOrderRepository orderItemRepository)
+        public OrdersController(IOrderRepository orderItemRepository, IShippingRepository shippingRepository)
         {
             this._orderRepository = orderItemRepository;
+            this._shippingRepository = shippingRepository;
         }
 
         /// <summary>
@@ -139,7 +142,9 @@ namespace BenriShop.Controllers
                     {
                         shipping.OrderId = order.OrderId;
                         shipping.UserName = order.UserName;
-                        CreatedAtAction(nameof(ShippingsController.AddShipping), shipping);
+                        shipping.ShippingId = Guid.NewGuid().ToString();
+                        await _shippingRepository.CreateShipping(shipping);
+                        //CreatedAtAction("AddShipping", "ShippingsController", new { }, shipping);
                         return Ok(order.ToString() + shipping.ToString());
                     }
                     else
