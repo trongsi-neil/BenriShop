@@ -204,6 +204,27 @@ namespace BenriShop.Controllers
                 return BadRequest("Error in DeleteOrder");
             }
         }
-
+        [Authorize]
+        [HttpPut("UpdateOrder")]
+        public async Task<ActionResult<Order>> UpdateOrder(Order order)
+        {
+            var identity = User.Identity as ClaimsIdentity;
+            if (identity.RoleClaimType == "Customer")
+            {
+                if (identity.Name != order.UserName)
+                {
+                    return Conflict("Can't access to diffirent account");
+                }
+            }
+            try
+            {
+                await _orderRepository.UpdateOrder(order);
+                return order;
+            }catch(Exception ex)
+            {
+                return BadRequest("Exception in UpdateOrder");
+            }
+            
+        }
     }
 }
