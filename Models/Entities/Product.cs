@@ -19,6 +19,8 @@ namespace BenriShop.Models
         public int Price { get; set; }
         public int StorageQuantity { get; set; }
 
+        public Boolean IsDisable { get; set; }
+
         public virtual Category Category { get; set; }
         public virtual ICollection<HaveTag> HaveTag { get; set; }
         public virtual ICollection<Image> Image { get; set; }

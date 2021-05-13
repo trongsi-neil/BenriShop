@@ -2,7 +2,7 @@
 
 namespace BenriShop.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -96,7 +96,8 @@ namespace BenriShop.Migrations
                     PRODUCT_NAME = table.Column<string>(maxLength: 200, nullable: false),
                     PRODUCT_DESCRIPTION = table.Column<string>(maxLength: 2000, nullable: false),
                     PRICE = table.Column<int>(nullable: false),
-                    STORAGE_QUANTITY = table.Column<int>(nullable: false)
+                    STORAGE_QUANTITY = table.Column<int>(nullable: false),
+                    IS_DISABLE = table.Column<bool>(nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {

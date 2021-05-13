@@ -40,6 +40,8 @@ namespace BenriShop.Models.Configurations
 
             builder.Property(e => e.StorageQuantity).HasColumnName("STORAGE_QUANTITY");
 
+            builder.Property(e => e.IsDisable).HasColumnName("IS_DISABLE").HasDefaultValue(false);
+
             builder.HasOne(d => d.Category)
                 .WithMany(p => p.Product)
                 .HasForeignKey(d => d.CategoryId)

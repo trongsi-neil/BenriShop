@@ -150,14 +150,24 @@ namespace BenriShop.Controllers
         [HttpDelete("{productId}")]
         public async Task<ActionResult<Product>> DeleteProduct(int productId)
         {
-            if (await _productRepository.DeleteProduct(productId))
+            var result = await _productRepository.DeleteProduct(productId);
+            if (result == 1)
             {
                 return Ok("Delete successfully!");
             }
-            else
+            else if (result == 0)
             {
-                return BadRequest("Error when call _productRepository.DeleteProduct(productId)");
+                return Ok("Product Is disable");
             }
+            else if (result == -1)
+            {
+                return BadRequest("Exception");
+            }
+
+            return BadRequest("Hông có sản phẩm á");
+        
+
+
         }
         #endregion
 

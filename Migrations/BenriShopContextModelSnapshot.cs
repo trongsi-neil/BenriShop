@@ -284,6 +284,12 @@ namespace BenriShop.Migrations
                         .HasMaxLength(100)
                         .IsUnicode(false);
 
+                    b.Property<bool>("IsDisable")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("IS_DISABLE")
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
                     b.Property<int>("Price")
                         .HasColumnName("PRICE")
                         .HasColumnType("int");

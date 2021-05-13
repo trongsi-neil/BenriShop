@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BenriShop.Models.ViewModel
 {
@@ -11,6 +12,8 @@ namespace BenriShop.Models.ViewModel
         public string ProductDescription { get; set; }
         public int Price { get; set; }
         public int StorageQuantity { get; set; }
+
+        public Boolean IsDisable { get; set; }
 
         public List<HaveTagView> HaveTags { get; set; }
         public List<ImageView> Images { get; set; }

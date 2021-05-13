@@ -1,5 +1,4 @@
-﻿using BenriShop.ApiRepository.Accounts;
-using BenriShop.Models;
+﻿using BenriShop.Models;
 using BenriShop.Models.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -21,47 +20,73 @@ namespace BenriShop.ApiRepository.Products
         {
             try
             {
-
                 addProductView.Product.StorageQuantity = 0;
+                addProductView.Product.IsDisable = false;
                 var result = await _context.Products.AddAsync(addProductView.Product);
                 await _context.SaveChangesAsync();
                 addProductView.Product.ProductId = _context.Products.Max(p => p.ProductId);
-                foreach(SizeOfProductHadColor sizeOfProductHadColor in addProductView.SizeOfProductHadColors)
+                foreach (SizeOfProductHadColor sizeOfProductHadColor in addProductView.SizeOfProductHadColors)
                 {
                     sizeOfProductHadColor.ProductId = addProductView.Product.ProductId;
                     _ = AddSizeAndColor(sizeOfProductHadColor);
                 }
-                foreach(HaveTag haveTag in addProductView.HaveTags)
+                foreach (HaveTag haveTag in addProductView.HaveTags)
                 {
                     _ = AddTag(addProductView.Product.ProductId, haveTag.TagId);
                 }
-            
+
                 return result.Entity;
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw ex;
             }
         }
 
-        public async Task<bool> DeleteProduct(int productId)
-        {
 
-            var product = await _context.Products.FindAsync(productId);
+        /// <summary>
+        /// Nếu return ==
+        /// 1 : Xóa thành công
+        /// -1 : Lỗi exception
+        /// 0: thay đổi trạng thái thành Disable
+        /// -2: không có Product
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
+        public async Task<int> DeleteProduct(int productId)
+        {
+            var product = _context.Products.FirstOrDefault(x => x.ProductId == productId);
             if (product != null)
             {
-                try
+                if (_context.OrderItems.Any(x => x.ProductId == product.ProductId)
+                || _context.CartItems.Any(x => x.ProductId == product.ProductId))
                 {
-                    _context.Products.Remove(product);
+                    product.IsDisable = true;
                     await _context.SaveChangesAsync();
+                    return 0;
                 }
-                catch (Exception ex)
+                else
                 {
-                    Console.WriteLine(ex);
-                    return false;
-                }
-                return true;
+                    var lstImage = _context.Images.Where(x => x.ProductId == product.ProductId).ToList();
+                    var lstSizeofProductHadColor = _context.SizeOfProductHadColors.Where(x => x.ProductId == product.ProductId).ToList();
+                    var lstHaveTag = _context.HaveTags.Where(x => x.ProductId == product.ProductId).ToList();
+                    try
+                    {
+                        _context.Images.RemoveRange(lstImage);
+                        _context.SizeOfProductHadColors.RemoveRange(lstSizeofProductHadColor);
+                        _context.HaveTags.RemoveRange(lstHaveTag);
+                        _context.Products.Remove(product);
+                        await _context.SaveChangesAsync();
+                        return 1;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex);
+                        return -1;
+                    }
+                }   
             }
-            return false;
+            return -2;
         }
 
         public async Task<Product> UpdateProduct(Product product)
@@ -84,7 +109,8 @@ namespace BenriShop.ApiRepository.Products
                 try
                 {
                     await _context.SaveChangesAsync();
-                }catch (Exception ex)
+                }
+                catch (Exception ex)
                 {
                     throw ex;
                 }
@@ -146,7 +172,7 @@ namespace BenriShop.ApiRepository.Products
             {
                 var haveTagView = new HaveTagView()
                 {
-                   TagId = item.TagId
+                    TagId = item.TagId
                 };
                 lstHaveTagView.Add(haveTagView);
             }
@@ -155,7 +181,7 @@ namespace BenriShop.ApiRepository.Products
 
             List<SizeOfProductHadColorView> lstSizeOfProductHadColorView = new List<SizeOfProductHadColorView>();
 
-            foreach(SizeOfProductHadColor item in lstSizeOfProductHadColor)
+            foreach (SizeOfProductHadColor item in lstSizeOfProductHadColor)
             {
                 var sizeOfProductHadColorView = new SizeOfProductHadColorView()
                 {
@@ -176,7 +202,8 @@ namespace BenriShop.ApiRepository.Products
                 HaveTags = lstHaveTagView,
                 Images = lstImageView,
                 SizeOfProductHadColors = lstSizeOfProductHadColorView,
-                StorageQuantity = product.StorageQuantity
+                StorageQuantity = product.StorageQuantity,
+                IsDisable = product.IsDisable
             };
 
             return productView;
@@ -186,7 +213,7 @@ namespace BenriShop.ApiRepository.Products
         {
             var product = _context.Products.ToList();
             var lst = new List<ProductView>();
-            foreach(Product pro in product)
+            foreach (Product pro in product)
             {
                 var temp = await GetProduct(pro.ProductId);
                 lst.Add(temp);
@@ -223,9 +250,9 @@ namespace BenriShop.ApiRepository.Products
             }
         }
 
-        public async Task<bool> AddTag (int productId, string tagId)
+        public async Task<bool> AddTag(int productId, string tagId)
         {
-            var product =  _context.Products.FindAsync(productId);
+            var product = _context.Products.FindAsync(productId);
             var tag = _context.Tags.FindAsync(tagId);
             if (product == null || tag == null)
             {
@@ -236,12 +263,13 @@ namespace BenriShop.ApiRepository.Products
             haveTag.TagId = tagId;
             haveTag.ProductId = productId;
 
-            try 
+            try
             {
                 var result = await _context.HaveTags.AddAsync(haveTag);
                 await _context.SaveChangesAsync();
                 return true;
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
                 return false;
