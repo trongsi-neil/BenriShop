@@ -265,7 +265,13 @@ namespace BenriShop.ApiRepository.Orders
 
             return null;
         }
-
+        public async Task<Order> UpdateOrderStatus(string orderId, int status)
+        {
+            var result = await _context.Orders.FirstOrDefaultAsync(e => e.OrderId == orderId);
+            result.Status = status;
+            await _context.SaveChangesAsync();
+            return result;
+        }
         public async Task<bool> AddItemFromCartToOrder(string orderId, string userName)
         {
             try

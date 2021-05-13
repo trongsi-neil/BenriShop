@@ -42,6 +42,7 @@ namespace BenriShop.ApiRepository.Orders
         /// <param name="Order"></param>
         /// <returns></returns>
         public Task<Order> UpdateOrder(Order order);
+        public Task<Order> UpdateOrderStatus(string orderId, int status);
         /// <summary>
         /// Xóa 1 đơn hàng bằng cách truyền vào OrderId
         /// </summary>

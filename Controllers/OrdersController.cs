@@ -206,7 +206,7 @@ namespace BenriShop.Controllers
         }
         [Authorize]
         [HttpPut("UpdateOrder")]
-        public async Task<ActionResult<Order>> UpdateOrder(Order order)
+        public async Task<ActionResult<Order>> UpdateOrderStatus(Order order)
         {
             var identity = User.Identity as ClaimsIdentity;
             if (identity.RoleClaimType == "Customer")
@@ -218,8 +218,8 @@ namespace BenriShop.Controllers
             }
             try
             {
-                await _orderRepository.UpdateOrder(order);
-                return order;
+                await _orderRepository.UpdateOrderStatus(order.OrderId, order.Status);
+                return Ok("Update status sucessfully");
             }catch(Exception ex)
             {
                 return BadRequest("Exception in UpdateOrder");
