@@ -61,14 +61,14 @@ namespace BenriShop.Controllers
         // GET: api/Orders/GetOrders/userName
         [Authorize]
         [HttpGet("GetOrders/{userName}")]
-        public async Task<IEnumerable<OrderView>> GetOrders(string userName)
+        public async Task<List<OrderView>> GetOrders(string userName)
         {
             var identity = User.Identity as ClaimsIdentity;
             if (identity.RoleClaimType == "Customer")
             {
                 if (identity.Name != userName)
                 {
-                    return (IEnumerable<OrderView>)Conflict("Can't access to diffirent account");
+                    return (List<OrderView>)(IEnumerable<Order>)Conflict("Can't access to diffirent account");
                 }
             }
 
@@ -77,7 +77,7 @@ namespace BenriShop.Controllers
             {
                 return orders;
             }
-            return (IEnumerable<OrderView>)NotFound("Error of GetOrders");
+            return (List<OrderView>)(IEnumerable<Order>)NotFound("Error of GetOrders");
         }
 
 
@@ -86,24 +86,17 @@ namespace BenriShop.Controllers
         /// </summary>
         /// <param name="orderId"></param>
         /// <returns></returns>
-        // GET: api/Orders/GetOrder/orderId
-        [Authorize]
-        [HttpGet("GetOrder/{orderId}")]
-        public async Task<ActionResult<OrderView>> GetOrder(string orderId)
+        // GET: api/Orders/GetOrders
+        [Authorize (Roles = "Admin, Mod")]
+        [HttpGet("GetOrders")]
+        public async Task<ActionResult<List<OrderView>>> GetOrders()
         {
             var identity = User.Identity as ClaimsIdentity;
-            var order = await _orderRepository.GetOrder(orderId);
-            if (identity.RoleClaimType == "Customer")
-            {
-                if (identity.Name != order.UserName)
-                {
-                    return Conflict("Can't access to diffirent account");
-                }
-            }
+            var orders = await _orderRepository.GetOrders();
 
-            if (order != null)
+            if (orders != null)
             {
-                return order;
+                return orders;
             }
             return NotFound("Error of GetOrder");
         }
@@ -185,11 +178,11 @@ namespace BenriShop.Controllers
                 }
             }
 
-            var order = await _orderRepository.GetOrder(orderId);
+            /*var order = await _orderRepository.GetOrder(orderId);
             if (order == null)
             {
                 return NotFound("Not found this order");
-            }
+            }*/
             try
             {
                 if(await _orderRepository.DeleteOrder(orderId))
@@ -201,7 +194,7 @@ namespace BenriShop.Controllers
                     return BadRequest("Error in DeleteOrder");
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 return BadRequest("Error in DeleteOrder");
             }

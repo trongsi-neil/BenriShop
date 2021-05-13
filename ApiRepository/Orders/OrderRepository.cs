@@ -60,68 +60,10 @@ namespace BenriShop.ApiRepository.Orders
             return false;
         }
 
-        public async Task<OrderView> GetOrder(string orderId)
-        {
-            var orders = await _context.Orders.Where(e => e.OrderId == orderId).ToListAsync();
-            
-            List<OrderView> orderViews = new List<OrderView>();
-
-            ShippingView shippingView = new ShippingView();
-
-            foreach (Order item in orders)
-            {
-                var orderView = new OrderView();
-                if (item != null)
-                {
-                    var lstOrderItem = _context.OrderItems.Where(x => x.OrderId == item.OrderId).ToList();
-                    List<OrderItemView> orderItemsView = new List<OrderItemView>();
-                    foreach (OrderItem orderItem in lstOrderItem)
-                    {
-                        OrderItemView orderItemView = new OrderItemView();
-                        if (orderItem != null)
-                        {
-                            orderItemView.OrderId = orderItem.OrderId;
-                            orderItemView.OrderItemId = orderItem.OrderItemId;
-                            orderItemView.ProductId = orderItem.ProductId;
-                            orderItemView.ColorId = orderItem.ColorId;
-                            orderItemView.SizeId = orderItem.SizeId;
-                            orderItemView.QuantityInOrder = orderItem.QuantityInOrder;
-                        }
-                        orderItemsView.Add(orderItemView);
-                    }
-
-
-                    var ship = _context.Shippings.FirstOrDefault(x => x.OrderId == item.OrderId);
-                    ShippingView shipView = new ShippingView();
-                    if (ship != null)
-                    {
-                        shipView.Note = ship.Note;
-                        shipView.Order = ship.Order;
-                        shipView.ShipAdress = ship.ShipAdress;
-                        shipView.ShipPhoneNumber = ship.ShipPhoneNumber;
-                        shipView.ShippingCost = ship.ShippingCost;
-                        shipView.ShipFullName = ship.ShipFullName;
-                        shipView.ShippingId = ship.ShippingId;
-                    }
-
-                    orderView.OrderId = item.OrderId;
-                    orderView.UserName = item.UserName;
-                    //orderView.OrderDate = item;
-                    orderView.Status = item.Status;
-                    orderView.Payment = item.Payment;
-                    orderView.OrderItems = orderItemsView;
-                    orderView.Shipping = shipView;
-
-                }
-                orderViews.Add(orderView);
-            }
-
-            return orderViews[0];
-        }
-
-        public async Task<IEnumerable<OrderView>> GetOrders(string userName)
+        public async Task<List<OrderView>> GetOrders(string userName)
         {
             var orders = await _context.Orders.Where(x => x.UserName == userName).ToListAsync();
+
             List<OrderView> orderViews = new List<OrderView>();
 
             ShippingView shippingView = new ShippingView();
@@ -138,6 +80,9 @@ namespace BenriShop.ApiRepository.Orders
                         OrderItemView orderItemView = new OrderItemView();
                         if (orderItem != null)
                         {
+                            var productTemp = _context.Products.Where(x => x.ProductId == orderItem.ProductId).FirstOrDefault();
+                            orderItemView.ProductName = productTemp.ProductName;
+                            orderItemView.Price = productTemp.Price;
                             orderItemView.OrderId = orderItem.OrderId;
                             orderItemView.OrderItemId = orderItem.OrderItemId;
                             orderItemView.ProductId = orderItem.ProductId;
@@ -177,7 +122,67 @@ namespace BenriShop.ApiRepository.Orders
             return orderViews;
         }
 
+        public async Task<List<OrderView>> GetOrders()
+        {
+            var orders = await _context.Orders.ToListAsync();
 
+            List<OrderView> orderViews = new List<OrderView>();
+
+            ShippingView shippingView = new ShippingView();
+
+            foreach (Order item in orders)
+            {
+                var orderView = new OrderView();
+                if (item != null)
+                {
+                    var lstOrderItem = _context.OrderItems.Where(x => x.OrderId == item.OrderId).ToList();
+                    List<OrderItemView> orderItemsView = new List<OrderItemView>();
+                    foreach (OrderItem orderItem in lstOrderItem)
+                    {
+                        OrderItemView orderItemView = new OrderItemView();
+                        if (orderItem != null)
+                        {
+                            var productTemp = _context.Products.Where(x => x.ProductId == orderItem.ProductId).FirstOrDefault();
+                            orderItemView.ProductName = productTemp.ProductName;
+                            orderItemView.Price = productTemp.Price;
+                            orderItemView.OrderId = orderItem.OrderId;
+                            orderItemView.OrderItemId = orderItem.OrderItemId;
+                            orderItemView.ProductId = orderItem.ProductId;
+                            orderItemView.ColorId = orderItem.ColorId;
+                            orderItemView.SizeId = orderItem.SizeId;
+                            orderItemView.QuantityInOrder = orderItem.QuantityInOrder;
+                        }
+                        orderItemsView.Add(orderItemView);
+                    }
+
+
+                    var ship = _context.Shippings.FirstOrDefault(x => x.OrderId == item.OrderId);
+                    ShippingView shipView = new ShippingView();
+                    if (ship != null)
+                    {
+                        shipView.Note = ship.Note;
+                        shipView.Order = ship.Order;
+                        shipView.ShipAdress = ship.ShipAdress;
+                        shipView.ShipPhoneNumber = ship.ShipPhoneNumber;
+                        shipView.ShippingCost = ship.ShippingCost;
+                        shipView.ShipFullName = ship.ShipFullName;
+                        shipView.ShippingId = ship.ShippingId;
+                    }
+
+                    orderView.OrderId = item.OrderId;
+                    orderView.UserName = item.UserName;
+                    //orderView.OrderDate = item;
+                    orderView.Status = item.Status;
+                    orderView.Payment = item.Payment;
+                    orderView.OrderItems = orderItemsView;
+                    orderView.Shipping = shipView;
+
+                }
+                orderViews.Add(orderView);
+            }
+
+            return orderViews;
+        }
         public async Task<IEnumerable<OrderView>> GetOrdersByStatus(int status)
         {
             var orders = await _context.Orders.Where(x => x.Status == status).ToListAsync();
@@ -192,11 +197,14 @@ namespace BenriShop.ApiRepository.Orders
                 {
                     var lstOrderItem = _context.OrderItems.Where(x => x.OrderId == item.OrderId).ToList();
                     List<OrderItemView> orderItemsView = new List<OrderItemView>();
-                    foreach(OrderItem orderItem in lstOrderItem)
+                    foreach (OrderItem orderItem in lstOrderItem)
                     {
                         OrderItemView orderItemView = new OrderItemView();
-                        if(orderItem != null)
+                        if (orderItem != null)
                         {
+                            var productTemp = _context.Products.Where(x => x.ProductId == orderItem.ProductId).FirstOrDefault();
+                            orderItemView.ProductName = productTemp.ProductName;
+                            orderItemView.Price = productTemp.Price;
                             orderItemView.OrderId = orderItem.OrderId;
                             orderItemView.OrderItemId = orderItem.OrderItemId;
                             orderItemView.ProductId = orderItem.ProductId;
