@@ -296,9 +296,9 @@ namespace BenriShop.Controllers
                 await _accountRepository.AddAccount(account);
                 return Ok("Add account is successful");
             }
-            catch (DbUpdateException ex)
+            catch (Exception ex)
             {
-                return BadRequest(ex.ToString() + "Error in CreateAccount()");
+                return BadRequest("Error in CreateAccount()");
             }
         }
         /// <summary>
@@ -311,7 +311,6 @@ namespace BenriShop.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> CheckAccountAsync(Account account)
         {
-
             var _account = await _accountRepository.GetAccount(account.UserName);
             
             if (_account != null)

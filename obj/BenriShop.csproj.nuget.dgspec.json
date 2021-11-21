@@ -1,28 +1,26 @@
 {
   "format": 1,
   "restore": {
-    "D:\\source\\repos\\BenriShop\\BenriShop.csproj": {}
+    "C:\\Users\\Si\\Source\\Repos\\BenriShop\\BenriShop.csproj": {}
   },
   "projects": {
-    "D:\\source\\repos\\BenriShop\\BenriShop.csproj": {
+    "C:\\Users\\Si\\Source\\Repos\\BenriShop\\BenriShop.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\source\\repos\\BenriShop\\BenriShop.csproj",
+        "projectUniqueName": "C:\\Users\\Si\\Source\\Repos\\BenriShop\\BenriShop.csproj",
         "projectName": "BenriShop",
-        "projectPath": "D:\\source\\repos\\BenriShop\\BenriShop.csproj",
-        "packagesPath": "C:\\Users\\ngomi\\.nuget\\packages\\",
-        "outputPath": "D:\\source\\repos\\BenriShop\\obj\\",
+        "projectPath": "C:\\Users\\Si\\Source\\Repos\\BenriShop\\BenriShop.csproj",
+        "packagesPath": "C:\\Users\\Si\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Si\\Source\\Repos\\BenriShop\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\ngomi\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 19.1.config",
+          "C:\\Users\\Si\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\DevExpress 19.1\\Components\\System\\Components\\Packages": {},
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
@@ -72,6 +70,10 @@
               "target": "Package",
               "version": "[3.1.5, )"
             },
+            "NUnit": {
+              "target": "Package",
+              "version": "[3.13.2, )"
+            },
             "Stripe.net": {
               "target": "Package",
               "version": "[39.45.0, )"
@@ -103,7 +105,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.401\\RuntimeIdentifierGraph.json"
         }
       }
     }
